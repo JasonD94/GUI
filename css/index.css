@@ -13,15 +13,6 @@
     All CSS in this file is organized in alphabetical order - as much as possible.
 */
 
-
-/*
-Google Fonts to use. See the following page for more fonts:
-http://cssdeck.com/labs/cool-and-professional-google-web-fonts-for-use
-
-*/
-@import url(//fonts.googleapis.com/css?family=Ubuntu);
-@import url(//fonts.googleapis.com/css?family=Advent+Pro);
-
 /* I found this one this stackoverflow page;  it is used to make the "#About" link in the Nav Bar go all the way to the top.
 I changed it to offset to 70px since that seems to be just enough for this fix to work.
 https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header
@@ -162,6 +153,14 @@ https://stackoverflow.com/questions/7226056/equivalent-to-center-tag-in-css */
   text-align: center;
 }
 
+/* For <ul> tags */
+.hightlight_not_aligned {
+  background-color: black;
+  color: white;
+  font-family: "Advent Pro";
+    font-size: 200%;
+}
+
 /* Highlights and underlines / bolds the text */
 .highlight_text_underline {
   background: black;
@@ -184,6 +183,21 @@ https://stackoverflow.com/questions/7226056/equivalent-to-center-tag-in-css */
 .left_align {
   color: white;
   text-align: left;
+  font-family: "Advent Pro";
+  font-size: 200%;
+}
+
+.right_align {
+  color: white;
+  text-align: left;
+  font-family: "Advent Pro";
+  font-size: 200%;
+}
+
+/* Plain white text for the unordered list */
+.white_text {
+  background-color: black;
+  color: white;
   font-family: "Advent Pro";
   font-size: 200%;
 }
