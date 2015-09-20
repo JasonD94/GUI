@@ -119,6 +119,12 @@ h1.name {
   background-color: black;
 }
 
+.highlight_muted {
+  background-color: black;
+  color: grey;
+  font-family: "Advent Pro";
+}
+
 .highlight_centered {
   background-color: black;
   color: white;
