@@ -105,114 +105,18 @@
         <div class = "row">
 
             <h1 class="name">
-                <span class="highlight">Assignment #3</span>
+                <span class="highlight">Assignment #5</span>
             </h1>
         </div>
 
         <!-- Contact info -->
         <div class = "row">
             <div class="col-md-12">
+                <!-- Removed extra div with class "center" - using just a span instead for easier readability. -->
                 <div class="highlight_left_aligned">
-                    This is a form I built using some JavaScript and the
-                    <a href="https://www.mandrill.com/">Mandrill RESTful API.</a>
-                    It allows me to accept emails from people who visit my webpage without
-                    giving out my email address for spammers / what not to get a hold of it.
-                    Mandrill lets me make a POST request to their API, and using some JSON I can send an email
-                    in JavaScript, as Mandril actually sends the email, and I don't need to deal with having my own email
-                    server. Mandril is also free up to some crazy amount of emails so its worth playing with for such a simple site.
+                    This assignment should do something with JSON.
                 </div>
             </div>
-        </div>
-
-        <br><br>                <!-- Adding line breaks to make the display nicer. -->
-
-        <!--      Contact Form.
-                    Powered by Mandrill, a JavaScript API
-                    I used the following site as a reference:
-                    http://codepen.io/riyadhalnur/pen/gbApi/?editors=101
-
-                    I also wrote a similar form here:
-                    https://github.com/JohnShep/repair/blob/master/contact.html
-
-                    I simplified this one by just using inputs though, and Bootstrap's grid system.      -->
-        <div class = "row">
-            <div class="col-md-3"></div>
-
-            <div class="col-md-6">
-                <div class="highlight_centered">
-                Contact me using the form below!
-                </div>
-            </div>
-
-            <div class="col-md-3"></div>
-        </div>
-
-        <!-- Name section -->
-        <div class = "row">
-            <div class="col-md-3"></div>
-
-            <div class="col-md-2">
-                <div class="highlight_right_aligned">
-                Name:&nbsp;&nbsp;
-                </div>
-            </div>
-            <div class="col-md-4">
-                <input id="name" name="name" type="text" placeholder="Enter your name here"
-                class="form-control input-md" required="">
-            </div>
-
-            <div class="col-md-1"></div>
-        </div>
-
-        <!-- Email section -->
-        <div class = "row">
-            <div class="col-md-3"></div>
-
-            <div class="col-md-2">
-                <div class="highlight_right_aligned">
-                Email:&nbsp;&nbsp;
-                </div>
-            </div>
-            <div class="col-md-4">
-                <input id="email" name="name" type="text" placeholder="Enter your email here"
-                class="form-control input-md" required="">
-            </div>
-
-            <div class="col-md-1"></div>
-        </div>
-
-        <!-- Message section -->
-        <div class = "row">
-            <div class="col-md-3"></div>
-
-            <div class="col-md-2">
-                <div class="highlight_right_aligned">
-                Message:&nbsp;&nbsp;
-                </div>
-            </div>
-            <div class="col-md-4">
-                <textarea class="form-control" id="msg" name="msg" cols="6" rows="6"></textarea>
-            </div>
-
-            <div class="col-md-1"></div>
-        </div>
-
-        <br>                <!-- Adding line breaks to make the display nicer. -->
-
-        <!-- Submit Button -->
-        <div class = "row">
-            <div class="col-md-5"></div>
-
-            <div class="col-md-2">
-                <!--
-                        this button calls the JavaScript function "sendEmail". See email.js in the JS folder for more info.
-                        Also - this Stackoverflow post was pretty helpful:
-                        https://stackoverflow.com/questions/1947263/using-an-html-button-to-call-a-javascript-function
-                -->
-                <button id="submit" name="submit" class="btn btn-primary" onclick="sendEmail();">Send Message</button>
-            </div>
-
-            <div class="col-md-5"></div>
         </div>
 
         <br><br>                <!-- Adding line breaks to make the display nicer. -->
