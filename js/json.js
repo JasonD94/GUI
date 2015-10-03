@@ -12,13 +12,20 @@
     and then call another function called place_json which will then put the
     song lyrics into the HTML document. A CSS file will also format these elements,
     which can be found in the CSS/json.css file.
+
+    Note: for the for loops I'm using a for .. in loop, which I discovered on
+    stackoverflow. I had troubles trying to use a tradional for loop, for example:
+    for(var x = 0; x < song_lyrics.lyrics.first.length(); x++)
+    That outputted "undefined" to the HTML document, so I went with the for .. in loop.
+    You can find that stackoverflow post here:
+    https://stackoverflow.com/questions/19323699/iterating-through-json-object-javascript
 */
 
 var song_lyrics;
 
 // Get the JSON file into a global var called song_lyrics
 function get_json() {
-  jQuery.get("~/json/lyrics.json", function(data) {
+  jQuery.get("json/lyrics.json", function(data) {
     song_lyrics = data;   // Save lyrics JSON file into song_lyrics variable.
     place_json();         // Place JSON data into the HTML document
   });
@@ -37,48 +44,67 @@ function place_json() {
   // Start looping through the lyrics.
   // Lyrics are from: http://www.ratm.net/lyrics/sle.html
   content += "<p class='YEAAH'>" + song_lyrics.lyrics.yeah + "</p>";
-
   content += "<br/>";   // Add newline.
 
   // First paragraph
-  for(var x = 0; x < song_lyrics.lyrics.first.length; x++) {
-    content += "<p class='first'>" + song_lyrics.first[x] + "</p>";
+  for(var key in song_lyrics.lyrics.first) {
+    if(song_lyrics.lyrics.first.hasOwnProperty(key)) {
+      var value = song_lyrics.lyrics.first[key];
+      content += "<p class='first'>" + value + "</p>";
+    }
   }
-
   content += "<br/>";   // Add newline.
 
   // Print out two "Hey! Hey!" lines
   for(var x = 0; x < 2; x++) {
-    for(var y = 0; y < 3; y++) {
-        content += "<p class='hey'>" + song_lyrics.hey[y] + "</p>";
+    for(var key in song_lyrics.lyrics.hey) {
+      if(song_lyrics.lyrics.hey.hasOwnProperty(key)) {
+        var value = song_lyrics.lyrics.hey[key];
+        content += "<p class='hey'>" + value + "</p>";
+      }
     }
     content += "<br/>";   // Add newline.
   }
 
   // Second paragraph
-  for(var x = 0; x < song_lyrics.lyrics.first.length; x++) {
-    content += "<p class='second'>" + song_lyrics.second[x] + "</p>";
+  for(var key in song_lyrics.lyrics.second) {
+    if(song_lyrics.lyrics.second.hasOwnProperty(key)) {
+      var value = song_lyrics.lyrics.second[key];
+      content += "<p class='second'>" + value + "</p>";
+    }
   }
+  content += "<br/>";   // Add newline.
 
   // Two more "Hey! Hey!" lines
   for(var x = 0; x < 2; x++) {
-    for(var y = 0; y < 3; y++) {
-        content += "<p class='hey'>" + song_lyrics.hey[y] + "</p>";
+    for(var key in song_lyrics.lyrics.hey) {
+      if(song_lyrics.lyrics.hey.hasOwnProperty(key)) {
+        var value = song_lyrics.lyrics.hey[key];
+        content += "<p class='hey'>" + value + "</p>";
+      }
     }
     content += "<br/>";   // Add newline.
   }
 
   // Third paragraph
-  for(var x = 0; x < song_lyrics.lyrics.first.length; x++) {
-    content += "<p class='third'>" + song_lyrics.third[x] + "</p>";
+  for(var key in song_lyrics.lyrics.third) {
+    if(song_lyrics.lyrics.third.hasOwnProperty(key)) {
+      var value = song_lyrics.lyrics.third[key];
+      content += "<p class='third'>" + value + "</p>";
+    }
   }
+  content += "<br/>";   // Add newline.
 
   // YEAAAAH!
   content += "<p class='YEAAH'>" + song_lyrics.lyrics.yeah + "</p>";
+  content += "<br/>";   // Add newline.
 
   // "SLEEP NOW IN THE FIRE!" lines.
-  for(var x = 0; x < 5; x++) {
-    content += "<p class='sleep'>" + song_lyrics.lyrics.sleep + "</p>";
+  for(var key in song_lyrics.lyrics.sleep) {
+    if(song_lyrics.lyrics.third.hasOwnProperty(key)) {
+      var value = song_lyrics.lyrics.sleep[key];
+      content += "<p class='sleep'>" + value + "</p>";
+    }
   }
 
   // Now the content gets loaded into the HTML page.
