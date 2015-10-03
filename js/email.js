@@ -1,6 +1,6 @@
 /*
     File: /~jason/js/email.js
-    91.461 Assignment: Add CSS / Go crazy
+    91.461 Assignment 3: Add CSS / Go crazy
     Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
     Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu
     MIT Licensed - see http://opensource.org/licenses/MIT for details.

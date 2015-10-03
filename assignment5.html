@@ -114,9 +114,21 @@
     <!-- Contact info -->
     <div class = "row">
       <div class="col-md-12">
-        <!-- Removed extra div with class "center" - using just a span instead for easier readability. -->
-        <div class="highlight_left_aligned">
-          This assignment should do something with JSON.
+        <!-- YouTube video for the lyrics that will appear below it.
+             Found how to make this responsive on the following page:
+             http://getbootstrap.com/components/#responsive-embed -->
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/w211KOQ5BMI?showinfo=1&controls=1"></iframe>
+        </div>
+
+        <!--  This div will have JSON placed inside of it.
+              The json.js file will place it here, and the json.css file will
+              style this text.  -->
+        <div class="highlight_centered" id="place_json_here">
+          Testing 1 2 3.
+          This text won't appear once I load up the JSON in the json.js file.
+          In fact, the song lyrics will magically appear instead.
+          How cool.
         </div>
       </div>
     </div>
@@ -164,13 +176,23 @@
    -->
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins). -->
-  <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
   <!-- Latest compiled and minified JavaScript -->
-  <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script type='text/javascript' src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-  <!-- Email function - powered by Mandrill -->
-  <script src="js/email.js"></script>
+  <!-- JS file that loads up the JSON data into the HTML document. -->
+  <script type='text/javascript' scr="js/json.js"></script>
+
+  <!-- Small script to run the json.js functions when the document has finished loading. -->
+  <script type='text/javascript'>
+    // This is from the following site:
+    // https://learn.jquery.com/using-jquery-core/document-ready/
+    $(document).ready(function() {
+      console.log("Document loaded.");
+      get_json();
+    });
+  </script>
 
 </body>
 </html>
