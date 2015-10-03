@@ -1,5 +1,5 @@
 /*
-    File: /~jason/js/json.js
+    File: ~/js/json.js
     91.461 Assignment 5: do stuff with JSON
     Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
     Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu

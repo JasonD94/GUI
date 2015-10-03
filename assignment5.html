@@ -14,7 +14,7 @@
    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu%7CAdvent+Pro">
 
   <!--
-    File: /~jason/assignment3.html
+    File: ~/assignment3.html
     91.461 Assignment: Creating Your First Web Page
     Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
     Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu
@@ -43,13 +43,14 @@
   <!-- CSS file to override stuff -->
   <link rel = "stylesheet" href = "css/index.css">
 
+  <!-- CSS file for the text that is loaded dynamically from JSON. -->
+  <link rel = "stylesheet" href = "css/json.css">
+
   <!-- Custom favicon -->
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-
 </head>
 
 <body>
-
   <!-- This is the Nav Bar, for switching between pages. It should automatically become smaller on Mobile.
   (Test this though!)
 
@@ -124,7 +125,7 @@
         <!--  This div will have JSON placed inside of it.
               The json.js file will place it here, and the json.css file will
               style this text.  -->
-        <div class="highlight_centered" id="place_json_here">
+        <div id="place_json_here">
           Testing 1 2 3.
           This text won't appear once I load up the JSON in the json.js file.
           In fact, the song lyrics will magically appear instead.
@@ -189,7 +190,6 @@
     // This is from the following site:
     // https://learn.jquery.com/using-jquery-core/document-ready/
     $(document).ready(function() {
-      console.log("Document loaded.");
       get_json();
     });
   </script>

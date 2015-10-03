@@ -1,0 +1,73 @@
+/*
+    File: ~/css/json.css
+    91.461 Assignment 5: do stuff with JSON
+    Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
+    Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu
+    MIT Licensed - see http://opensource.org/licenses/MIT for details.
+    Anyone may freely use this code. Just don't sue me if it breaks stuff.
+    Created: Oct 3, 2015.
+    Last Updated: Oct 3, 6:30PM
+
+    This CSS file is for styling the text that we dynamically load in from
+    the JSON file lyrics.json.
+*/
+
+/* Styles the title of the song */
+.title {
+  background-color: black;
+  color: #FF3300;
+  font-family: "Ubuntu";
+  font-weight:900;
+  font-size: 400%;
+  text-align: center;
+}
+
+/* Styles the artist of the song */
+.artist {
+  background-color: black;
+  color: #FF9900;
+  font-family: "Ubuntu";
+  font-weight:900;
+  font-size: 350%;
+  text-align: center;
+}
+
+/* One of the lyrics that repeats twice in the song. */
+.YEAAH {
+  background-color: black;
+  color: blue;
+  font-family: "Advent Pro";
+  font-weight:900;
+  font-size: 200%;
+  text-align: center;
+}
+
+/* A couple of sentences that repeat a few times in the song. */
+.hey {
+
+}
+
+/* First paragraph in the song */
+.first {
+
+}
+
+/* Second paragraph in the song */
+.second {
+
+}
+
+/* Third paragraph in the song */
+.third {
+
+}
+
+/* "Sleep now in the fire!" lyrics, turn this red for awesomeness. */
+.sleep {
+  background-color: black;
+  color: red;
+  font-family: "Advent Pro";
+  font-weight:900;
+  font-size: 300%;
+  text-align: center;
+}
