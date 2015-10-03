@@ -22,6 +22,7 @@
 */
 
 var song_lyrics;
+var content = "";
 
 // Get the JSON file into a global var called song_lyrics
 function get_json() {
@@ -33,8 +34,6 @@ function get_json() {
 
 // Place the JSON data into the HTML document.
 function place_json() {
-  var content = "";
-
   // Creating content dynamically using the JSON data.
   content += "<h1 class='title'>" + song_lyrics.title + "</h1>";
   content += "<h2 class='artist'>" + song_lyrics.artist + "</h2>";
@@ -56,15 +55,7 @@ function place_json() {
   content += "<br/>";   // Add newline.
 
   // Print out two "Hey! Hey!" lines
-  for(var x = 0; x < 2; x++) {
-    for(var key in song_lyrics.lyrics.hey) {
-      if(song_lyrics.lyrics.hey.hasOwnProperty(key)) {
-        var value = song_lyrics.lyrics.hey[key];
-        content += "<p class='hey'>" + value + "</p>";
-      }
-    }
-    content += "<br/>";   // Add newline.
-  }
+  print_hey(content);
 
   // Second paragraph
   for(var key in song_lyrics.lyrics.second) {
@@ -76,15 +67,7 @@ function place_json() {
   content += "<br/>";   // Add newline.
 
   // Two more "Hey! Hey!" lines
-  for(var x = 0; x < 2; x++) {
-    for(var key in song_lyrics.lyrics.hey) {
-      if(song_lyrics.lyrics.hey.hasOwnProperty(key)) {
-        var value = song_lyrics.lyrics.hey[key];
-        content += "<p class='hey'>" + value + "</p>";
-      }
-    }
-    content += "<br/>";   // Add newline.
-  }
+  print_hey(content);
 
   // Third paragraph
   for(var key in song_lyrics.lyrics.third) {
@@ -109,4 +92,22 @@ function place_json() {
 
   // Now the content gets loaded into the HTML page.
   $("#place_json_here").html(content);
+}
+
+// Instead of repeating two for loops, use just one.
+function print_hey() {
+  for(var x = 0; x < 2; x++) {
+    for(var key in song_lyrics.lyrics.hey) {
+      if(song_lyrics.lyrics.hey.hasOwnProperty(key)) {
+        var value = song_lyrics.lyrics.hey[key];
+        if(value == "HEY!") {
+          content += "<p class='hey'>" + value + "</p>";
+        }
+        else {
+          content += "<p class='sleep'>" + value + "</p>";
+        }
+      }
+    }
+    content += "<br/>";   // Add newline.
+  }
 }

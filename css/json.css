@@ -16,9 +16,9 @@
 .title {
   background-color: black;
   color: #FF3300;
-  font-family: "Ubuntu";
-  font-weight:900;
-  font-size: 400%;
+  font-family: "Bangers";
+  font-weight: 400;
+  font-size: 600%;
   text-align: center;
 }
 
@@ -26,9 +26,9 @@
 .artist {
   background-color: black;
   color: #FF9900;
-  font-family: "Ubuntu";
-  font-weight:900;
-  font-size: 350%;
+  font-family: "Slackey";
+  font-weight: 400;
+  font-size: 300%;
   text-align: center;
 }
 
@@ -36,7 +36,7 @@
 .YEAAH {
   background-color: black;
   color: blue;
-  font-family: "Advent Pro";
+  font-family: "Orbitron";
   font-weight:900;
   font-size: 200%;
   text-align: center;
@@ -44,29 +44,49 @@
 
 /* A couple of sentences that repeat a few times in the song. */
 .hey {
-
+  background-color: black;
+  color: blue;
+  font-family: "Orbitron";
+  font-weight:900;
+  font-size: 200%;
+  text-align: center;
 }
 
 /* First paragraph in the song */
 .first {
-
+  background-color: black;
+  color: #006600;
+  font-family: "Ubuntu Condensed";
+  font-weight:900;
+  font-size: 200%;
+  text-align: center;
 }
 
 /* Second paragraph in the song */
 .second {
-
+  background-color: black;
+  color: #FFFFFF;
+  font-family: "Ubuntu Condensed";
+  font-weight:900;
+  font-size: 200%;
+  text-align: center;
 }
 
 /* Third paragraph in the song */
 .third {
-
+  background-color: black;
+  color: #FF9900;
+  font-family: "Ubuntu Condensed";
+  font-weight:900;
+  font-size: 200%;
+  text-align: center;
 }
 
 /* "Sleep now in the fire!" lyrics, turn this red for awesomeness. */
 .sleep {
   background-color: black;
   color: red;
-  font-family: "Advent Pro";
+  font-family: "Sigmar One";
   font-weight:900;
   font-size: 300%;
   text-align: center;
