@@ -46,7 +46,7 @@ body {
   padding: 0px;
   height: 100%;
   width: 100%;
-  font-family: "Advent Pro", Times, sans-serif;
+  font-family: "Advent Pro";
 }
 
 /*
@@ -117,6 +117,12 @@ h1.name {
 
 .highlight {
   background-color: black;
+}
+
+.highlight_red {
+  background-color: black;
+  color: red;
+  font-family: "Righteous";
 }
 
 .highlight_centered {

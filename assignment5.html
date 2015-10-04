@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang = "en-US">
+<html lang="en-US">
 <head>
-  <meta charset = "utf-8">
+  <meta charset="utf-8">
 
   <!--
       Google fonts. Included here at the very top for performance gains and to avoid the use of @import
@@ -12,7 +12,7 @@
       https://stackoverflow.com/questions/22466913/google-fonts-url-break-html5-validation-on-w3-org
    -->
    <link rel="stylesheet" type="text/css"
-   href="http://fonts.googleapis.com/css?family=Ubuntu%7CDroid+Serif%7CLobster%7CUbuntu+Condensed%7COrbitron%7CSigmar+One%7CBangers%7CSlackey%7CAdvent+Pro">
+   href="http://fonts.googleapis.com/css?family=Advent+Pro%7CBangers%7CSlackey%7CSigmar+One%7CRighteous%7CUbuntu">
 
   <!--
     File: ~/assignment3.html
@@ -30,22 +30,22 @@
   -->
 
   <!-- Configuration -->
-  <meta name = "viewport" content = "width = device-width, initial-scale = 1, maximum-scale = 1, user-scalable = no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   <!-- Custom Title Bar -->
   <title>Jason Downing</title>
 
   <!-- Latest compiled and minified CSS -->
-  <link rel = "stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
   <!-- Optional theme -->
-  <link rel = "stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
   <!-- CSS file to override stuff -->
-  <link rel = "stylesheet" href = "css/index.css">
+  <link rel="stylesheet" href="css/index.css">
 
   <!-- CSS file for the text that is loaded dynamically from JSON. -->
-  <link rel = "stylesheet" href = "css/json.css">
+  <link rel="stylesheet" href="css/json.css">
 
   <!-- Custom favicon -->
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -61,18 +61,18 @@
   https://github.com/JasonD94/repair
   https://github.com/JasonD94/repair/blob/gh-pages/index.html
    -->
-  <div class = "navbar-wrapper">
-    <div class = "container">
-      <nav class = "navbar navbar-inverse navbar-fixed-top">
-        <div class = "container-fluid">
+  <div class="navbar-wrapper">
+    <div class="container">
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
 
           <!-- Brand and toggle get grouped together for better mobile display. -->
-          <div class = "navbar-header">
-            <button type = "button" class = "navbar-toggle collapsed" data-toggle = "collapse" data-target = "#navbar">
-              <span class = "sr-only">Toggle navigation. </span>
-              <span class = "icon-bar"></span>
-              <span class = "icon-bar"></span>
-              <span class = "icon-bar"></span>
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+              <span class="sr-only">Toggle navigation. </span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
             </button>
             <a class = "navbar-brand" href = "index.html">Jason Downing</a>
           </div>
@@ -105,16 +105,22 @@
   <!-- The main container -->
   <div class="container">
 
-    <!-- First row -->
-    <div class = "row">
-
+    <!-- First row - Assignment description -->
+    <div class="row">
       <h1 class="name">
-        <span class="highlight">Assignment #5</span>
+        <span class="highlight_red">Assignment #5</span>
       </h1>
+      <div class="col-md-12">
+        <div class="highlight_centered">For assignment 5, we formatted dynamic text that was
+        loaded onto the page by using JavaScript. This text was also stored in JSON
+        format, and I wrote a JavaScript file named "json.js" to parse the JSON file
+        and add classes, that could be styled in a CSS file. </div>
+      </div>
+      <br/><br/>
     </div>
 
-    <!-- Contact info -->
-    <div class = "row">
+    <!-- YouTube video / JSON lyrics loaded here. -->
+    <div class="row">
       <div class="col-md-12">
         <!-- YouTube video for the lyrics that will appear below it.
              Found how to make this responsive on the following page:
@@ -149,7 +155,7 @@
         text as a link as well.
         http://teacherjohn.com/tutorials/cabrillo/validatebuttons.php
     -->
-    <div class = "center_text_small">
+    <div class="center_text_small">
       <a href="http://validator.w3.org/check?uri=referer">
         <img class="img-square" src="img/HTML5_Logo.png" style="height: 40px" alt="HTML5 Logo"/>
         Valid HTML5
@@ -161,9 +167,9 @@
       </a>
       <br><br>
 
-      <p class = "text-muted">
+      <p class="text-muted">
         Jason Downing &copy; 2015. All rights reserved.
-        Powered by <a href = "http://www.getbootstrap.com/">Bootstrap</a>.
+        Powered by <a href="http://www.getbootstrap.com/">Bootstrap</a>.
       </p>
     </div>
   </div>          <!-- This should be the end div of the main container. -->
@@ -186,7 +192,8 @@
   <!-- JS file that loads up the JSON data into the HTML document. -->
   <script type='text/javascript' src="js/json.js"></script>
 
-  <!-- Small script to run the json.js functions when the document has finished loading. -->
+  <!-- Small script to run the json.js functions when the document has finished loading.
+       Technically the site is loaded by this point, but might as well use .ready() to be safe. -->
   <script type='text/javascript'>
     // This is from the following site:
     // https://learn.jquery.com/using-jquery-core/document-ready/

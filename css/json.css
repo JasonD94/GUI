@@ -10,6 +10,11 @@
 
     This CSS file is for styling the text that we dynamically load in from
     the JSON file lyrics.json.
+
+    The margin stuff I figured out in this stackoverflow post. I also played around
+    with margins in the Title / Artist on my own, until I got something that looks
+    decent.
+    https://stackoverflow.com/questions/2787310/how-to-reduce-the-space-between-p-tags
 */
 
 /* Styles the title of the song */
@@ -19,6 +24,8 @@
   font-family: "Bangers";
   font-weight: 400;
   font-size: 600%;
+  margin-top: 10;             /* Keep spacing between YouTube video, but  not between */
+  margin-bottom: 0;           /* the Title / Artist lines. */
   text-align: center;
 }
 
@@ -29,6 +36,7 @@
   font-family: "Slackey";
   font-weight: 400;
   font-size: 300%;
+  margin: 0;
   text-align: center;
 }
 
@@ -36,9 +44,10 @@
 .YEAAH {
   background-color: black;
   color: blue;
-  font-family: "Orbitron";
-  font-weight:900;
+  font-family: "Sigmar One";
+  font-weight: 400;
   font-size: 200%;
+  margin: 0;
   text-align: center;
 }
 
@@ -46,39 +55,41 @@
 .hey {
   background-color: black;
   color: blue;
-  font-family: "Orbitron";
-  font-weight:900;
-  font-size: 200%;
+  font-family: "Sigmar One";
+  font-weight: 400;
+  font-size: 250%;
+  margin: 0;
   text-align: center;
 }
 
-/* First paragraph in the song */
+/* I style the three paragraphs at this point. They all have different colors
+   and fonts. I also tweaked the margins on the paragraphs so they appear close
+   together vs having spaces everywhere. */
 .first {
   background-color: black;
   color: #006600;
-  font-family: "Ubuntu Condensed";
-  font-weight:900;
+  font-family: "Righteous";
+  font-weight: 400;
   font-size: 200%;
+  margin: 0;
   text-align: center;
 }
-
-/* Second paragraph in the song */
 .second {
   background-color: black;
-  color: #FFFFFF;
-  font-family: "Ubuntu Condensed";
-  font-weight:900;
+  color: #FF9900;
+  font-family: "Righteous";
+  font-weight: 400;
   font-size: 200%;
+  margin: 0;
   text-align: center;
 }
-
-/* Third paragraph in the song */
 .third {
   background-color: black;
-  color: #FF9900;
-  font-family: "Ubuntu Condensed";
-  font-weight:900;
+  color: #FFFFFF;
+  font-family: "Righteous";
+  font-weight: 400;
   font-size: 200%;
+  margin: 0;
   text-align: center;
 }
 
@@ -87,7 +98,8 @@
   background-color: black;
   color: red;
   font-family: "Sigmar One";
-  font-weight:900;
+  font-weight: 400;
   font-size: 300%;
+  margin: 0;
   text-align: center;
 }

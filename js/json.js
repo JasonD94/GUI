@@ -100,10 +100,10 @@ function print_hey() {
     for(var key in song_lyrics.lyrics.hey) {
       if(song_lyrics.lyrics.hey.hasOwnProperty(key)) {
         var value = song_lyrics.lyrics.hey[key];
-        if(value == "HEY!") {
+        if(value == "HEY!") { // "HEY!" should be blue.
           content += "<p class='hey'>" + value + "</p>";
         }
-        else {
+        else {  // The "SLEEP NOW IN THE FIRE" part will be red.
           content += "<p class='sleep'>" + value + "</p>";
         }
       }
