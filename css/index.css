@@ -134,6 +134,16 @@ h1.name {
   text-align: center;
 }
 
+.highlight_centered_margins {
+  background-color: black;
+  color: white;
+  font-family: "Advent Pro";
+  font-weight:900;
+  font-size: 200%;
+  margin: 10px;
+  text-align: center;
+}
+
 .highlight_left_aligned {
   background-color: black;
   color: white;
