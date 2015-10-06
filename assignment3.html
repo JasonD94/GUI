@@ -1,18 +1,7 @@
 <!DOCTYPE html>
-<html lang = "en-US">
+<html lang="en-US">
 <head>
-  <meta charset = "utf-8">
-
-  <!--
-      Google fonts. Included here at the very top for performance gains and to avoid the use of @import
-      like Google recommends here:
-      http://googlewebfonts.blogspot.com/2010/09/optimizing-use-of-google-font-api.html
-
-      Fix for the validator comes from this page (| is encoded as %7C):
-      https://stackoverflow.com/questions/22466913/google-fonts-url-break-html5-validation-on-w3-org
-   -->
-   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu%7CAdvent+Pro">
-
+  <meta charset="utf-8">
   <!--
     File: /~jason/assignment3.html
     91.461 Assignment: Creating Your First Web Page
@@ -27,31 +16,36 @@
     build a simple form that can email me when someone fills it out. It uses a JavaScript file to do this, which makes a
     AJAX call to an API called Mandrill which allows me to POST data to their servers, which they will then email for me.
   -->
+  <!--
+      Google fonts. Included here at the very top for performance gains and to avoid the use of @import
+      like Google recommends here:
+      http://googlewebfonts.blogspot.com/2010/09/optimizing-use-of-google-font-api.html
+
+      Fix for the validator comes from this page (| is encoded as %7C):
+      https://stackoverflow.com/questions/22466913/google-fonts-url-break-html5-validation-on-w3-org
+   -->
+   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu%7CAdvent+Pro">
 
   <!-- Configuration -->
-  <meta name = "viewport" content = "width = device-width, initial-scale = 1, maximum-scale = 1, user-scalable = no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   <!-- Custom Title Bar -->
   <title>Jason Downing</title>
 
   <!-- Latest compiled and minified CSS -->
-  <link rel = "stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
   <!-- Optional theme -->
-  <link rel = "stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
   <!-- CSS file to override stuff -->
-  <link rel = "stylesheet" href = "css/index.css">
+  <link rel="stylesheet" href="css/index.css">
 
   <!-- Custom favicon -->
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-
 </head>
-
 <body>
-
   <!-- This is the Nav Bar, for switching between pages. It should automatically become smaller on Mobile.
-  (Test this though!)
 
   Note: I originally wrote part of this for another web page, and I reworked it for this web page.
   You can find the original source code in this repository:
@@ -59,26 +53,26 @@
   https://github.com/JasonD94/repair
   https://github.com/JasonD94/repair/blob/gh-pages/index.html
    -->
-  <div class = "navbar-wrapper">
-    <div class = "container">
-      <nav class = "navbar navbar-inverse navbar-fixed-top">
-        <div class = "container-fluid">
+  <div class="navbar-wrapper">
+    <div class="container">
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
 
           <!-- Brand and toggle get grouped together for better mobile display. -->
-          <div class = "navbar-header">
-            <button type = "button" class = "navbar-toggle collapsed" data-toggle = "collapse" data-target = "#navbar">
-              <span class = "sr-only">Toggle navigation. </span>
-              <span class = "icon-bar"></span>
-              <span class = "icon-bar"></span>
-              <span class = "icon-bar"></span>
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+              <span class="sr-only">Toggle navigation. </span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
             </button>
-            <a class = "navbar-brand" href = "index.html">Jason Downing</a>
+            <a class="navbar-brand" href="index.html">Jason Downing</a>
           </div>
 
           <!-- Collect the nav links, forms, and other content for toggling. -->
-          <div id = "navbar" class = "navbar-collapse collapse">
-            <ul class = "nav navbar-nav navbar-right">
-              <li class = "active"><a href = "index.html">Home</a></li>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="index.html">Home</a></li>
               <!-- w3schools had a good example of how to achieve this, so I used their layout with some changes like
               linking to other assignment HTML files rather than # links.
               See this page for where I got it from: http://www.w3schools.com/bootstrap/bootstrap_case_navigation.asp -->
@@ -94,7 +88,6 @@
               </li>
             </ul>
           </div>
-
         </div>
       </nav>
     </div>
@@ -128,7 +121,7 @@
 
     <br><br>                <!-- Adding line breaks to make the display nicer. -->
 
-    <!--      Contact Form.
+    <!--  Contact Form.
           Powered by Mandrill, a JavaScript API
           I used the following site as a reference:
           http://codepen.io/riyadhalnur/pen/gbApi/?editors=101

@@ -1,4 +1,17 @@
 {
+  "documentation": "
+
+    The song lyrics in this JSON file come off of Rage Against The Machines
+    website: http://www.ratm.net/lyrics/sle.html
+
+    I used the JSON editor website to double check this JSON file as well:
+    http://www.jsoneditoronline.org/
+
+    Also, the lyrics are inside of an object, which is slightly different then
+    how Prof. Heines did it. I probably should have put them inside of arrays
+    since that would have been easier to access when using for loops, but I
+    figured out how to use objects anyway so it works the same.
+  ",
   "title": "Sleep Now In The Fire",
   "artist": "Rage Against The Machine",
   "lyrics": {
@@ -13,7 +26,7 @@
       "line7": "I'll jail and bury those committed",
       "line8": "And smother the rest in greed",
       "line9": "Crawl with me into tomorrow",
-      "line10": "Or i'll drag you to your grave",
+      "line10": "Or I'll drag you to your grave",
       "line11": "I'm deep inside your children",
       "line12": "They'll betray you in my name"
     },
@@ -22,10 +35,10 @@
       "line2": "The scope with my desire",
       "line3": "The party blessed me with its future",
       "line4": "And I protect it with fire",
-      "line5": "I am the nina, the pinta, the santa maria",
+      "line5": "I am the Nina, the Pinta, the Santa Maria",
       "line6": "The noose and the rapist, the fields overseer",
       "line7": "The agents of orange",
-      "line8": "The priests of hiroshima",
+      "line8": "The priests of Hiroshima",
       "line9": "The cost of my desire",
       "line10": "Sleep now in the fire"
     },
@@ -35,17 +48,17 @@
       "line3": "There is no other pill to take",
       "line4": "So swallow the one",
       "line5": "That makes you ill",
-      "line6": "The nina, the pinta, the santa maria",
+      "line6": "The Nina, the Pinta, the Santa Maria",
       "line7": "The noose and the rapist, the fields' overseer",
       "line8": "The agents of orange",
-      "line9": "The priests of hiroshima",
+      "line9": "The priests of Hiroshima",
       "line10": "The cost of my desire",
       "line11": "Sleep now in the fire"
     },
     "hey": {
       "line1": "HEY!",
       "line2": "HEY!",
-      "line3": "Sleep now in the fire"
+      "line3": "Sleep now in the fire!"
     },
     "sleep": {
       "line1": "Sleep now in the fire!",
