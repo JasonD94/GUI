@@ -1,17 +1,4 @@
 {
-  "documentation": "
-
-    The song lyrics in this JSON file come off of Rage Against The Machines
-    website: http://www.ratm.net/lyrics/sle.html
-
-    I used the JSON editor website to double check this JSON file as well:
-    http://www.jsoneditoronline.org/
-
-    Also, the lyrics are inside of an object, which is slightly different then
-    how Prof. Heines did it. I probably should have put them inside of arrays
-    since that would have been easier to access when using for loops, but I
-    figured out how to use objects anyway so it works the same.
-  ",
   "title": "Sleep Now In The Fire",
   "artist": "Rage Against The Machine",
   "lyrics": {
