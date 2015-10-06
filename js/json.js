@@ -19,6 +19,10 @@
     That outputted "undefined" to the HTML document, so I went with the for .. in loop.
     You can find that stackoverflow post here:
     https://stackoverflow.com/questions/19323699/iterating-through-json-object-javascript
+
+    Some of the JS in this file is also from Prof. Heines' web page for Assignment 5.
+    I modified it for my custom made JSON file. The URL to that assignment is below:
+    https://teaching.cs.uml.edu/~heines/91.461/91.461-2015-16f/461-assn/FormattingText-v05.jsp
 */
 
 var song_lyrics;
