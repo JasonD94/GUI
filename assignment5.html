@@ -2,18 +2,6 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8">
-
-  <!--
-      Google fonts. Included here at the very top for performance gains and to avoid the use of @import
-      like Google recommends here:
-      http://googlewebfonts.blogspot.com/2010/09/optimizing-use-of-google-font-api.html
-
-      Fix for the validator comes from this page (| is encoded as %7C):
-      https://stackoverflow.com/questions/22466913/google-fonts-url-break-html5-validation-on-w3-org
-   -->
-   <link rel="stylesheet" type="text/css"
-   href="http://fonts.googleapis.com/css?family=Advent+Pro%7CBangers%7CSlackey%7CSigmar+One%7CRighteous%7CUbuntu">
-
   <!--
     File: ~/assignment5.html
     91.461 Assignment 5: Formatting Dynamic Text
@@ -24,10 +12,22 @@
     Created: Oct 3, 2015.
     Last Updated: Oct 5th, 10PM.
 
-    This is a page specifically for the 3rd assignment. Since I already did CSS in the first assignment, I decided to
-    build a simple form that can email me when someone fills it out. It uses a JavaScript file to do this, which makes a
-    AJAX call to an API called Mandrill which allows me to POST data to their servers, which they will then email for me.
+    This is a page for the 5th assignment. It mainly consists of a div with the id "place_json_here", and a 
+    YouTube iframe. The YouTube video is the music video for the song "Sleep Now In The Fire" by 
+    Rage Against The Machine. I load a JSON file called lyrics.json into the "place_json_here" div,
+    and I then style the text dynamically using CSS. The JSON file contains the title, artist and song lyrics
+    to the song in the YouTube video displayed on this page (Sleep Now In The Fire).
   -->
+  <!--
+      Google fonts. Included here at the very top for performance gains and to avoid the use of @import
+      like Google recommends here:
+      http://googlewebfonts.blogspot.com/2010/09/optimizing-use-of-google-font-api.html
+
+      Fix for the validator comes from this page (| is encoded as %7C):
+      https://stackoverflow.com/questions/22466913/google-fonts-url-break-html5-validation-on-w3-org
+   -->
+   <link rel="stylesheet" type="text/css"
+   href="http://fonts.googleapis.com/css?family=Advent+Pro%7CBangers%7CSlackey%7CSigmar+One%7CRighteous%7CUbuntu">
 
   <!-- Configuration -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
