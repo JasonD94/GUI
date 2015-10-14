@@ -83,7 +83,7 @@ function table_fill(calc_array) {
   content += "<table class='dyn_table'>";
 
   // Start by putting the empty spot in the top left corner.
-  content += "<tr class='dyn_tr_td'><td class='dyn_tr_td'>&nbsp;</td>";
+  content += "<tr class='dyn_tr_td'><td></td>";
 
   // Now fill out the rest of the first row.
   for (var x = hor_start; x <= hor_end; x++) {
