@@ -14,93 +14,47 @@
     fills in the table.
 */
 
-var song_lyrics;
-var content = "";
+// This function calculates the multiplication table.
+function table_calc() {
+  // Calculate the multiplication table.
+  // We'll do a 2d array, of:
+  /*
+      x 1  2  3  4  5
+      5 5 10 15 20 25
+      6 6 12 18 24 30
+      etc
+  */
 
-// Get the JSON file into a global var called song_lyrics
-function get_json() {
-  jQuery.get("json/lyrics.json", function(data) {
-    song_lyrics = data;   // Save lyrics JSON file into song_lyrics variable.
-    place_json();         // Place JSON data into the HTML document
-  });
+  // Found how to do this on Stackoverflow
+  // URL: https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
+  var calc = new Array(5);    // Ending length
+
+  for (var x = 0; x < 4; x++) {   // x < Ending length
+    calc = new Array(5);
+  }
+
+  // Make the top left corner 0, and ignore it in the future.
+  calc[0][0] = 0;
+
+  var hor = 1;    // start at 1 to ignore the "x". Reset to 0 each loop though.
+  var vert = 0;   // increment by 1 each pass through columns.
+
+  // Now let's calculate the multiplication table
+  //         hor beg  hor ending
+  for (var x = 5; x <= 8; x++) {
+    //       vert beg  vert ending
+    for (var y = 1; y <= 5; y++) {
+      calc[hor][vert] = x * y;    // Calculate the given spot in the multiplication table.
+      hor++;                      // Horizontal counter increments each time.
+    }
+    hor = 0;
+    vert++;
+  }
+
+  table_fill();
 }
 
-// Place the JSON data into the HTML document.
-function place_json() {
-  // Creating content dynamically using the JSON data.
-  content += "<h1 class='title'>" + song_lyrics.title + "</h1>";
-  content += "<h2 class='artist'>" + song_lyrics.artist + "</h2>";
-
-  content += "<br/>";   // Add newline.
-
-  // Start looping through the lyrics.
-  // Lyrics are from: http://www.ratm.net/lyrics/sle.html
-  content += "<p class='YEAAH'>" + song_lyrics.lyrics.yeah + "</p>";
-  content += "<br/>";   // Add newline.
-
-  // First paragraph
-  for(var key in song_lyrics.lyrics.first) {
-    if(song_lyrics.lyrics.first.hasOwnProperty(key)) {
-      var value = song_lyrics.lyrics.first[key];
-      content += "<p class='first'>" + value + "</p>";
-    }
-  }
-  content += "<br/>";   // Add newline.
-
-  // Print out two "Hey! Hey!" lines
-  print_hey(content);
-
-  // Second paragraph
-  for(var key in song_lyrics.lyrics.second) {
-    if(song_lyrics.lyrics.second.hasOwnProperty(key)) {
-      var value = song_lyrics.lyrics.second[key];
-      content += "<p class='second'>" + value + "</p>";
-    }
-  }
-  content += "<br/>";   // Add newline.
-
-  // Two more "Hey! Hey!" lines
-  print_hey(content);
-
-  // Third paragraph
-  for(var key in song_lyrics.lyrics.third) {
-    if(song_lyrics.lyrics.third.hasOwnProperty(key)) {
-      var value = song_lyrics.lyrics.third[key];
-      content += "<p class='third'>" + value + "</p>";
-    }
-  }
-  content += "<br/>";   // Add newline.
-
-  // YEAAAAH!
-  content += "<p class='YEAAH'>" + song_lyrics.lyrics.yeah + "</p>";
-  content += "<br/>";   // Add newline.
-
-  // "SLEEP NOW IN THE FIRE!" lines.
-  for(var key in song_lyrics.lyrics.sleep) {
-    if(song_lyrics.lyrics.third.hasOwnProperty(key)) {
-      var value = song_lyrics.lyrics.sleep[key];
-      content += "<p class='sleep'>" + value + "</p>";
-    }
-  }
-
-  // Now the content gets loaded into the HTML page.
-  $("#place_json_here").html(content);
-}
-
-// Instead of repeating two for loops, use just one.
-function print_hey() {
-  for(var x = 0; x < 2; x++) {
-    for(var key in song_lyrics.lyrics.hey) {
-      if(song_lyrics.lyrics.hey.hasOwnProperty(key)) {
-        var value = song_lyrics.lyrics.hey[key];
-        if(value == "HEY!") { // "HEY!" should be blue.
-          content += "<p class='hey'>" + value + "</p>";
-        }
-        else {  // The "SLEEP NOW IN THE FIRE" part will be red.
-          content += "<p class='sleep'>" + value + "</p>";
-        }
-      }
-    }
-    content += "<br/>";   // Add newline.
-  }
+// This function fills in the multiplication table.
+function table_fill() {
+  console.log("The array looks like:\n", calc);
 }
