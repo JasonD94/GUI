@@ -122,21 +122,37 @@
       <div class="col-md-12">
         <!-- Form to take user input.
         I used the following site for help with the form:
-        http://www.w3schools.com/html/html_forms.asp -->
-        <form onSubmit="table_calc(); return false;">
+        http://www.w3schools.com/html/html_forms.asp
+
+        I also used this stackoverflow post for the onsubmit:
+        https://stackoverflow.com/questions/13143932/submit-html-form-perform-javascript-function-alert-then-redirect
+
+        LOOK AT THIS FOR CENTERING THE FORM:
+        https://stackoverflow.com/questions/9737394/html-how-to-center-align-a-form -->
+
+        <div class="highlight_centered_margins">
+
+        <form onsubmit="return table_calc();">
           Starting horizontal multiplier:&nbsp;
-          <input type="number" name="horiz_start"><br/>
+          <input type="number" name="horz start" id="horiz_start"><br/>
+
           Ending horizontal multiplier:&nbsp;
-          <input type="number" name="horiz_end"><br/>
+          <input type="number" name="horz end" id="horiz_end"><br/>
+
           Starting vertical multiplier:&nbsp;
-          <input type="number" name="vert_start"><br/>
+          <input type="number" name="vert start" id="vert_start"><br/>
+
           Ending vertical multiplier:&nbsp;
-          <input type="number" name="vert_end"><br/>
+          <input type="number" name="vert end" id="vert_end"><br/>
+
           <input type="submit" value="Submit">
         </form>
 
         <!-- The multiplication table will appear in this div -->
         <div id="multiplication_table"></div>
+
+        </div>
+
       </div>
     </div>
 
@@ -193,15 +209,13 @@
 
   <!-- Small script to run the json.js functions when the document has finished loading.
        Technically the site is loaded by this point, but might as well use .ready() to be safe. -->
-  <!--
   <script type='text/javascript'>
     // This is from the following site:
     // https://learn.jquery.com/using-jquery-core/document-ready/
     $(document).ready(function() {
-      get_json();
+      table_calc();
     });
   </script>
-  -->
 
 </body>
 </html>

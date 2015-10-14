@@ -25,25 +25,35 @@ function table_calc() {
       etc
   */
 
-  // Found how to do this on Stackoverflow
-  // URL: https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
-  var calc = new Array(5);    // Ending length
+  // User input
+  var hor_start = document.getElementById('horiz_start').value;
+  var hor_end = document.getElementById('horiz_end').value;
+  var vert_start = document.getElementById('vert_start').value;
+  var vert_end = document.getElementById('vert_end').value;
 
-  for (var x = 0; x < 4; x++) {   // x < Ending length
-    calc = new Array(5);
+  // Validate user input
+  if (hor_start == hor_end || vert_start == vert_end) {
+    return;   // Can't do this.
   }
 
-  // Make the top left corner 0, and ignore it in the future.
-  calc[0][0] = 0;
+  // Found how to do this on Stackoverflow
+  // URL: https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
+  var calc = [];
 
-  var hor = 1;    // start at 1 to ignore the "x". Reset to 0 each loop though.
-  var vert = 0;   // increment by 1 each pass through columns.
+  for (var x = 0; x <= hor_end; x++) {   // x < Ending length
+    calc[x] = [];
+  }
 
-  // Now let's calculate the multiplication table
-  //         hor beg  hor ending
-  for (var x = 5; x <= 8; x++) {
-    //       vert beg  vert ending
-    for (var y = 1; y <= 5; y++) {
+  var hor = 0;          // Indexes for the 2D array.
+  var vert = 0;
+
+  // Now let's calculate the multiplication table using a 2D array.
+  // I figured out how to do this using this stackoverflow post:
+  // https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
+  //         vert beg  vert ending
+  for (var x = vert_start; x <= vert_end; x++) {
+    //       hor beg  hor ending
+    for (var y = hor_start; y <= hor_end; y++) {
       calc[hor][vert] = x * y;    // Calculate the given spot in the multiplication table.
       hor++;                      // Horizontal counter increments each time.
     }
@@ -51,10 +61,59 @@ function table_calc() {
     vert++;
   }
 
-  table_fill();
+  table_fill(calc);
+  return false;
 }
 
 // This function fills in the multiplication table.
-function table_fill() {
-  console.log("The array looks like:\n", calc);
+function table_fill(calc_array) {
+  console.log("The array looks like:\n", calc_array);
+
+  // User input
+  var hor_start = document.getElementById('horiz_start').value;
+  var hor_end = document.getElementById('horiz_end').value;
+  var vert_start = document.getElementById('vert_start').value;
+  var vert_end = document.getElementById('vert_end').value;
+
+  // Now we can fill in the table.
+  // w3schools is helpful: http://www.w3schools.com/html/html_tables.asp
+  var content = "";
+
+  // Opening table tags.
+  content += "<table>";
+
+  // Start by putting the empty spot in the top left corner.
+  content += "<tr><td>&nbsp;</td>";
+
+  // Now fill out the rest of the first row.
+  for (var x = hor_start; x <= hor_end; x++) {
+    content += "<td>" + x + "</td>";
+  }
+
+  // Close the first row.
+  content += "</tr>";
+
+  var hor = 0;          // Indexes for the 2D array.
+  var vert = 0;
+
+  // Fill in each row after the first.
+  for (var x = vert_start; x <= vert_end; x++) {
+    content += "<tr> <td>" + x + "</td>";
+
+    for (var y = hor_start; y <= hor_end; y++) {
+      content += "<td>" + calc_array[hor][vert] + "</td>";
+      hor++;
+    }
+    hor = 0;
+    vert++;
+
+    // Close each row.
+    content += "</tr>";
+  }
+
+  // Ending table tags.
+  content += "</table>";
+
+  // Now the content gets loaded into the HTML page.
+  $("#multiplication_table").html(content);
 }
