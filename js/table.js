@@ -80,14 +80,14 @@ function table_fill(calc_array) {
   var content = "";
 
   // Opening table tags.
-  content += "<table>";
+  content += "<table class='dyn_table'>";
 
   // Start by putting the empty spot in the top left corner.
-  content += "<tr><td>&nbsp;</td>";
+  content += "<tr class='dyn_tr_td'><td class='dyn_tr_td'>&nbsp;</td>";
 
   // Now fill out the rest of the first row.
   for (var x = hor_start; x <= hor_end; x++) {
-    content += "<td>" + x + "</td>";
+    content += "<td class='dyn_tr_td'>" + x + "</td>";
   }
 
   // Close the first row.
@@ -98,10 +98,10 @@ function table_fill(calc_array) {
 
   // Fill in each row after the first.
   for (var x = vert_start; x <= vert_end; x++) {
-    content += "<tr> <td>" + x + "</td>";
+    content += "<tr class='dyn_tr_td'> <td class='dyn_tr_td'>" + x + "</td>";
 
     for (var y = hor_start; y <= hor_end; y++) {
-      content += "<td>" + calc_array[hor][vert] + "</td>";
+      content += "<td class='dyn_tr_td'>" + calc_array[hor][vert] + "</td>";
       hor++;
     }
     hor = 0;

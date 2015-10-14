@@ -113,6 +113,11 @@
         <div class="highlight_centered_margins">
           This assignment generates a dynamic multiplication table based on
           user input.
+          <br/>
+          Users should enter a starting and ending horizontal multiplier,<br/>
+          as well as a vertical starting and ending multiplier.
+          <br/>
+          Example input would be "1, 5" for horizontal, and "1, 5" for vertical.
         </div>
       </div>
     </div>
@@ -133,20 +138,22 @@
         <div class="highlight_centered_margins">
 
         <form onsubmit="return table_calc();">
-          Starting horizontal multiplier:&nbsp;
+          <label>Starting horizontal multiplier: </label>
           <input type="number" name="horz start" id="horiz_start"><br/>
 
-          Ending horizontal multiplier:&nbsp;
+          <label>Ending horizontal multiplier: </label>
           <input type="number" name="horz end" id="horiz_end"><br/>
 
-          Starting vertical multiplier:&nbsp;
+          <label>Starting vertical multiplier: </label>
           <input type="number" name="vert start" id="vert_start"><br/>
 
-          Ending vertical multiplier:&nbsp;
-          <input type="number" name="vert end" id="vert_end"><br/>
+          <label>Ending vertical multiplier: </label>
+          <input type="number" name="vert end" id="vert_end"><br/><br/>
 
-          <input type="submit" value="Submit">
+          <input type="submit" value="Submit ">
         </form>
+
+        <br/>
 
         <!-- The multiplication table will appear in this div -->
         <div id="multiplication_table"></div>

@@ -77,12 +77,45 @@ html {
   text-align: center;
 }
 
+/* The following is for the table in assignment #6 */
+
 /*
     Modifying forms so that input is visible.
 */
 input {
   color: black;
 }
+
+/*
+    This Stackoverflow post explained how to do this:
+    https://stackoverflow.com/questions/9686538/align-labels-in-form-next-to-input
+
+    See if there is a better way.
+*/
+label {
+  display: inline-block;
+  width: 350px;           /* modified this */
+  text-align: right;
+}​
+
+/*
+    w3schools is so helpful:
+    http://www.w3schools.com/css/css_table.asp
+*/
+.dyn_table {
+  border: 1px solid red;
+}
+
+.dyn_tr_td {
+  background-color: orange;
+  border: 3px solid red;
+  color: black;
+  height: 50px;
+  padding: 15px;
+  text-align: right;
+  vertical-align: bottom;
+}
+
 
 /*
   This chunk contains all the highlight / text related CSS.
