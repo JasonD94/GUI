@@ -12,6 +12,12 @@
     All CSS in this file is organized in alphabetical order - as much as possible.
 */
 
+/* CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+}
+
 /*
     I found this one this stackoverflow page;  it is used to make the "#About" link in the Nav Bar go all
     the way to the top. I changed it to offset to 70px since that seems to be just enough for this fix to work.
@@ -103,10 +109,28 @@ label {
     w3schools is so helpful:
     http://www.w3schools.com/css/css_table.asp
 */
-#multiplication_table {
-  margin: 0 auto;
-  text-align: left;
+div#multiplication_table {
   font-family: "Advent Pro";
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+/* Finally this worked! This post I tried first:
+https://stackoverflow.com/questions/301147/css-way-to-horizontally-align-table
+
+But I think I needed the "width: 100%" for some reason. I saw that on this page:
+https://stackoverflow.com/questions/9402856/how-to-put-table-in-the-center-of-the-page-using-css */
+table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+tbody {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 /* This is for the TR and TD tags. */

@@ -80,7 +80,7 @@ function table_fill(calc_array) {
   var content = "";
 
   // Opening table tags.
-  content += "<table class='dyn_table'>";
+  content += "<table>";
 
   // Start by putting the empty spot in the top left corner.
   content += "<tr class='dyn_tr_td'><td></td>";
