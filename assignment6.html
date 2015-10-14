@@ -3,16 +3,18 @@
 <head>
   <meta charset="utf-8">
   <!--
-    File: /~jason/assignment4.html
-    91.461 Assignment 4: Posting a Page to GitHub
+    File: ~/assignment6.html
+    91.461 Assignment 6: Creating an Interactive Dynamic Table
     Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
     Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
-    Created: Oct 1, 2015.
-    Last Updated: Oct 1, at 9PM.
+    Created: Oct 13, 2015.
+    Last Updated: Oct 13, 9PM.
 
-    This is just a page for the 4th assignment, Posting a Page to GitHub.
+    This page is for the 6th assignment, "Creating an Interactive Dynamic Table".
+    It contains a form for user input, and a JavaScript program to calculate what
+    the user inputs.
   -->
   <!--
       Google fonts. Included here at the very top for performance gains and to avoid the use of @import
@@ -21,8 +23,9 @@
 
       Fix for the validator comes from this page (| is encoded as %7C):
       https://stackoverflow.com/questions/22466913/google-fonts-url-break-html5-validation-on-w3-org
-  -->
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu%7CAdvent+Pro">
+   -->
+   <link rel="stylesheet" type="text/css"
+   href="http://fonts.googleapis.com/css?family=Advent+Pro%7CBangers%7CSlackey%7CSigmar+One%7CRighteous%7CUbuntu">
 
   <!-- Configuration -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -38,6 +41,9 @@
 
   <!-- CSS file to override stuff -->
   <link rel="stylesheet" href="css/index.css">
+
+  <!-- CSS file for the text that is loaded dynamically from JSON. -->
+  <link rel="stylesheet" href="css/json.css">
 
   <!-- Custom favicon -->
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -95,35 +101,42 @@
   <!-- The main container -->
   <div class="container">
 
-    <!-- First row -->
-    <div class = "row">
+    <!-- First row - Assignment description -->
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="name">
+          <span class="highlight_red">Assignment #6</span>
+        </h1>
+      </div>
 
-      <h1 class="name">
-        <span class="highlight">Assignment #4</span>
-      </h1>
+      <div class="col-md-12">
+        <div class="highlight_centered_margins">
+          This assignment generates a dynamic multiplication table based on
+          user input.
+        </div>
+      </div>
     </div>
 
-    <!-- Contact info -->
-    <div class = "row">
+    <!-- YouTube video / JSON lyrics loaded here. -->
+    <div class="row">
       <div class="col-md-12">
-        <div class="highlight_left_aligned">
-          This assignment was to post our websites onto GitHub.
-        </div>
-        <div class="highlight_left_aligned">
-          You can find the URL to my page on GitHub Pages at:
-          <a href="https://jasond94.github.io/GUI">jasond94.github.io/GUI</a>
-        </div>
-        <div class="highlight_left_aligned">
-          NOTE: I have a custom domain on my personal website,
-          <a href="https://jasond94.github.io">jason.github.io</a>,
-          which is
-          <a href="http://downing.io">downing.io</a>.
-        </div>
-        <div class="highlight_left_aligned">
-          As a result, all of my jasond94.github.io URLs redirect to
-          downing.io, so the actual URL of my GitHub Pages site is:
-          <a href="http://downing.io/GUI">downing.io/GUI</a>.
-        </div>
+        <!-- Form to take user input.
+        I used the following site for help with the form:
+        http://www.w3schools.com/html/html_forms.asp -->
+        <form onSubmit="return table_calc()">
+          Starting horizontal multiplier:&nbsp;
+          <input type="number" name="horiz_start"><br/>
+          Ending horizontal multiplier:&nbsp;
+          <input type="number" name="horiz_end"><br/>
+          Starting vertical multiplier:&nbsp;
+          <input type="number" name="vert_start"><br/>
+          Ending vertical multiplier:&nbsp;
+          <input type="number" name="vert_end"><br/>
+          <input type="submit" value="Submit">
+        </form>
+
+        <!-- The multiplication table will appear in this div -->
+        <div id="multiplication_table"></div>
       </div>
     </div>
 
@@ -141,7 +154,7 @@
         text as a link as well.
         http://teacherjohn.com/tutorials/cabrillo/validatebuttons.php
     -->
-    <div class = "center_text_small">
+    <div class="center_text_small">
       <a href="http://validator.w3.org/check?uri=referer">
         <img class="img-square" src="img/HTML5_Logo.png" style="height: 40px" alt="HTML5 Logo"/>
         Valid HTML5
@@ -153,9 +166,9 @@
       </a>
       <br><br>
 
-      <p class = "text-muted">
+      <p class="text-muted">
         Jason Downing &copy; 2015. All rights reserved.
-        Powered by <a href = "http://www.getbootstrap.com/">Bootstrap</a>.
+        Powered by <a href="http://www.getbootstrap.com/">Bootstrap</a>.
       </p>
     </div>
   </div>          <!-- This should be the end div of the main container. -->
@@ -170,13 +183,25 @@
    -->
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins). -->
-  <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
   <!-- Latest compiled and minified JavaScript -->
-  <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script type='text/javascript' src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-  <!-- Email function - powered by Mandrill -->
-  <script src="js/email.js"></script>
+  <!-- JS file that loads up the JSON data into the HTML document. -->
+  <script type='text/javascript' src="js/table.js"></script>
+
+  <!-- Small script to run the json.js functions when the document has finished loading.
+       Technically the site is loaded by this point, but might as well use .ready() to be safe. -->
+  <!--
+  <script type='text/javascript'>
+    // This is from the following site:
+    // https://learn.jquery.com/using-jquery-core/document-ready/
+    $(document).ready(function() {
+      get_json();
+    });
+  </script>
+  -->
 
 </body>
 </html>
