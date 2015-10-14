@@ -106,21 +106,23 @@ label {
 }​
 
 /*
-    w3schools is so helpful:
-    http://www.w3schools.com/css/css_table.asp
+  w3schools is so helpful:
+  http://www.w3schools.com/css/css_table.asp
+
+  This was really helpful for centering the table. I had to use margin left / right
+  at auto, and width 100%. I'm not sure why but I had to use both the div and the
+  table. If I remove either then the table stops being centered. It also only stays
+  centered for up to 25 columns, after that it expands to the right. But I think that's
+  fine, otherwise the content would become very tiny.
+  https://stackoverflow.com/questions/301147/css-way-to-horizontally-align-table
+  https://stackoverflow.com/questions/9402856/how-to-put-table-in-the-center-of-the-page-using-css
 */
 div#multiplication_table {
-  font-family: "Advent Pro";
   margin-left: auto;
   margin-right: auto;
   width: 100%;
 }
 
-/* Finally this worked! This post I tried first:
-https://stackoverflow.com/questions/301147/css-way-to-horizontally-align-table
-
-But I think I needed the "width: 100%" for some reason. I saw that on this page:
-https://stackoverflow.com/questions/9402856/how-to-put-table-in-the-center-of-the-page-using-css */
 table {
   margin-left: auto;
   margin-right: auto;
@@ -139,10 +141,11 @@ tbody {
   border: 3px solid red;
   color: black;
   height: 50px;
+  font-family: "Advent Pro";
+  font-size: 150%;
+  font-weight: 900;
   padding: 15px;
   text-align: center;
-/*  text-align: right;
-  vertical-align: bottom;*/
 }
 
 /* The very top left table spot should be blank.
@@ -166,31 +169,31 @@ tbody > tr:first-child > td:first-child {
 
 .center_text {
   color: white;
-  text-align: center;
   font-family: "Advent Pro";
-  font-weight:900;
   font-size: 200%;
+  font-weight: 900;
+  text-align: center;
 }
 
 .center_text_nohighlight {
   color: black;
-  text-align: center;
   font-size: 200%;
+  text-align: center;
 }
 
 .center_text_small {
   color: white;
-  text-align: center;
   font-family: "Advent Pro";
-  font-weight:900;
   font-size: 120%;
+  font-weight: 900;
+  text-align: center;
 }
 
 h1.name {
   color: white;
-  text-align: center;
   font-family: "Ubuntu";
   font-size: 750%;
+  text-align: center;
 }
 
 .highlight {
@@ -207,8 +210,8 @@ h1.name {
   background-color: black;
   color: white;
   font-family: "Advent Pro";
-  font-weight:900;
   font-size: 200%;
+  font-weight: 900;
   text-align: center;
 }
 
@@ -216,8 +219,8 @@ h1.name {
   background-color: black;
   color: white;
   font-family: "Advent Pro";
-  font-weight:900;
   font-size: 200%;
+  font-weight: 900;
   margin: 10px;
   text-align: center;
 }
@@ -226,8 +229,8 @@ h1.name {
   background-color: black;
   color: white;
   font-family: "Advent Pro";
-  font-weight:900;
   font-size: 200%;
+  font-weight: 900;
   text-align: left;
 }
 
@@ -235,8 +238,8 @@ h1.name {
   background-color: black;
   color: white;
   font-family: "Advent Pro";
-  font-weight:900;
   font-size: 200%;
+  font-weight: 900;
   margin-right: -20px;
   text-align: right;
 }
@@ -251,8 +254,8 @@ h1.name {
   background-color: black;
   color: white;
   font-family: "Advent Pro";
-  font-weight:900;
   font-size: 200%;
+  font-weight: 900;
   text-align: center;
   font-weight: bold;
   text-decoration: underline;
