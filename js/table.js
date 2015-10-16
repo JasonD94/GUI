@@ -17,10 +17,17 @@
 // This function calculates the multiplication table.
 function table_calc() {
   // User input
-  var hor_start = document.getElementById('horiz_start').value;
-  var hor_end = document.getElementById('horiz_end').value;
-  var vert_start = document.getElementById('vert_start').value;
-  var vert_end = document.getElementById('vert_end').value;
+  var hor_start = Number(document.getElementById('horiz_start').value);
+  var hor_end = Number(document.getElementById('horiz_end').value);
+  var vert_start = Number(document.getElementById('vert_start').value);
+  var vert_end = Number(document.getElementById('vert_end').value);
+
+  // Swap beginning / ending numbers if the start is larger than the beginning.
+  if (hor_start > hor_end) {
+    var tmp_num = hor_start;
+    hor_start = hor_end;
+    hor_end = tmp_num;
+  }
 
   // Debugging
   console.log("Horiz start: ", hor_start, "Horiz end: ", hor_end, "Vert start: ",
@@ -98,10 +105,19 @@ function table_fill(matrix) {
   console.log("The array looks like:\n", matrix);
 
   // User input
-  var hor_start = document.getElementById('horiz_start').value;
-  var hor_end = document.getElementById('horiz_end').value;
-  var vert_start = document.getElementById('vert_start').value;
-  var vert_end = document.getElementById('vert_end').value;
+  // Convert to number to prevent random shit
+  // http://www.w3schools.com/js/js_comparisons.asp
+  var hor_start = Number(document.getElementById('horiz_start').value);
+  var hor_end = Number(document.getElementById('horiz_end').value);
+  var vert_start = Number(document.getElementById('vert_start').value);
+  var vert_end = Number(document.getElementById('vert_end').value);
+
+  // Swap beginning / ending numbers if the start is larger than the beginning.
+  if (hor_start > hor_end) {
+    var tmp_num = hor_start;
+    hor_start = hor_end;
+    hor_end = tmp_num;
+  }
 
   // Debug why stuff is weird.
   console.log("Horiz start: ", hor_start, "Horiz end: ", hor_end, "Vert start: ",
@@ -128,7 +144,7 @@ function table_fill(matrix) {
   content += "<tr><td></td>";
 
   // Now fill out the rest of the first row.
-  for (var a = hor_start; a <= rows; a++) {
+  for (var a = hor_start; a <= hor_end; a++) {
     content += "<td>" + a + "</td>";
   }
 
