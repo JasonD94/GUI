@@ -22,18 +22,12 @@ function table_calc() {
   var vert_start = document.getElementById('vert_start').value;
   var vert_end = document.getElementById('vert_end').value;
 
-  // Validate user input
-  if (hor_start == hor_end || vert_start == vert_end) {
-    alert("Sorry, please enter a wider number range (at least 1 number apart).");
-    return;   
-  }
-  
   // It crashes on huge numbers so don't let users enter numbers greater/less than 1,000
   if (hor_start < -1000 || hor_end > 1000 || vert_start < -1000 || vert_end > 1000) {
     alert("Sorry, but valid input is a number between -1000 and 1000.");
     return;
   }
-  
+
   // Flip the inputs around if the end is less than the start.
   // This would break the row count code.
   if (hor_end < hor_start) {
@@ -41,7 +35,7 @@ function table_calc() {
     hor_end = hor_start;    // Swap two ints.
     hor_start = tmp;
   }
-  
+
   // Also flip around vertical indexes too if the end is less than the start.
   if (vert_end < vert_start) {
     var tmp = vert_end;
@@ -49,20 +43,37 @@ function table_calc() {
     vert_start = tmp;
   }
 
-  var calc = [];
-
   /*
-    2D Array for calculating the multiplication table.
 
-    I found how to do this on Stackoverflow
-    https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
+    this code is badly broken.
+    and i don't know why.
+    2d arrays are annoying in JavaScript.
+
+    thought:
+
+    instead of array of arrays, use an object containing each rows array.
+
+    EG:
+
+    matrix {
+      row1: [1, 2, 3,  4,  5],
+      row2: [3, 6, 9, 12, 15],
+      row3: [etc],
+      row4: [etc]
+    }
+
   */
-  
-  console.log("ARRAY IS: ", calc);
+
+  var matrix = {};                          // empty object
+  var rows = hor_end - hor_start;         // Need to know how many rows / columns
+  var columns = vert_end - vert_start;
+
+  // Debugging
+  console.log("Object is: ", matrix);
 
   // Indexes for the 2D array.
-  var hor = 0;
-  var vert = 0;
+  var horz = hor_start;
+  var vert = vert_start;
 
   /*  Now let's calculate the multiplication table using a 2D array.
       This parts confusing so let me explain:
@@ -75,25 +86,29 @@ function table_calc() {
       The vert position index increases each time as we move down a row.
       The horizontal index resets to zero each time since we're doing a
   */
-  for (var x = vert_start; x <= vert_end; x++) {
+  for (var x = 0; x <= rows; x++) {
     var tmp_arr = [];
-    for (var y = hor_start; y <= hor_end; y++) {
+
+    for (var y = 0; y <= columns; y++) {
       // Calculate the given spot in the multiplication table.
-      console.log("ARRAY IS: ", calc);
-      tmp_arr[hor] = x * y;
-      hor++;
+      var calc = horz * vert;
+      tmp_arr[y] = calc;
+      horz++;
     }
-    calc[vert] = tmp_arr;
-    hor = 0;        // Reset to zero each pass since we're moving down a row.
+
+    // Save the current row in the object.
+    matrix["row" + x] = tmp_arr;
+
+    horz = hor_start;        // Reset each pass since we're moving down a row.
     vert++;
   }
 
-  table_fill(calc);
+  table_fill(matrix);
   return false;
 }
 
 // This function fills in the multiplication table.
-function table_fill(calc_array) {
+function table_fill(mult_matrix) {
   // Debugging.
   console.log("The array looks like:\n", calc_array);
 
@@ -121,24 +136,23 @@ function table_fill(calc_array) {
   // Close the first row.
   content += "</tr>";
 
-  var hor = 0;          // Indexes for the 2D array.
-  var vert = 0;
+  // Figure out how many rows and columns we have.
+  var rows = hor_end - hor_start;
+  var columns = vert_end - vert_start;
+
+  // Print out the left most column using this variable.
+  var vert = vert_start;
 
   // Fill in each row after the first.
-  for (var x = vert_start; x <= vert_end; x++) {
+  for (var x = 0; x <= rows; x++) {
     // Set the left most column first.
-    content += "<tr><td>" + x + "</td>";
-    
-    var tmp_arr = calc_array[hor];
+    content += "<tr><td>" + vert + "</td>";
 
     // Add in all the multiplication for this row.
-    for (var y = hor_start; y <= hor_end; y++) {
-      content += "<td>" + tmp_arr[vert] + "</td>";
-      vert++;
+    for (var y = 0; y <= columns; y++) {
+      content += "<td>" + calc_array[y][x] + "</td>";
     }
-    // Reset horizontal counter each time as we move down a row.
-    vert = 0;
-    hor++;
+    vert++;
 
     // Close each row.
     content += "</tr>";
