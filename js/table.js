@@ -16,7 +16,7 @@
 
 // This function calculates the multiplication table.
 function table_calc() {
-  /*  User input
+  /*  User input - from the form on the assignment 6 HTML doc.
       Convert to a number using type casting. This fixed so many random bugs
       in my code. W3Schools helped a ton in figuring this out, as comparisons
       would fail randomly before I added this.
@@ -26,6 +26,10 @@ function table_calc() {
   var hor_end = Number(document.getElementById('horiz_end').value);
   var vert_start = Number(document.getElementById('vert_start').value);
   var vert_end = Number(document.getElementById('vert_end').value);
+
+  // Check to see if the numbers are read correctly.
+  console.log("Horizontal start: ", hor_start, "Horizontal end: ", hor_end,
+              "---Vertical start: ", vert_start, "Vertical end: ", vert_end);
 
   // Swap beginning / ending numbers if the start is larger than the beginning.
   if (hor_start > hor_end) {
@@ -59,7 +63,7 @@ function table_calc() {
 
   // Flip the inputs around if the end is less than the start.
   // This would break the <= row code below.
-  // Do using this absolute values - so if we got say -8 it would ignore the negative.
+  // Also use absolute values - so if we got say -8 it would ignore the negative.
   var rows = Math.abs(hor_end - hor_start);
   var columns = Math.abs(vert_end - vert_start);
 
@@ -105,6 +109,10 @@ function table_fill(matrix) {
   var hor_end = Number(document.getElementById('horiz_end').value);
   var vert_start = Number(document.getElementById('vert_start').value);
   var vert_end = Number(document.getElementById('vert_end').value);
+
+  // Check to see if the numbers are read correctly.
+  console.log("Horizontal start: ", hor_start, "Horizontal end: ", hor_end,
+              "---Vertical start: ", vert_start, "Vertical end: ", vert_end);
 
   // Swap beginning / ending numbers if the start is larger than the beginning.
   if (hor_start > hor_end) {

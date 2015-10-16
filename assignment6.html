@@ -133,7 +133,7 @@
         I also used this stackoverflow post for the onsubmit:
         https://stackoverflow.com/questions/13143932/submit-html-form-perform-javascript-function-alert-then-redirect
 
-        LOOK AT THIS FOR CENTERING THE FORM:
+        This link was helpful for centering the form using CSS:
         https://stackoverflow.com/questions/9737394/html-how-to-center-align-a-form -->
         <div class="highlight_centered_margins">
           <form onsubmit="return false">
@@ -149,6 +149,10 @@
             <label>Ending vertical multiplier: </label>
             <input type="number" name="vert end" id="vert_end" value="5"><br/><br/>
 
+            <!-- Note: using onclick so that when debugging the form, user input isn't lost
+                 and console.logs are also kept. Using onsubmit made it very difficult to
+                 spot errors, while onclick doesn't force the page to refresh because
+                 of the return false in the onsubmit form attribute. -->
             <input type="submit" value="Submit " onclick="return table_calc()">
           </form>
         </div>
