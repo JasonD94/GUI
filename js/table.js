@@ -33,6 +33,12 @@ function table_calc() {
     hor_start = hor_end;
     hor_end = tmp_num;
   }
+  // Also swap vertical beginning / ending
+  if (vert_start > vert_end) {
+    var tmp_num = vert_start;
+    vert_start = vert_end;
+    vert_end = tmp_num;
+  }
 
   // It crashes on huge numbers so don't let users enter numbers greater/less than 1,000
   if (hor_start < -1000 || hor_end > 1000 || vert_start < -1000 || vert_end > 1000) {
@@ -105,6 +111,12 @@ function table_fill(matrix) {
     var tmp_num = hor_start;
     hor_start = hor_end;
     hor_end = tmp_num;
+  }
+  // Also swap vertical beginning / ending
+  if (vert_start > vert_end) {
+    var tmp_num = vert_start;
+    vert_start = vert_end;
+    vert_end = tmp_num;
   }
 
   // Flip the inputs around if the end is less than the start. This would break <= row code below.
