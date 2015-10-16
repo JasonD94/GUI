@@ -22,35 +22,17 @@ function table_calc() {
   var vert_start = document.getElementById('vert_start').value;
   var vert_end = document.getElementById('vert_end').value;
 
+  // Debugging
+  console.log("Horiz start: ", hor_start, "Horiz end: ", hor_end, "Vert start: ",
+              vert_start, "Vert end: ", vert_end);
+
   // It crashes on huge numbers so don't let users enter numbers greater/less than 1,000
   if (hor_start < -1000 || hor_end > 1000 || vert_start < -1000 || vert_end > 1000) {
     alert("Sorry, but valid input is a number between -1000 and 1000.");
     return;
   }
 
-  // Flip the inputs around if the end is less than the start.
-  // This would break the row count code.
-  if (hor_end < hor_start) {
-    var tmp = hor_end;
-    hor_end = hor_start;    // Swap two ints.
-    hor_start = tmp;
-  }
-
-  // Also flip around vertical indexes too if the end is less than the start.
-  if (vert_end < vert_start) {
-    var tmp = vert_end;
-    vert_end = vert_start;
-    vert_start = tmp;
-  }
-
   /*
-
-    this code is badly broken.
-    and i don't know why.
-    2d arrays are annoying in JavaScript.
-
-    thought:
-
     instead of array of arrays, use an object containing each rows array.
 
     EG:
@@ -61,15 +43,18 @@ function table_calc() {
       row3: [etc],
       row4: [etc]
     }
-
   */
+  var matrix = {};
 
-  var matrix = {};                          // empty object
-  var rows = hor_end - hor_start;         // Need to know how many rows / columns
-  var columns = vert_end - vert_start;
+  // Flip the inputs around if the end is less than the start. This would break <= row code below.
+  // Do using this absolute values - so if we got say -8 it would ignore the negative.
+  var rows = Math.abs(hor_end - hor_start);
+  var columns = Math.abs(vert_end - vert_start);
 
   // Debugging
   console.log("Object is: ", matrix);
+  console.log("# of rows is: ", rows);
+  console.log("# of columns is: ", columns);
 
   // Indexes for the 2D array.
   var horz = hor_start;
@@ -86,10 +71,10 @@ function table_calc() {
       The vert position index increases each time as we move down a row.
       The horizontal index resets to zero each time since we're doing a
   */
-  for (var x = 0; x <= rows; x++) {
+  for (var x = 0; x <= columns; x++) {
     var tmp_arr = [];
 
-    for (var y = 0; y <= columns; y++) {
+    for (var y = 0; y <= rows; y++) {
       // Calculate the given spot in the multiplication table.
       var calc = horz * vert;
       tmp_arr[y] = calc;
@@ -108,15 +93,29 @@ function table_calc() {
 }
 
 // This function fills in the multiplication table.
-function table_fill(mult_matrix) {
+function table_fill(matrix) {
   // Debugging.
-  console.log("The array looks like:\n", calc_array);
+  console.log("The array looks like:\n", matrix);
 
   // User input
   var hor_start = document.getElementById('horiz_start').value;
   var hor_end = document.getElementById('horiz_end').value;
   var vert_start = document.getElementById('vert_start').value;
   var vert_end = document.getElementById('vert_end').value;
+
+  // Debug why stuff is weird.
+  console.log("Horiz start: ", hor_start, "Horiz end: ", hor_end, "Vert start: ",
+              vert_start, "Vert end: ", vert_end);
+
+  // Flip the inputs around if the end is less than the start. This would break <= row code below.
+  // Do using this absolute values - so if we got say -8 it would ignore the negative.
+  var rows = Math.abs(hor_end - hor_start);
+  var columns = Math.abs(vert_end - vert_start);
+
+  // Debugging
+  console.log("Object is: ", matrix);
+  console.log("# of rows is: ", rows);
+  console.log("# of columns is: ", columns);
 
   // Now we can fill in the table.
   // w3schools is helpful: http://www.w3schools.com/html/html_tables.asp
@@ -129,28 +128,24 @@ function table_fill(mult_matrix) {
   content += "<tr><td></td>";
 
   // Now fill out the rest of the first row.
-  for (var x = hor_start; x <= hor_end; x++) {
-    content += "<td>" + x + "</td>";
+  for (var a = hor_start; a <= rows; a++) {
+    content += "<td>" + a + "</td>";
   }
 
   // Close the first row.
   content += "</tr>";
 
-  // Figure out how many rows and columns we have.
-  var rows = hor_end - hor_start;
-  var columns = vert_end - vert_start;
-
   // Print out the left most column using this variable.
   var vert = vert_start;
 
   // Fill in each row after the first.
-  for (var x = 0; x <= rows; x++) {
+  for (var x = 0; x <= columns; x++) {
     // Set the left most column first.
     content += "<tr><td>" + vert + "</td>";
 
     // Add in all the multiplication for this row.
-    for (var y = 0; y <= columns; y++) {
-      content += "<td>" + calc_array[y][x] + "</td>";
+    for (var y = 0; y <= rows; y++) {
+      content += "<td>" + matrix["row" + x][y] + "</td>";
     }
     vert++;
 
