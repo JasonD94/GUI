@@ -135,9 +135,7 @@ tbody {
   width: 100%;
 }
 
-/* 
-    Style all rows and all columns this way using selectors.
-*/
+/*    Style all rows and all columns this way using parent selectors      */
 tbody > tr > td {
   background-color: orange;
   border: 3px solid #663300;
@@ -153,18 +151,12 @@ tbody > tr > td {
 /* Style the very top row. */
 tbody > tr:first-child > td {
   background-color: red;
-/*  border-left: 3px solid white;
-  border-right: 3px solid white;
-  border-top: 3px solid white;*/
   color: white;
 }
 
 /* Style the left most column. */
 tbody > tr > td:first-child {
   background-color: red;
-/*border-bottom: 3px solid white;
-  border-left: 3px solid white;
-  border-top: 3px solid white;*/
   color: white;
 }
 
@@ -175,8 +167,8 @@ https://stackoverflow.com/questions/7232813/css-selection-of-first-column-of-fir
 For making it completely transparent W3Schools was helpful:
 http://www.w3schools.com/css/css_image_transparency.asp */
 tbody > tr:first-child > td:first-child {
-  background-color: #ffffff;
-  border-top: none;       /* stop the border from appearing, so the spot in the table looks blank. */
+  background-color: #ffffff;    /* This is a white color, we don't care about it. */
+  border-top: none;             /* stop the border from appearing, so the spot in the table looks blank. */
   border-left: none;
   color: black;
   opacity: 0;
@@ -224,10 +216,19 @@ h1.name {
   background-color: black;
 }
 
+/* Assignment 5 title */
 .highlight_red {
   background-color: black;
   color: red;
   font-family: "Righteous";
+}
+
+/* Assignment 6 title */
+.highlight_gold {
+  background-color: #e5c100;    /* Gold color */
+  color: #990000;               /* Dark red color */
+  font-family: "Sigmar One";
+  font-size: 80%;
 }
 
 .highlight_centered {

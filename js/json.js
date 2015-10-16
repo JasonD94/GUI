@@ -65,7 +65,13 @@ function place_json() {
   for(var key in song_lyrics.lyrics.second) {
     if(song_lyrics.lyrics.second.hasOwnProperty(key)) {
       var value = song_lyrics.lyrics.second[key];
-      content += "<p class='second'>" + value + "</p>";
+      // Make the last line in this paragraph look like the other "SLEEP NOW IN THE FIRE" lines
+      if(value == "Sleep now in the fire") {
+        content += "<p class='sleep'>" + value + "</p>";
+      }
+      else {
+        content += "<p class='second'>" + value + "</p>";
+      }
     }
   }
   content += "<br/>";   // Add newline.
@@ -77,7 +83,13 @@ function place_json() {
   for(var key in song_lyrics.lyrics.third) {
     if(song_lyrics.lyrics.third.hasOwnProperty(key)) {
       var value = song_lyrics.lyrics.third[key];
-      content += "<p class='third'>" + value + "</p>";
+      // Make the last line in this paragraph look like the other "SLEEP NOW IN THE FIRE" lines
+      if(value == "Sleep now in the fire") {
+        content += "<p class='sleep'>" + value + "</p>";
+      }
+      else {
+        content += "<p class='third'>" + value + "</p>";
+      }
     }
   }
   content += "<br/>";   // Add newline.
