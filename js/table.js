@@ -24,40 +24,41 @@ function table_calc() {
 
   // Validate user input
   if (hor_start == hor_end || vert_start == vert_end) {
-    return;   // Can't do this.
+    alert("Sorry, please enter a wider number range (at least 1 number apart).");
+    return;   
+  }
+  
+  // It crashes on huge numbers so don't let users enter numbers greater/less than 1,000
+  if (hor_start < -1000 || hor_end > 1000 || vert_start < -1000 || vert_end > 1000) {
+    alert("Sorry, but valid input is a number between -1000 and 1000.");
+    return;
+  }
+  
+  // Flip the inputs around if the end is less than the start.
+  // This would break the row count code.
+  if (hor_end < hor_start) {
+    var tmp = hor_end;
+    hor_end = hor_start;    // Swap two ints.
+    hor_start = tmp;
+  }
+  
+  // Also flip around vertical indexes too if the end is less than the start.
+  if (vert_end < vert_start) {
+    var tmp = vert_end;
+    vert_end = vert_start;
+    vert_start = tmp;
   }
 
   var calc = [];
 
   /*
-    The 2D array works like this.
-    Calc is an array, which will contain many more arrays. The main array,
-    or the first bracket pair ([here][]), will control how far horizontally
-    the table goes. Each position in this array will then contain another array,
-    which contains all the vertical positions for that column.
-
-    x 1 2 3  4  5   -> each of these positions is an array, contained inside array "calc"
-    1 1 2 3  4  5
-    2 2 4 8 10 12
-    3 3 6 9 12 15
-    ^ ->  each vertical position is a location inside of the vertical array
-          for this column.
-
-    Example for horizontal 1 to 5, and vertical 1 to 5:
-
-         Horizontally there are 5 vertical arrays.
-    [ Array[5], Array[5], Array[5], Array[5], Array[5] ]
-
-    The first vertical Array[5] is: [1, 2, 3]
-    The second one would be: [2, 4, 6]
-    etc.
+    2D Array for calculating the multiplication table.
 
     I found how to do this on Stackoverflow
     https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript
   */
-  for (var x = 0; x <= hor_end - hor_start; x++) {   // x <= horizontal length
-    calc[x] = [];
-  }
+  
+  console.log("ARRAY IS: ", calc);
 
   // Indexes for the 2D array.
   var hor = 0;
@@ -75,11 +76,14 @@ function table_calc() {
       The horizontal index resets to zero each time since we're doing a
   */
   for (var x = vert_start; x <= vert_end; x++) {
+    var tmp_arr = [];
     for (var y = hor_start; y <= hor_end; y++) {
       // Calculate the given spot in the multiplication table.
-      calc[hor][vert] = x * y;
+      console.log("ARRAY IS: ", calc);
+      tmp_arr[hor] = x * y;
       hor++;
     }
+    calc[vert] = tmp_arr;
     hor = 0;        // Reset to zero each pass since we're moving down a row.
     vert++;
   }
@@ -90,6 +94,7 @@ function table_calc() {
 
 // This function fills in the multiplication table.
 function table_fill(calc_array) {
+  // Debugging.
   console.log("The array looks like:\n", calc_array);
 
   // User input
@@ -123,15 +128,17 @@ function table_fill(calc_array) {
   for (var x = vert_start; x <= vert_end; x++) {
     // Set the left most column first.
     content += "<tr><td>" + x + "</td>";
+    
+    var tmp_arr = calc_array[hor];
 
     // Add in all the multiplication for this row.
     for (var y = hor_start; y <= hor_end; y++) {
-      content += "<td>" + calc_array[hor][vert] + "</td>";
-      hor++;
+      content += "<td>" + tmp_arr[vert] + "</td>";
+      vert++;
     }
     // Reset horizontal counter each time as we move down a row.
-    hor = 0;
-    vert++;
+    vert = 0;
+    hor++;
 
     // Close each row.
     content += "</tr>";

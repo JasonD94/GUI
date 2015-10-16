@@ -135,18 +135,8 @@ tbody {
   width: 100%;
 }
 
-/* This is for the TR and TD tags. */
-/*.dyn_tr_td {
-  background-color: #009900;
-  border: 3px solid black;
-  color: black;
-  height: 50px;
-  font-family: "Advent Pro";
-  font-size: 160%;
-  font-weight: 900;
-  padding: 15px;
-  text-align: center;
-}
+/* 
+    Style all rows and all columns this way using selectors.
 */
 tbody > tr > td {
   background-color: orange;
