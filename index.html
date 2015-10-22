@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang = "en-US">
+<html lang="en-US">
 <head>
-  <meta charset = "utf-8">
+  <meta charset="utf-8">
 
   <!-- Google fonts. Included here at the very top for performance gains and to
   avoid the use of @import like Google recommends here:
@@ -19,7 +19,7 @@
   MIT Licensed - see http://opensource.org/licenses/MIT for details.
   Anyone may freely use this code. Just don't sue me if it breaks stuff.
   Created: September 3rd, 2015.
-  Last Updated: September 15th, at 9PM.
+  Last Updated: Oct 22, 1:35PM.
 
   Note: much of this design comes from a previous personal website that I
   built over the summer. I've redesigned this one, using much of the same
@@ -32,19 +32,19 @@
   <!-- Configuration.
   The viewport / width / scale line helps make the web page more responsive to
   mobile devices. Bootstrap is also being used for its grid system and for the Nav bar. -->
-  <meta name = "viewport" content = "width = device-width, initial-scale = 1, maximum-scale = 1, user-scalable = no">
+  <meta name="viewport" content="width = device-width, initial-scale = 1, maximum-scale = 1, user-scalable = no">
 
   <!-- Custom Title Bar -->
   <title>Jason Downing</title>
 
   <!-- Latest compiled and minified CSS -->
-  <link rel = "stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
   <!-- Optional theme -->
-  <link rel = "stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
   <!-- CSS file to override stuff -->
-  <link rel = "stylesheet" href = "css/index.css">
+  <link rel="stylesheet" href="css/index.css">
 
   <!-- Custom favicon -->
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -52,60 +52,9 @@
 
 <body>
 
-  <!-- This is the Nav Bar, for switching between pages. It should automatically become smaller on Mobile.
-  (Test this though!)
-
-  Note: I originally wrote part of this for another web page, and I reworked it for this web page (notedly adding
-  the dropdown menu for linking to additional assignments).
-  You can find the original source code in this repository:
-
-  https://github.com/JasonD94/repair
-  https://github.com/JasonD94/repair/blob/gh-pages/index.html
-   -->
-  <div class = "navbar-wrapper">
-  <div class = "container">
-    <nav class = "navbar navbar-inverse navbar-fixed-top">
-    <div class = "container-fluid">
-
-      <!-- Brand and toggle get grouped together for better mobile display. -->
-      <div class = "navbar-header">
-      <button type = "button" class = "navbar-toggle collapsed" data-toggle = "collapse" data-target = "#navbar">
-        <span class = "sr-only">Toggle navigation. </span>
-        <span class = "icon-bar"></span>
-        <span class = "icon-bar"></span>
-        <span class = "icon-bar"></span>
-      </button>
-      <a class = "navbar-brand" href = "index.html">Jason Downing</a>
-      </div>
-
-      <!-- Collect the nav links, forms, and other content for toggling. -->
-      <div id = "navbar" class = "navbar-collapse collapse">
-      <ul class = "nav navbar-nav navbar-right">
-        <li class = "active"><a href = "index.html">Home</a></li>
-        <li><a href = "#About">About</a></li>
-        <li><a href = "#GitHub">GitHub</a></li>
-
-        <!-- w3schools had a good example of how to achieve this, so I
-        used their layout with some changes like linking to other assignment
-        HTML files rather than # links. See this page for where I got it
-        from: http://www.w3schools.com/bootstrap/bootstrap_case_navigation.asp -->
-        <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Index<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="assignment1.html">Assignment #1</a></li>
-          <li><a href="assignment2.html">Assignment #2</a></li>
-          <li><a href="assignment3.html">Assignment #3</a></li>
-          <li><a href="assignment4.html">Assignment #4</a></li>
-          <li><a href="assignment5.html">Assignment #5</a></li>
-          <li><a href="assignment6.html">Assignment #6</a></li>
-        </ul>
-        </li>
-      </ul>
-      </div>
-    </div>
-    </nav>
-  </div>
-  </div>
+  <!--  Navbar div. See html/navbar.html for that code. It gets loaded into this
+        div by the JS at the bottom of this page. -->
+  <div id="NavBarHeader"></div>
 
   <!-- The main container - required for Bootstrap. (see: http://getbootstrap.com/css/ for more info)-->
   <div class="container">
@@ -116,14 +65,14 @@
     I found out how to do this correctly at this Stackoverflow page:
     https://stackoverflow.com/questions/20605009/linking-within-a-page-with-bootstrap
     -->
-    <div class = "row">
+    <div class="row">
 
       <!--
       I found this on Stackoverflow. I'm using this trick to make the "About" link actually go all the way to the top of the
       page. It offsets by 50px which is enough.
       See this page:  https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header
       -->
-      <a class="anchor"  id="About"></a>
+      <a class="anchor" id="About"></a>
 
       <!-- Background image is in the body -->
       <h1 class="name">
@@ -138,7 +87,7 @@
       Also, the center div is there to improve mobile display as well, since I have the grids setup to make the image
       appear on its own line on mobile.                -->
       <div class="col-xs-12 col-md-3 col-lg-2">
-        <div class = "center_text_images">
+        <div class="center_text_images">
 
           <!-- I thought it would be funny to link to a YouTube video whenever someone clicks on my image.
               I embedded it in another HTML file with autoplay enabled.
@@ -220,16 +169,16 @@
 
           I now only use one GitHub card, in an effort to speedup the loading of my page.
     -->
-    <div class = "row">
+    <div class="row">
 
       <!-- These divs are to force the text into the middle and prevent highlighting the whole column! -->
       <div class="col-md-4"></div>
       <div class="col-md-4">
 
         <!-- Similar to the #About link, this is for the #GitHub link. -->
-        <a class="anchor"  id="GitHub"></a>
+        <a class="anchor" id="GitHub"></a>
 
-        <p class = "highlight_text_underline_centered">Jason's GitHub Repositories </p>
+        <p class="highlight_text_underline_centered">Jason's GitHub Repositories </p>
 
       </div>
       <div class="col-md-4"></div>
@@ -238,7 +187,7 @@
     <br>               <!-- Adding line breaks to make the display nicer. -->
 
     <!-- GitHub Card row -->
-    <div class = "row">
+    <div class="row">
       <div class="col-md-2"></div>
 
       <div class="col-md-8">
@@ -261,7 +210,7 @@
     <br>                <!-- Adding line breaks to make the display nicer. -->
 
     <!-- GitHub Repositories row -->
-    <div class = "row">
+    <div class="row">
       <div class="col-md-2"></div>
 
       <div class="col-md-8">
@@ -327,35 +276,10 @@
 
     <br><br>                <!-- Adding line breaks to make the display nicer. -->
 
-    <!--
-        THIS IS THE FOOTER - displays a copyright notice and that Bootstrap powers this webpage.
-        I also added the "valid HTML and CSS" script here, to show my site validates properly.
+    <!--  This div will have the footer (html/footer.html) loaded into it
+          by the JS at the bottom of the page. -->
+    <div id="TheFooter"></div>
 
-        The HTML5 / CSS3 Logos are from the following sites:
-        https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/2000px-HTML5_logo_and_wordmark.svg.png
-        http://codore.io/assets/css3-logo-325bd50601d1c87c390fae69f71191c800957ffbb021d28efee94c1a3f8bd8d4.png
-
-        I also used the following site as a guide for doing this, although I modified it so that the image shows up with the
-        text as a link as well.
-        http://teacherjohn.com/tutorials/cabrillo/validatebuttons.php
-    -->
-    <div class = "center_text_small">
-      <a href="http://validator.w3.org/check?uri=referer">
-        <img class="img-square" src="img/HTML5_Logo.png" style="height: 40px" alt="HTML5 Logo"/>
-        Valid HTML5
-      </a>
-      &nbsp;&nbsp;
-      <a href="http://jigsaw.w3.org/css-validator/check/referer">
-        <img class="img-square" src="img/CSS3_Logo.png" style="height: 40px" alt="CSS3 Logo"/>
-        Valid CSS3
-      </a>
-      <br><br>
-
-      <p class = "text-muted">
-        Jason Downing &copy; 2015. All rights reserved.
-        Powered by <a href = "http://www.getbootstrap.com/">Bootstrap</a>.
-      </p>
-    </div>
   </div>          <!-- This should be the end div of the main container. -->
 
   <!--
@@ -367,10 +291,23 @@
       https://developer.yahoo.com/performance/rules.html#css_top=
    -->
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins). -->
-  <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
   <!-- Latest compiled and minified JavaScript -->
-  <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+  <!-- Load the header/footer when the page is ready. -->
+  <script>
+    /* From the following URLs:
+        https://learn.jquery.com/using-jquery-core/document-ready/
+        https://stackoverflow.com/questions/8988855/include-another-html-file-in-a-html-file
+    */
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        $("#NavBarHeader").load("html/navbar.html");
+        $("#TheFooter").load("html/footer.html");
+    });
+  </script>
 
 </body>
 </html>
