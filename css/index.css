@@ -152,12 +152,12 @@ tbody > tr > td {
   background-color: orange;
   border: 3px solid #663300;
   color: black;
-  height: 20px;
+  height: 25px;
   font-family: "Advent Pro";
   font-size: 100%;
   font-weight: 900;
   text-align: center;
-  width: 20px;
+  width: 25px;
 }
 
 /* Style the very top row. */
@@ -184,6 +184,15 @@ tbody > tr:first-child > td:first-child {
   border-left: none;
   color: black;
   opacity: 0;
+}
+
+/* Error Message CSS */
+#error_msg {
+  color: red;
+  font-family: "Advent Pro";
+  font-size: 70%;
+  font-style: italic;
+  font-weight: 900;
 }
 
 /*

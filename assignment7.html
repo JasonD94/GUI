@@ -51,8 +51,9 @@
         div by the JS at the bottom of this page. -->
   <div id="NavBarHeader"></div>
 
-  <!-- The main container -->
-  <div class="container">
+  <!-- The main container
+       Making the container fluid to use up all the screen real estate -->
+  <div class="container-fluid">
 
     <!-- First row - Assignment description -->
     <div class="row">
@@ -67,6 +68,7 @@
 
     <!-- Title / form goes here -->
     <div class="row">
+      <div class="col-md-1"></div>
       <div class="col-md-4">
         <!-- Form to take user input.
         I used the following site for help with the form:
@@ -97,12 +99,16 @@
                  of the return false in the onsubmit form attribute. -->
             <input class="submit_button" type="submit" value="Generate Table" onclick="return table_calc()">
           </form>
+
+          <!-- Error messages will appear here instead of in a popup. -->
+          <div id="error_msg"></div>
+
         </div>
 
         <br/>
       </div>
 
-      <div class="col-md-8">
+      <div class="col-md-7">
         <!-- The multiplication table will appear in this div -->
         <div id="multiplication_table"></div>
       </div>
@@ -132,8 +138,12 @@
   <!-- Latest compiled and minified JavaScript -->
   <script type='text/javascript' src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
+  <!-- jQuery Validation plugin -->
+  <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.js"></script>
+  <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/additional-methods.js"></script>
+
   <!-- JS file that loads up the JSON data into the HTML document. -->
-  <script type='text/javascript' src="js/table.js"></script>
+  <script type='text/javascript' src="js/table_v2.js"></script>
 
   <!-- Load the header/footer when the page is ready. -->
   <script>
