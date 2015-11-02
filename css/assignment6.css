@@ -1,15 +1,16 @@
 /*
-    File: ~/css/index.css
-    91.461 Assignment 2: Creating Your First Web Page
+    File: ~/css/assignment6.css
+    91.461 Assignment 6: Creating an Interactive Dynamic Table
     Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
     Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
-    Created: September 3rd, 2015.
-    Last Updated: September 16th at 4PM
+    Created: November 1, 2015.
+    Last Updated: November 1st, 8:30PM
 
-    Note: this is a CSS file for index.html and a few other HTML files also use it.
-    All CSS in this file is organized in alphabetical order - as much as possible.
+    This file is for assignment 6. I modified all of this for assignment 7 and
+    as a result it broke my assignment 6 page. So this file exists to keep
+    assignment6.html working properly.
 */
 
 /* CSS Reset */
@@ -91,10 +92,6 @@ html {
 */
 input {
   color: black;
-  font-family: "Advent Pro";
-  font-size: 70%;
-  font-weight: 900;
-  width: 50px;
 }
 
 /*
@@ -105,23 +102,9 @@ input {
 */
 label {
   display: inline-block;
-  float: left;
-  font-family: "Advent Pro";
-  font-size: 70%;
-  font-weight: 900;
-  margin-top: 6px;
+  width: 350px;           /* modified this */
   text-align: right;
-  width: 250px;           /* modified this */
 }​
-
-/* Generate Table button
-   Not sure why but I needed both selectors for some reason.  */
-input[type=submit] {
-  width: 150px;
-}
-div form input.submit_button {
-  width: 150px;
-}
 
 /*
   w3schools is so helpful:
@@ -136,15 +119,21 @@ div form input.submit_button {
   https://stackoverflow.com/questions/9402856/how-to-put-table-in-the-center-of-the-page-using-css
 */
 div#multiplication_table {
-  /* Currently not used */
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 table {
-  /* Currently not used */
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 tbody {
-  /* Currently not used */
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 /*    Style all rows and all columns this way using parent selectors      */
@@ -152,12 +141,12 @@ tbody > tr > td {
   background-color: orange;
   border: 3px solid #663300;
   color: black;
-  height: 20px;
+  height: 50px;
   font-family: "Advent Pro";
-  font-size: 100%;
+  font-size: 160%;
   font-weight: 900;
+  padding: 15px;
   text-align: center;
-  width: 20px;
 }
 
 /* Style the very top row. */
@@ -240,7 +229,7 @@ h1.name {
   background-color: #e5c100;    /* Gold color */
   color: #990000;               /* Dark red color */
   font-family: "Sigmar One";
-  font-size: 40%;
+  font-size: 80%;
 }
 
 .highlight_centered {

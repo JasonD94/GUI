@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   <!--
-    File: ~/assignment6.html
-    91.461 Assignment 6: Creating an Interactive Dynamic Table
+    File: ~/assignment7.html
+    91.461 Assignment 7: Using the jQuery Validation Plugin with Your Dynamic Table
     Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
     Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
-    Created: Oct 13, 2015.
-    Last Updated: Oct 13, 9PM.
+    Created: Nov 1, 2015.
+    Last Updated: Nov 1, 9PM.
 
     This page is for the 6th assignment, "Creating an Interactive Dynamic Table".
     It contains a form for user input, and a JavaScript program to calculate what
     the user inputs.
   -->
   <!--
-      Google fonts. Included here at the very top for performance gains and to avoid the use of @import
+      Google fonts. Included here at the top for performance gains and to avoid the use of @import
       like Google recommends here:
       http://googlewebfonts.blogspot.com/2010/09/optimizing-use-of-google-font-api.html
 
@@ -39,8 +39,8 @@
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
-  <!-- Fix this page by using old CSS -->
-  <link rel="stylesheet" href="css/assignment6.css">
+  <!-- CSS file to override stuff -->
+  <link rel="stylesheet" href="css/index.css">
 
   <!-- Custom favicon -->
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -58,30 +58,16 @@
     <div class="row">
       <div class="col-md-12">
         <h1 class="name">
-          <span class="highlight_gold">Assignment #6</span>
+          <span class="highlight_gold">Assignment #7</span>
         </h1>
       </div>
     </div>
 
     <br>
 
-    <div class="row">
-      <div class="col-md-12">
-        <div class="highlight_centered_margins">
-          This assignment generates a dynamic multiplication table based on
-          user input.
-          <br/>
-          Users should enter a starting and ending horizontal multiplier,<br/>
-          as well as a vertical starting and ending multiplier.
-          <br/>
-          Example input would be "1, 5" for horizontal, and "1, 5" for vertical.
-        </div>
-      </div>
-    </div>
-
     <!-- Title / form goes here -->
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-4">
         <!-- Form to take user input.
         I used the following site for help with the form:
         http://www.w3schools.com/html/html_forms.asp
@@ -103,22 +89,25 @@
             <input type="number" name="vert start" id="vert_start" value="1"><br/>
 
             <label>Ending vertical multiplier: </label>
-            <input type="number" name="vert end" id="vert_end" value="5"><br/><br/>
+            <input type="number" name="vert end" id="vert_end" value="5"><br/>
 
             <!-- Note: using onclick so that when debugging the form, user input isn't lost
                  and console.logs are also kept. Using onsubmit made it very difficult to
                  spot errors, while onclick doesn't force the page to refresh because
                  of the return false in the onsubmit form attribute. -->
-            <input type="submit" value="Submit " onclick="return table_calc()">
+            <input class="submit_button" type="submit" value="Generate Table" onclick="return table_calc()">
           </form>
         </div>
 
         <br/>
       </div>
-    </div>
 
-    <!-- The multiplication table will appear in this div -->
-    <div id="multiplication_table"></div>
+      <div class="col-md-8">
+        <!-- The multiplication table will appear in this div -->
+        <div id="multiplication_table"></div>
+      </div>
+
+    </div>
 
     <br><br>                <!-- Adding line breaks to make the display nicer. -->
 
