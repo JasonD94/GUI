@@ -35,16 +35,30 @@ function table_calc() {
 
   // Swap beginning / ending numbers if the start is larger than the beginning.
   if (hor_start > hor_end) {
+
+    // Alert the user that this is happening!
+
     var tmp_num = hor_start;
     hor_start = hor_end;
     hor_end = tmp_num;
   }
   // Also swap vertical beginning / ending
   if (vert_start > vert_end) {
+
+    // Alert the user that this is happening!
+
     var tmp_num = vert_start;
     vert_start = vert_end;
     vert_end = tmp_num;
   }
+
+  // Empty the div first.
+  // See this Stackoverflow post: https://stackoverflow.com/questions/20293680/how-to-empty-div-before-append
+  $("#error_msg").empty();
+
+  // Switch to using the jQuery Validation Plugin
+  // See this demo: jqueryvalidation.org/files/demo/
+  // And Prof. Heines' website: https://teaching.cs.uml.edu/~heines/91.461/91.461-2015-16f/461-lecs/lecture18.jsp
 
   // It crashes on huge numbers so don't let users enter numbers greater/less than 1,000
   if (hor_start < -10 || hor_end > 10 || vert_start < -10 || vert_end > 10) {
