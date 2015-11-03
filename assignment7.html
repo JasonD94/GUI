@@ -80,28 +80,29 @@
         This link was helpful for centering the form using CSS:
         https://stackoverflow.com/questions/9737394/html-how-to-center-align-a-form -->
         <div class="highlight_centered_margins">
-          <form onsubmit="return false">
+          <form id="mult_form" name="mult_form" method="GET" action="">
             <label>Starting horizontal multiplier: </label>
-            <input type="number" name="horz start" id="horiz_start" value="1"><br/>
+            <input type="text" id="horiz_start" name="horiz_start" value="" required><br/>
 
             <label>Ending horizontal multiplier: </label>
-            <input type="number" name="horz end" id="horiz_end" value="5"><br/>
+            <input type="text" id="horiz_end" name="horiz_end" value="" required><br/>
 
             <label>Starting vertical multiplier: </label>
-            <input type="number" name="vert start" id="vert_start" value="1"><br/>
+            <input type="text" id="vert_start" name="vert_start" value="" required><br/>
 
             <label>Ending vertical multiplier: </label>
-            <input type="number" name="vert end" id="vert_end" value="5"><br/>
+            <input type="text" id="vert_end" name="vert_end" value="" required><br/>
 
             <!-- Note: using onclick so that when debugging the form, user input isn't lost
                  and console.logs are also kept. Using onsubmit made it very difficult to
                  spot errors, while onclick doesn't force the page to refresh because
                  of the return false in the onsubmit form attribute. -->
-            <input class="submit_button" type="submit" value="Generate Table" onclick="return table_calc()">
+            <input class="submit_button" type="submit" value="Generate Table">
           </form>
 
           <!-- Error messages will appear here instead of in a popup. -->
           <div id="error_msg"></div>
+          <br/>
 
         </div>
 
@@ -152,9 +153,9 @@
         https://stackoverflow.com/questions/8988855/include-another-html-file-in-a-html-file
     */
     $( document ).ready(function() {
-        console.log( "ready!" );
         $("#NavBarHeader").load("html/navbar.html");
         $("#TheFooter").load("html/footer.html");
+
     });
   </script>
 
