@@ -50,14 +50,28 @@ function validate() {
     messages: {
       horiz_start: {
         number: function() {
-          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Horizontal start.</p>");
+          // Stop duplicate error messages! remove previous error message.
+          $(".hor_start_err1").remove();
+
+          // Now we can append just fine
+          $("#error_msg").append("<p class='hor_start_err1'>Please enter a number between -10 and 10 for the Horizontal start.</p>");
+
+          // We should also figure out how to color the border around this input.
 
         },
         range: function() {
-          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Horizontal start.</p>");
+          // Stop duplicate error messages! remove previous error message.
+          $(".hor_start_err1").remove();
+
+          // Can append now
+          $("#error_msg").append("<p class='hor_start_err1'>Please enter a number between -10 and 10 for the Horizontal start.</p>");
         },
         required: function() {
-          $("#error_msg").append("<p>A number between -10 and 10 is required for the Horizontal start.</p>");
+          // Stop duplicate error messages! remove previous error message.
+          $(".hor_start_err1").remove();
+
+          // Can append now
+          $("#error_msg").append("<p class='hor_start_err1'>A number between -10 and 10 is required for the Horizontal start.</p>");
 
         }
       },
@@ -113,7 +127,7 @@ function validate() {
     // URL: https://stackoverflow.com/questions/3691743/jquery-validate-how-to-keep-error-messages-from-altering-the-form-disposition
     errorElement: "div",
     errorPlacement: function(error, element) {
-      $("#error").html(error);
+      $("#error").html(error);                      // This div doesn't exist so the validator doesn't mess stuff up.
     }
   });
 }
