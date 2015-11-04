@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 1, 2015.
-    Last Updated: Nov 1, 9PM.
+    Last Updated: Nov 4, 1:30PM.
 
     This page is for the 7th assignment. It is a complete copy of my assignment 6
     JavaScript code, except this one uses the jQuery Validation plugin.
@@ -18,9 +18,11 @@
 
 function validate() {
 
-  // Switch to using the jQuery Validation Plugin
-  // See this demo: jqueryvalidation.org/files/demo/
-  // And Prof. Heines' website: https://teaching.cs.uml.edu/~heines/91.461/91.461-2015-16f/461-lecs/lecture18.jsp
+  /*  Switch to using the jQuery Validation Plugin
+      See this demo: jqueryvalidation.org/files/demo/
+      And Prof. Heines' website: https://teaching.cs.uml.edu/~heines/91.461/91.461-2015-16f/461-lecs/lecture18.jsp
+      Also the documentation on this site was pretty helpful: http://jqueryvalidation.org/validate/
+  */
   $("#mult_form").validate({
     // Rules for validating the form.
     rules: {
@@ -76,6 +78,19 @@ function validate() {
       table_calc();
     },
 
+    invalidHandler: function() {
+      /*
+          Decided to try out a different alert system.
+          Found this on Google and GitHub: https://t4t5.github.io/sweetalert/
+      */
+      swal({
+        title: "Error - Invalid form",
+        text: "Sorry, the form isn't valid.\nPlease review the error message(s) that are marked in red.",
+        type: "error",
+        confirmButtonText: "OK"
+      });
+    },
+
     // This is from stackoverflow, its helpful to stop the validator plugin from moving the inputs around
     // with the error message. I already had a div for error messages anyway, so why not use that?
     // URL: https://stackoverflow.com/questions/3691743/jquery-validate-how-to-keep-error-messages-from-altering-the-form-disposition
@@ -83,6 +98,31 @@ function validate() {
     errorPlacement: function(error, element) {
       error.insertAfter(element);
     }
+  });
+}
+
+
+// Simple function to auto submit when input changes
+function auto_submit() {
+
+  /*
+        Whenever an input is changed, the table will regenerate.
+  */
+
+  $("#horiz_start").on("input", function() {
+    validate();
+  });
+
+  $("#horiz_end").on("input", function() {
+    validate();
+  });
+
+  $("#vert_start").on("input", function() {
+    validate();
+  });
+
+  $("#vert_end").on("input", function() {
+    validate();
   });
 }
 
@@ -103,15 +143,29 @@ function table_calc() {
   console.log("Horizontal start: ", hor_start, "Horizontal end: ", hor_end),
   console.log("Vertical start: ", vert_start, "Vertical end: ", vert_end);
 
+  /*
+        This section handles some "warning messages" that I decided would be worth
+        adding after Prof. Heines mentioned some thoughts the graders had.
+
+        I basically warn the user if I decide to flip the inputs on them,
+        e.g. user enters [5, 1] I flip this to [1, 5] so it's easier to deal with
+        (1 case vs 2 cases basically).
+
+        This doesn't actually validate the form or anything - if this function is run,
+        it is run by the submit button assuming the validation rules aren't broken,
+        so at this point everything is assumed to be valid. (see the submitHandler function
+        in the validate() function)
+  */
+
   // Empty the div first.
   // See this Stackoverflow post: https://stackoverflow.com/questions/20293680/how-to-empty-div-before-append
-  $("#error_msg").empty();
+  $("#warning_msg").empty();
 
   // Swap beginning / ending numbers if the start is larger than the beginning.
   if (hor_start > hor_end) {
 
     // Alert the user that this is happening!
-    $("#error_msg").append("<p>Swapping the Horizontal start and Horizontal end.</p>");
+    $("#warning_msg").append("<p class='warning_class'>Swapping the Horizontal start and Horizontal end.</p>");
 
     var tmp_num = hor_start;
     hor_start = hor_end;
@@ -121,7 +175,7 @@ function table_calc() {
   if (vert_start > vert_end) {
 
     // Alert the user that this is happening!
-    $("#error_msg").append("<p>Swapping the Vertical start and Vertical end.</p>");
+    $("#warning_msg").append("<p class='warning_class'>Swapping the Vertical start and Vertical end.</p>");
 
     var tmp_num = vert_start;
     vert_start = vert_end;

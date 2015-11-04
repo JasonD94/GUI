@@ -10,7 +10,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 1, 2015.
-    Last Updated: Nov 1, 9PM.
+    Last Updated: Nov 4, 1:30PM.
 
     This page is for the 6th assignment, "Creating an Interactive Dynamic Table".
     It contains a form for user input, and a JavaScript program to calculate what
@@ -38,6 +38,10 @@
 
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <!-- SweetAlert, better JavaScript alerts
+        URL: https://t4t5.github.io/sweetalert/ -->
+  <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
 
   <!-- CSS file to override stuff -->
   <link rel="stylesheet" href="css/index.css">
@@ -109,13 +113,9 @@
           </form>
 
           <!-- Error messages will appear here instead of in a popup. -->
-          <br/>
-          <div id="error_msg"></div>
-          <br/>
+          <div id="warning_msg"></div>
 
         </div>
-
-        <br/>
       </div>
 
       <div class="col-md-7">
@@ -125,7 +125,7 @@
 
     </div>
 
-    <br><br>                <!-- Adding line breaks to make the display nicer. -->
+    <br><br><br>               <!-- Adding line breaks to make the display nicer. -->
 
     <!--  This div will have the footer (html/footer.html) loaded into it
           by the JS at the bottom of the page. -->
@@ -152,19 +152,29 @@
   <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.js"></script>
   <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/additional-methods.js"></script>
 
-  <!-- JS file that loads up the JSON data into the HTML document. -->
+  <!-- JS file that handles the multiplication table and validate code -->
   <script type='text/javascript' src="js/table_v2.js"></script>
 
-  <!-- Load the header/footer when the page is ready. -->
+  <!-- SweetAlert, better JavaScript alerts
+        URL: https://t4t5.github.io/sweetalert/ -->
+  <script src="js/sweetalert.min.js"></script>
+
+  <!-- Load the header/footer when the page is ready. Also load the validate() function -->
   <script>
-    /* From the following URLs:
+    /*  This code is from a Stackoverflow post about how to load a HTML document
+        into div in another HTML document.
+        I run this on every page I make so I can change 1 HTML file when I add assignments
+        vs changing 7+ HTML files.
+        From the following URLs:
         https://learn.jquery.com/using-jquery-core/document-ready/
         https://stackoverflow.com/questions/8988855/include-another-html-file-in-a-html-file
     */
     $( document ).ready(function() {
         $("#NavBarHeader").load("html/navbar.html");
         $("#TheFooter").load("html/footer.html");
-        validate();
+
+        validate();         // Runs the validate code as soon as the body is ready.
+        auto_submit();      // Run the auto submit code when the body is ready.
     });
   </script>
 

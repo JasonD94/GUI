@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: September 3rd, 2015.
-    Last Updated: September 16th at 4PM
+    Last Updated: Nov 4th at 1:30PM
 
     Note: this is a CSS file for index.html and a few other HTML files also use it.
     All CSS in this file is organized in alphabetical order - as much as possible.
@@ -94,6 +94,7 @@ input {
   font-family: "Advent Pro";
   font-size: 70%;
   font-weight: 900;
+  text-align: center;
   width: 50px;
 }
 
@@ -120,6 +121,7 @@ input[type=submit] {
   width: 150px;
 }
 div form input.submit_button {
+  margin-bottom: 10px;
   width: 150px;
 }
 
@@ -186,8 +188,9 @@ tbody > tr:first-child > td:first-child {
   opacity: 0;
 }
 
-/* Error Message CSS */
-#error_msg {
+/* Warning messages that I generate, such as "swaping inputs" if someone enters
+   [5, 1] instead of [1,5]  */
+#warning_msg {
   color: red;
   font-family: "Advent Pro";
   font-size: 70%;
@@ -196,8 +199,14 @@ tbody > tr:first-child > td:first-child {
 }
 
 
+/* Some CSS for the warning messages that show up. I wanted them to be separated nicely. */
+.warning_class {
+  padding: 5px;
+}
+
+
 /*
-    This is for the error messages
+    This is for the error messages that the jQuery plugin generates
 */
 .error {
   color: red;
@@ -206,6 +215,14 @@ tbody > tr:first-child > td:first-child {
   font-style: italic;
   font-weight: 900;
   text-align: center;
+}
+
+/*  When an input is invalid, the jQuery Validation Plugin adds the class "error"
+    to the input. So why not make it obvious to the user which inputs aren't valid
+    by making a red border around the input? As soon as the input is valid this will
+    disappear since the jQuery plugin wil remove the class "error".  */
+input.error {
+  border: 3px solid red;
 }
 
 /*
@@ -257,12 +274,14 @@ h1.name {
   font-family: "Righteous";
 }
 
-/* Assignment 6 title */
+/* Assignment 7 title */
 .highlight_gold {
   background-color: #e5c100;    /* Gold color */
   color: #990000;               /* Dark red color */
   font-family: "Sigmar One";
-  font-size: 40%;
+  font-size: 50%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .highlight_centered {
