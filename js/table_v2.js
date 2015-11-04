@@ -16,6 +16,108 @@
     fills in the table.
 */
 
+function validate() {
+
+  // Switch to using the jQuery Validation Plugin
+  // See this demo: jqueryvalidation.org/files/demo/
+  // And Prof. Heines' website: https://teaching.cs.uml.edu/~heines/91.461/91.461-2015-16f/461-lecs/lecture18.jsp
+  $("#mult_form").validate({
+    // Rules for validating the form.
+    rules: {
+      horiz_start: {
+        number: true,
+        range:[-10, 10],
+        required: true
+      },
+      horiz_end: {
+        number: true,
+        range:[-10, 10],
+        required: true
+      },
+      vert_start: {
+        number: true,
+        range:[-10, 10],
+        required: true
+      },
+      vert_end: {
+        number: true,
+        range:[-10, 10],
+        required: true
+      }
+    },
+
+    // Messages that appear if a rule isn't valid.
+    messages: {
+      horiz_start: {
+        number: function() {
+          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Horizontal start.</p>");
+
+        },
+        range: function() {
+          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Horizontal start.</p>");
+        },
+        required: function() {
+          $("#error_msg").append("<p>A number between -10 and 10 is required for the Horizontal start.</p>");
+
+        }
+      },
+      horiz_end: {
+        number: function() {
+          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Horizontal end.</p>");
+
+        },
+        range: function() {
+          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Horizontal end.</p>");
+        },
+        required: function() {
+          $("#error_msg").append("<p>A number between -10 and 10 is required for the Horizontal end.</p>");
+
+        }
+      },
+      vert_start: {
+        number: function() {
+          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Vertical start.</p>");
+
+        },
+        range: function() {
+          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Vertical start.</p>");
+        },
+        required: function() {
+          $("#error_msg").append("<p>A number between -10 and 10 is required for the Vertical start.</p>");
+
+        }
+      },
+      vert_end: {
+        number: function() {
+          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Vertical end.</p>");
+
+        },
+        range: function() {
+          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Vertical end.</p>");
+        },
+        required: function() {
+          $("#error_msg").append("<p>A number between -10 and 10 is required for the Vertical end.</p>");
+
+        }
+      }
+    },
+
+    // When the form is
+    submitHandler: function() {
+      // Call the calculate function.
+      table_calc();
+    },
+
+    // This is from stackoverflow, its helpful to stop the validator plugin from moving the inputs around
+    // with the error message. I already had a div for error messages anyway, so why not use that?
+    // URL: https://stackoverflow.com/questions/3691743/jquery-validate-how-to-keep-error-messages-from-altering-the-form-disposition
+    errorElement: "div",
+    errorPlacement: function(error, element) {
+      $("#error").html(error);
+    }
+  });
+}
+
 // This function calculates the multiplication table.
 function table_calc() {
   /*  User input - from the form on the assignment 6 HTML doc.
@@ -57,59 +159,6 @@ function table_calc() {
     vert_start = vert_end;
     vert_end = tmp_num;
   }
-
-  // Switch to using the jQuery Validation Plugin
-  // See this demo: jqueryvalidation.org/files/demo/
-  // And Prof. Heines' website: https://teaching.cs.uml.edu/~heines/91.461/91.461-2015-16f/461-lecs/lecture18.jsp
-  $("#mult_form").validate({
-    // Rules for validating the form.
-    rules: {
-      horiz_start: {
-        number: true,
-        range:[-10, 10],
-        required: true
-      },
-      horiz_end: {
-        number: true,
-        range:[-10, 10],
-        required: true
-      },
-      vert_start: {
-        number: true,
-        range:[-10, 10],
-        required: true
-      },
-      vert_end: {
-        number: true,
-        range:[-10, 10],
-        required: true
-      }
-    },
-    // Messages that appear if a rule isn't valid.
-    messages: {
-      horiz_start: {
-        number: "Please enter a number between -10 and 10",
-        range: "Please enter a number between -10 and 10",
-        required: "A number between -10 and 10 is required."
-      },
-      horiz_end: {
-        number: "Please enter a number between -10 and 10",
-        range:"Please enter a number between -10 and 10",
-        required: "A number between -10 and 10 is required."
-      },
-      vert_start: {
-        number: "Please enter a number between -10 and 10",
-        range:"Please enter a number between -10 and 10",
-        required: "A number between -10 and 10 is required."
-      },
-      vert_end: {
-        number: "Please enter a number between -10 and 10",
-        range:"Please enter a number between -10 and 10",
-        required: "A number between -10 and 10 is required."
-      }
-    }
-  });
-
 
   /*  Instead of an array of arrays, use an object containing each rows array.
       Example:
@@ -234,4 +283,7 @@ function table_fill(matrix) {
 
   // Now the content gets loaded into the HTML page.
   $("#multiplication_table").html(content);
+
+  // Stop the form from refreshing.
+  return false;
 }
