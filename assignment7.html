@@ -81,17 +81,25 @@
         https://stackoverflow.com/questions/9737394/html-how-to-center-align-a-form -->
         <div class="highlight_centered_margins">
           <form id="mult_form" name="mult_form" method="GET" action="">
-            <label>Starting horizontal multiplier: </label>
-            <input type="text" id="horiz_start" name="horiz_start" value="" required><br/>
+            <div>
+              <label>Starting horizontal multiplier: </label>
+              <input type="text" id="horiz_start" name="horiz_start" value="" required>
+            </div>
 
-            <label>Ending horizontal multiplier: </label>
-            <input type="text" id="horiz_end" name="horiz_end" value="" required><br/>
+            <div>
+              <label>Ending horizontal multiplier: </label>
+              <input type="text" id="horiz_end" name="horiz_end" value="" required>
+            </div>
 
-            <label>Starting vertical multiplier: </label>
-            <input type="text" id="vert_start" name="vert_start" value="" required><br/>
+            <div>
+              <label>Starting vertical multiplier: </label>
+              <input type="text" id="vert_start" name="vert_start" value="" required>
+            </div>
 
-            <label>Ending vertical multiplier: </label>
-            <input type="text" id="vert_end" name="vert_end" value="" required><br/>
+            <div>
+              <label>Ending vertical multiplier: </label>
+              <input type="text" id="vert_end" name="vert_end" value="" required>
+            </div>
 
             <!-- Note: using onclick so that when debugging the form, user input isn't lost
                  and console.logs are also kept. Using onsubmit made it very difficult to

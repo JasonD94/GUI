@@ -49,70 +49,24 @@ function validate() {
     // Messages that appear if a rule isn't valid.
     messages: {
       horiz_start: {
-        number: function() {
-          // Stop duplicate error messages! remove previous error message.
-          $(".hor_start_err1").remove();
-
-          // Now we can append just fine
-          $("#error_msg").append("<p class='hor_start_err1'>Please enter a number between -10 and 10 for the Horizontal start.</p>");
-
-          // We should also figure out how to color the border around this input.
-
-        },
-        range: function() {
-          // Stop duplicate error messages! remove previous error message.
-          $(".hor_start_err1").remove();
-
-          // Can append now
-          $("#error_msg").append("<p class='hor_start_err1'>Please enter a number between -10 and 10 for the Horizontal start.</p>");
-        },
-        required: function() {
-          // Stop duplicate error messages! remove previous error message.
-          $(".hor_start_err1").remove();
-
-          // Can append now
-          $("#error_msg").append("<p class='hor_start_err1'>A number between -10 and 10 is required for the Horizontal start.</p>");
-
-        }
+        number: "Please enter a number between -10 and 10 for the Horizontal start.",
+        range: "Please enter a number between -10 and 10 for the Horizontal start.",
+        required: "A number between -10 and 10 is required for the Horizontal start."
       },
       horiz_end: {
-        number: function() {
-          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Horizontal end.</p>");
-
-        },
-        range: function() {
-          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Horizontal end.</p>");
-        },
-        required: function() {
-          $("#error_msg").append("<p>A number between -10 and 10 is required for the Horizontal end.</p>");
-
-        }
+        number: "Please enter a number between -10 and 10 for the Horizontal end.",
+        range: "Please enter a number between -10 and 10 for the Horizontal end.",
+        required: "A number between -10 and 10 is required for the Horizontal end."
       },
       vert_start: {
-        number: function() {
-          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Vertical start.</p>");
-
-        },
-        range: function() {
-          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Vertical start.</p>");
-        },
-        required: function() {
-          $("#error_msg").append("<p>A number between -10 and 10 is required for the Vertical start.</p>");
-
-        }
+        number: "Please enter a number between -10 and 10 for the Vertical start.",
+        range: "Please enter a number between -10 and 10 for the Vertical start.",
+        required: "A number between -10 and 10 is required for the Vertical start."
       },
       vert_end: {
-        number: function() {
-          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Vertical end.</p>");
-
-        },
-        range: function() {
-          $("#error_msg").append("<p>Please enter a number between -10 and 10 for the Vertical end.</p>");
-        },
-        required: function() {
-          $("#error_msg").append("<p>A number between -10 and 10 is required for the Vertical end.</p>");
-
-        }
+        number: "Please enter a number between -10 and 10 for the Vertical end.",
+        range: "Please enter a number between -10 and 10 for the Vertical end.",
+        required: "A number between -10 and 10 is required for the Vertical end."
       }
     },
 
@@ -127,7 +81,7 @@ function validate() {
     // URL: https://stackoverflow.com/questions/3691743/jquery-validate-how-to-keep-error-messages-from-altering-the-form-disposition
     errorElement: "div",
     errorPlacement: function(error, element) {
-      $("#error").html(error);                      // This div doesn't exist so the validator doesn't mess stuff up.
+      error.insertAfter(element);
     }
   });
 }

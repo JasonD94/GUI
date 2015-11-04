@@ -195,6 +195,19 @@ tbody > tr:first-child > td:first-child {
   font-weight: 900;
 }
 
+
+/*
+    This is for the error messages
+*/
+.error {
+  color: red;
+  font-family: "Advent Pro";
+  font-size: 60%;
+  font-style: italic;
+  font-weight: 900;
+  text-align: center;
+}
+
 /*
   This chunk contains all the highlight / text related CSS.
   Mostly center / left / right alignment and changing the color / font of text.
