@@ -16,23 +16,6 @@
     fills in the table.
 */
 
-// // Simple function to fix keypress / enter auto generating the table.
-// function key_press() {
-//   $("#button_submit").keypress(function() {
-//     console.log( "Handler for .keypress() called." );
-//     validate();
-
-//     return false;
-//   });
-
-//   $("#button_submit").click(function() {
-//     console.log( "Handler for .click() called." );
-//     validate();
-
-//     return false;
-//   });
-// }
-
 function validate() {
 
   /*  Switch to using the jQuery Validation Plugin
@@ -45,26 +28,26 @@ function validate() {
     rules: {
       horiz_start: {
         number: true,
-        min: -10,
-        max: 10,
+        min: -12,
+        max: 12,
         required: true
       },
       horiz_end: {
         number: true,
-        min: -10,
-        max: 10,
+        min: -12,
+        max: 12,
         required: true
       },
       vert_start: {
         number: true,
-        min: -10,
-        max: 10,
+        min: -12,
+        max: 12,
         required: true
       },
       vert_end: {
         number: true,
-        min: -10,
-        max: 10,
+        min: -12,
+        max: 12,
         required: true
       }
     },
@@ -72,40 +55,46 @@ function validate() {
     // Messages that appear if a rule isn't valid.
     messages: {
       horiz_start: {
-        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        min: "ERROR: number entered is too small.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        max: "ERROR: number entered is too large.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        required: "ERROR: no number was entered.<br/>A number between -10 and 10 is required for the Horizontal start."
+        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -12 and 12 for the Horizontal start.",
+        min: "ERROR: number entered is too small.<br/>Please enter a number greater than or equal to -12 for the Horizontal start.",
+        max: "ERROR: number entered is too large.<br/>Please enter a number less than or equal to 12 for the Horizontal start.",
+        required: "ERROR: no number was entered.<br/>A number between -12 and 12 is required for the Horizontal start."
       },
       horiz_end: {
-        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        min: "ERROR: number entered is too small.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        max: "ERROR: number entered is too large.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        required: "ERROR: no number was entered.<br/>A number between -10 and 10 is required for the Horizontal start."
+        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -12 and 12 for the Horizontal start.",
+        min: "ERROR: number entered is too small.<br/>Please enter a number greater than or equal to -12 for the Horizontal start.",
+        max: "ERROR: number entered is too large.<br/>Please enter a number less than or equal to 12 for the Horizontal start.",
+        required: "ERROR: no number was entered.<br/>A number between -12 and 12 is required for the Horizontal start."
       },
       vert_start: {
-        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        min: "ERROR: number entered is too small.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        max: "ERROR: number entered is too large.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        required: "ERROR: no number was entered.<br/>A number between -10 and 10 is required for the Horizontal start."
+        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -12 and 12 for the Horizontal start.",
+        min: "ERROR: number entered is too small.<br/>Please enter a number greater than or equal to -12 for the Horizontal start.",
+        max: "ERROR: number entered is too large.<br/>Please enter a number less than or equal to 12 for the Horizontal start.",
+        required: "ERROR: no number was entered.<br/>A number between -12 and 12 is required for the Horizontal start."
       },
       vert_end: {
-        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        min: "ERROR: number entered is too small.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        max: "ERROR: number entered is too large.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
-        required: "ERROR: no number was entered.<br/>A number between -10 and 10 is required for the Horizontal start."
+        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -12 and 12 for the Horizontal start.",
+        min: "ERROR: number entered is too small.<br/>Please enter a number greater than or equal to -12 for the Horizontal start.",
+        max: "ERROR: number entered is too large.<br/>Please enter a number less than or equal to 12 for the Horizontal start.",
+        required: "ERROR: no number was entered.<br/>A number between -12 and 12 is required for the Horizontal start."
       }
     },
 
-    // handles when the form is submitted
+    // This gets called when the form is submitted and valid.
     submitHandler: function() {
-      console.log("Hey! This is valid!");
       table_calc();
       return false;
     },
 
+    invalidHandler: function() {
+      // Wipe the previous table / error messages
+      // This way nothing will show up if a user tries to submit with an error.
+      $("#warning_msg").empty();
+      $("#multiplication_table").empty();
+    },
+
     // This is from stackoverflow, its helpful to stop the validator plugin from moving the inputs around
-    // with the error message. I already had a div for error messages anyway, so why not use that?
+    // with the error message. I also insert after the input as well since I thought that looked better.
     // URL: https://stackoverflow.com/questions/3691743/jquery-validate-how-to-keep-error-messages-from-altering-the-form-disposition
     errorElement: "div",
     errorPlacement: function(error, element) {
@@ -159,6 +148,7 @@ function table_calc() {
     hor_start = hor_end;
     hor_end = tmp_num;
   }
+
   // Also swap vertical beginning / ending
   if (vert_start > vert_end) {
 
