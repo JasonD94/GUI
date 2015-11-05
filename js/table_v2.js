@@ -45,22 +45,26 @@ function validate() {
     rules: {
       horiz_start: {
         number: true,
-        range:[-10, 10],
+        min: -10,
+        max: 10,
         required: true
       },
       horiz_end: {
         number: true,
-        range:[-10, 10],
+        min: -10,
+        max: 10,
         required: true
       },
       vert_start: {
         number: true,
-        range:[-10, 10],
+        min: -10,
+        max: 10,
         required: true
       },
       vert_end: {
         number: true,
-        range:[-10, 10],
+        min: -10,
+        max: 10,
         required: true
       }
     },
@@ -68,45 +72,36 @@ function validate() {
     // Messages that appear if a rule isn't valid.
     messages: {
       horiz_start: {
-        number: "Please enter a number between -10 and 10 for the Horizontal start.",
-        range: "Please enter a number between -10 and 10 for the Horizontal start.",
-        required: "A number between -10 and 10 is required for the Horizontal start."
+        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        min: "ERROR: number entered is too small.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        max: "ERROR: number entered is too large.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        required: "ERROR: no number was entered.<br/>A number between -10 and 10 is required for the Horizontal start."
       },
       horiz_end: {
-        number: "Please enter a number between -10 and 10 for the Horizontal end.",
-        range: "Please enter a number between -10 and 10 for the Horizontal end.",
-        required: "A number between -10 and 10 is required for the Horizontal end."
+        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        min: "ERROR: number entered is too small.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        max: "ERROR: number entered is too large.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        required: "ERROR: no number was entered.<br/>A number between -10 and 10 is required for the Horizontal start."
       },
       vert_start: {
-        number: "Please enter a number between -10 and 10 for the Vertical start.",
-        range: "Please enter a number between -10 and 10 for the Vertical start.",
-        required: "A number between -10 and 10 is required for the Vertical start."
+        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        min: "ERROR: number entered is too small.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        max: "ERROR: number entered is too large.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        required: "ERROR: no number was entered.<br/>A number between -10 and 10 is required for the Horizontal start."
       },
       vert_end: {
-        number: "Please enter a number between -10 and 10 for the Vertical end.",
-        range: "Please enter a number between -10 and 10 for the Vertical end.",
-        required: "A number between -10 and 10 is required for the Vertical end."
+        number: "ERROR: you did not enter a valid number.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        min: "ERROR: number entered is too small.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        max: "ERROR: number entered is too large.<br/>Please enter a number between -10 and 10 for the Horizontal start.",
+        required: "ERROR: no number was entered.<br/>A number between -10 and 10 is required for the Horizontal start."
       }
     },
 
     // handles when the form is submitted
     submitHandler: function() {
-      // Call the calculate function.
+      console.log("Hey! This is valid!");
       table_calc();
       return false;
-    },
-
-    invalidHandler: function() {
-      /*
-          Decided to try out a different alert system.
-          Found this on Google and GitHub: https://t4t5.github.io/sweetalert/
-      */
-      swal({
-        title: "Error - Invalid form",
-        text: "Sorry, the form isn't valid.\nPlease review the error message(s) that are marked in red.",
-        type: "error",
-        confirmButtonText: "OK"
-      });
     },
 
     // This is from stackoverflow, its helpful to stop the validator plugin from moving the inputs around
@@ -186,9 +181,7 @@ function table_calc() {
   */
   var matrix = {};
 
-  // Flip the inputs around if the end is less than the start.
-  // This would break the <= row code below.
-  // Also use absolute values - so if we got say -8 it would ignore the negative.
+  // Figure out how many rows / columns we have.
   var rows = Math.abs(hor_end - hor_start);
   var columns = Math.abs(vert_end - vert_start);
 
@@ -216,46 +209,6 @@ function table_calc() {
     horz = hor_start;        // Reset each pass since we're moving down a row.
     vert++;
   }
-
-  table_fill(matrix);
-  return false;
-}
-
-
-// This function fills in the multiplication table.
-function table_fill(matrix) {
-  // Debugging.
-  console.log("The array looks like:\n", matrix);
-
-  // User input
-  // Convert to number to prevent random shit
-  // http://www.w3schools.com/js/js_comparisons.asp
-  var hor_start = Number(document.getElementById('horiz_start').value);
-  var hor_end = Number(document.getElementById('horiz_end').value);
-  var vert_start = Number(document.getElementById('vert_start').value);
-  var vert_end = Number(document.getElementById('vert_end').value);
-
-  // Check to see if the numbers are read correctly.
-  console.log("Horizontal start: ", hor_start, "Horizontal end: ", hor_end,
-              "---Vertical start: ", vert_start, "Vertical end: ", vert_end);
-
-  // Swap beginning / ending numbers if the start is larger than the beginning.
-  if (hor_start > hor_end) {
-    var tmp_num = hor_start;
-    hor_start = hor_end;
-    hor_end = tmp_num;
-  }
-  // Also swap vertical beginning / ending
-  if (vert_start > vert_end) {
-    var tmp_num = vert_start;
-    vert_start = vert_end;
-    vert_end = tmp_num;
-  }
-
-  // Flip the inputs around if the end is less than the start. This would break <= row code below.
-  // Do using this absolute values - so if we got say -8 it would ignore the negative.
-  var rows = Math.abs(hor_end - hor_start);
-  var columns = Math.abs(vert_end - vert_start);
 
   // Now we can fill in the table.
   // w3schools is helpful: http://www.w3schools.com/html/html_tables.asp
