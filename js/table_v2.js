@@ -16,6 +16,23 @@
     fills in the table.
 */
 
+// // Simple function to fix keypress / enter auto generating the table.
+// function key_press() {
+//   $("#button_submit").keypress(function() {
+//     console.log( "Handler for .keypress() called." );
+//     validate();
+
+//     return false;
+//   });
+
+//   $("#button_submit").click(function() {
+//     console.log( "Handler for .click() called." );
+//     validate();
+
+//     return false;
+//   });
+// }
+
 function validate() {
 
   /*  Switch to using the jQuery Validation Plugin
@@ -72,10 +89,11 @@ function validate() {
       }
     },
 
-    // When the form is
+    // handles when the form is submitted
     submitHandler: function() {
       // Call the calculate function.
       table_calc();
+      return false;
     },
 
     invalidHandler: function() {
@@ -98,31 +116,6 @@ function validate() {
     errorPlacement: function(error, element) {
       error.insertAfter(element);
     }
-  });
-}
-
-
-// Simple function to auto submit when input changes
-function auto_submit() {
-
-  /*
-        Whenever an input is changed, the table will regenerate.
-  */
-
-  $("#horiz_start").on("input", function() {
-    validate();
-  });
-
-  $("#horiz_end").on("input", function() {
-    validate();
-  });
-
-  $("#vert_start").on("input", function() {
-    validate();
-  });
-
-  $("#vert_end").on("input", function() {
-    validate();
   });
 }
 

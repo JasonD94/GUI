@@ -109,7 +109,7 @@
                  and console.logs are also kept. Using onsubmit made it very difficult to
                  spot errors, while onclick doesn't force the page to refresh because
                  of the return false in the onsubmit form attribute. -->
-            <input class="submit_button" type="submit" value="Generate Table">
+            <input id="button_submit" class="submit_button" type="submit" value="Generate Table">
           </form>
 
           <!-- Error messages will appear here instead of in a popup. -->
@@ -174,7 +174,6 @@
         $("#TheFooter").load("html/footer.html");
 
         validate();         // Runs the validate code as soon as the body is ready.
-        auto_submit();      // Run the auto submit code when the body is ready.
     });
   </script>
 
