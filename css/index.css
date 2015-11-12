@@ -14,8 +14,8 @@
 
 /* CSS Reset */
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 /*
@@ -224,6 +224,14 @@ tbody > tr:first-child > td:first-child {
 input.error {
   border: 3px solid red;
 }
+
+
+/*******************************************************************************
+ *  This section will be for Assignment 8.
+ *******************************************************************************/
+
+/* stuff will go here soon. */
+
 
 /*
   This chunk contains all the highlight / text related CSS.
