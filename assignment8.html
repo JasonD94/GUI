@@ -67,6 +67,7 @@
       <div class="col-md-3"></div>
       <div class="col-md-6">
         <div class="highlight_centered">Enter four numbers (range -12 to 12) to generate a dynamic multiplication table.</div>
+        <div class="highlight_centered">You may also save up to 5 multiplication tables.</div>
       </div>
       <div class="col-md-3"></div>
     </div>
@@ -112,11 +113,8 @@
               <div id="slider_vert_end"></div>
             </div>
 
-            <!-- Note: using onclick so that when debugging the form, user input isn't lost
-                 and console.logs are also kept. Using onsubmit made it very difficult to
-                 spot errors, while onclick doesn't force the page to refresh because
-                 of the return false in the onsubmit form attribute. -->
-            <input id="button_submit" class="submit_button" type="submit" value="Generate Table">
+            <!-- onClick now saves the current multiplication tab into a new tab -->
+            <input id="button_submit" class="submit_button" type="submit" onClick="save_tab();" value="Save Table">
           </form>
 
           <!-- Error messages will appear here instead of in a popup. -->
@@ -126,8 +124,11 @@
       </div>
 
       <div class="col-md-7">
-        <!-- The multiplication table will appear in this div -->
+        <!-- The CURRENT multiplication table will appear in this div -->
         <div id="multiplication_table"></div>
+
+        <!-- Old Tables will be saved here -->
+        <div id="table_tabs"></div>
       </div>
 
     </div>

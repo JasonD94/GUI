@@ -45,6 +45,21 @@ function auto_submit() {
 
 
 /*
+ *    Saves the current multiplication table into a new tab.
+ */
+function save_tab() {
+  var tabCount = 0;
+
+  var title = "<li><a href='#tab" + tabCount + "''>Tab " + tabCount + "'</a></li>";
+  var content = "<div id='#tab" + tabCount + "'" + $("#multiplication_table").html() + "</div>";
+
+  console.log(content);
+
+  var tabs = $( "#table_tabs" ).tabs();
+  tabs.append(content);
+}
+
+/*
     Code that makes the slider appear for the parameters
 */
 function slider() {
@@ -61,7 +76,7 @@ function slider() {
       auto_submit();  // Call the auto submit function on slide.
     }
   });
-  $("#horiz_start").on("keyup", function(e) {
+  $("#horiz_start").on("keyup", function() {
     $("#slider_hor_start").slider("value", this.value);
     auto_submit();  // Call the auto submit function on keyup as well.
   });
@@ -75,7 +90,7 @@ function slider() {
       auto_submit();  // Call the auto submit function on slide.
     }
   });
-  $("#horiz_end").on("keyup", function(e) {
+  $("#horiz_end").on("keyup", function() {
     $("#slider_hor_end").slider("value", this.value);
     auto_submit();  // Call the auto submit function on keyup as well.
   });
@@ -89,7 +104,7 @@ function slider() {
       auto_submit();  // Call the auto submit function on slide.
     }
   });
-  $("#vert_start").on("keyup", function(e) {
+  $("#vert_start").on("keyup", function() {
     $("#slider_vert_start").slider("value", this.value);
     auto_submit();  // Call the auto submit function on keyup as well.
   });
@@ -103,11 +118,12 @@ function slider() {
       auto_submit();  // Call the auto submit function on slide.
     }
   });
-  $("#vert_end").on("keyup", function(e) {
+  $("#vert_end").on("keyup", function() {
     $("#slider_vert_end").slider("value", this.value);
     auto_submit();  // Call the auto submit function on keyup as well.
   });
 }
+
 
 function validate() {
 
@@ -201,6 +217,7 @@ function validate() {
     }
   });
 }
+
 
 // This function calculates the multiplication table.
 function table_calc() {
