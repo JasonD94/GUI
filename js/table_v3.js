@@ -17,6 +17,49 @@
     fills in the table.
 */
 
+/*
+    Code that makes the slider appear for the parameters
+*/
+function slider() {
+
+  // Horizontal Start Slider
+  $("#slider_hor_start").slider({
+    min: -10,
+    max: 10,
+    slide: function(event, ui) {
+      $("#hor_start").val(ui.value);
+      console.log(ui.value);
+    }
+  });
+
+  $("#hor_start").on("keyup", function(e) {
+    $("#slider_hor_start").slider("value", this.value);
+    console.log(this.value);
+  });
+
+  // $("#hor_start").change(function() {
+  //   slider.slider("value". this.selectedIndex + 1);
+  // });
+
+  // Horizontal End Slider
+  $("#slider_hor_end").slider({
+    min: -10,
+    max: 10
+  });
+
+  // Vertical Start Slider
+  $("#slider_vert_start").slider({
+    min: -10,
+    max: 10
+  });
+
+  // Vertical End Slider
+  $("#slider_vert_end").slider({
+    min: -10,
+    max: 10
+  });
+}
+
 function validate() {
 
   /*  Switch to using the jQuery Validation Plugin

@@ -38,6 +38,9 @@
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
+  <!-- jQuery UI Library -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+
   <!-- CSS file to override stuff -->
   <link rel="stylesheet" href="css/index.css">
 
@@ -87,22 +90,26 @@
           <form id="mult_form" name="mult_form" method="GET">
             <div>
               <label>Starting horizontal number: </label>
-              <input type="number" id="horiz_start" name="horiz_start" value="" required>
+              <input type="number" id="horiz_start" name="horiz_start" required>
+              <div id="slider_hor_start"></div>
             </div>
 
             <div>
               <label>Ending horizontal number: </label>
               <input type="number" id="horiz_end" name="horiz_end" value="" required>
+              <div id="slider_hor_end"></div>
             </div>
 
             <div>
               <label>Starting vertical number: </label>
               <input type="number" id="vert_start" name="vert_start" value="" required>
+              <div id="slider_vert_start"></div>
             </div>
 
             <div>
               <label>Ending vertical number: </label>
               <input type="number" id="vert_end" name="vert_end" value="" required>
+              <div id="slider_vert_end"></div>
             </div>
 
             <!-- Note: using onclick so that when debugging the form, user input isn't lost
@@ -152,6 +159,9 @@
   <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.js"></script>
   <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/additional-methods.js"></script>
 
+  <!-- jQuery UI Slider and Tab Wigets -->
+  <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
   <!-- JS file that handles the multiplication table and validate code -->
   <script type='text/javascript' src="js/table_v3.js"></script>
 
@@ -169,6 +179,7 @@
         $("#NavBarHeader").load("html/navbar.html");
         $("#TheFooter").load("html/footer.html");
 
+        slider();           // Runs the slider code.
         validate();         // Runs the validate code as soon as the body is ready.
     });
   </script>
