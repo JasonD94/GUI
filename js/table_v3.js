@@ -17,46 +17,95 @@
     fills in the table.
 */
 
+
+/*
+    This function tries to submit the form. It will only submit if the form is valid.
+    It gets called on various events:
+    - on page load (automagically generated a 0 by 0 table by default)
+    - on keyup (if the user types "5" it generates a new table using this input)
+    - on slide (slider moves, new table is generated)
+
+    I found an example of submitting the form using jQuery on Stackoverflow,
+    URL here: https://stackoverflow.com/questions/1200266/submit-a-form-using-jquery
+
+    The if statement I created after Googling to see if there is a way to detect
+    valid forms with the jQuery Validator. Turns out .valid() returns true or false.
+
+    Also, by using this code I can now validate code on the first run through
+    without having the user click the submit button. This was pointed out by
+    one of the graders as a problem, and now even on the first page load the
+    validator will be run if the user tries to type "100". They don't even need
+    to click enter either, as I run this code onkeyup as well in the validator.
+*/
+function auto_submit() {
+  if( $("form#mult_form").valid() == true ) {
+    $("form#mult_form").submit();
+  }
+}
+
+
 /*
     Code that makes the slider appear for the parameters
 */
 function slider() {
 
+  // The slider code is based off of jQuery's UI page.
+  // URL: https://jqueryui.com/slider/#hotelrooms
+
   // Horizontal Start Slider
   $("#slider_hor_start").slider({
-    min: -10,
-    max: 10,
+    min: -12,
+    max: 12,
     slide: function(event, ui) {
-      $("#hor_start").val(ui.value);
-      console.log(ui.value);
+      $("#horiz_start").val(ui.value);
+      auto_submit();  // Call the auto submit function on slide.
     }
   });
-
-  $("#hor_start").on("keyup", function(e) {
+  $("#horiz_start").on("keyup", function(e) {
     $("#slider_hor_start").slider("value", this.value);
-    console.log(this.value);
+    auto_submit();  // Call the auto submit function on keyup as well.
   });
-
-  // $("#hor_start").change(function() {
-  //   slider.slider("value". this.selectedIndex + 1);
-  // });
 
   // Horizontal End Slider
   $("#slider_hor_end").slider({
-    min: -10,
-    max: 10
+    min: -12,
+    max: 12,
+    slide: function(event, ui) {
+      $("#horiz_end").val(ui.value);
+      auto_submit();  // Call the auto submit function on slide.
+    }
+  });
+  $("#horiz_end").on("keyup", function(e) {
+    $("#slider_hor_end").slider("value", this.value);
+    auto_submit();  // Call the auto submit function on keyup as well.
   });
 
   // Vertical Start Slider
   $("#slider_vert_start").slider({
-    min: -10,
-    max: 10
+    min: -12,
+    max: 12,
+    slide: function(event, ui) {
+      $("#vert_start").val(ui.value);
+      auto_submit();  // Call the auto submit function on slide.
+    }
+  });
+  $("#vert_start").on("keyup", function(e) {
+    $("#slider_vert_start").slider("value", this.value);
+    auto_submit();  // Call the auto submit function on keyup as well.
   });
 
   // Vertical End Slider
   $("#slider_vert_end").slider({
-    min: -10,
-    max: 10
+    min: -12,
+    max: 12,
+    slide: function(event, ui) {
+      $("#vert_end").val(ui.value);
+      auto_submit();  // Call the auto submit function on slide.
+    }
+  });
+  $("#vert_end").on("keyup", function(e) {
+    $("#slider_vert_end").slider("value", this.value);
+    auto_submit();  // Call the auto submit function on keyup as well.
   });
 }
 
@@ -143,6 +192,12 @@ function validate() {
     errorElement: "div",
     errorPlacement: function(error, element) {
       error.insertAfter(element);
+    },
+
+    onkeyup: function( element, event ) {
+      // Call the auto submit function on keyup, so the user does not have to
+      // press the enter button.
+      auto_submit();
     }
   });
 }
@@ -160,9 +215,10 @@ function table_calc() {
   var vert_start = Number(document.getElementById('vert_start').value);
   var vert_end = Number(document.getElementById('vert_end').value);
 
+  // DEBUG
   // Check to see if the numbers are read correctly.
-  console.log("Horizontal start: ", hor_start, "Horizontal end: ", hor_end),
-  console.log("Vertical start: ", vert_start, "Vertical end: ", vert_end);
+  // console.log("Horizontal start: ", hor_start, "Horizontal end: ", hor_end),
+  // console.log("Vertical start: ", vert_start, "Vertical end: ", vert_end);
 
   /*
         This section handles some "warning messages" that I decided would be worth
