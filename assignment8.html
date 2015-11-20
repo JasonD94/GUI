@@ -42,7 +42,10 @@
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/dark-hive/jquery-ui.min.css">
 
   <!-- CSS file to override stuff -->
-  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/index_assignment8.css">
+
+  <!-- Snowflake code from here: http://www.kirupa.com/html5/the_falling_snow_effect.htm -->
+  <link rel="stylesheet" href="css/snowflakes.css">
 
   <!-- Custom favicon -->
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -54,8 +57,12 @@
   <div id="NavBarHeader"></div>
 
   <!-- The main container
-       Making the container fluid to use up all the screen real estate -->
+       Making the container fluid to use up all the screen real estate   -->
   <div class="container-fluid">
+    <!-- SNOWFLAKES! URL: http://www.kirupa.com/html5/the_falling_snow_effect.htm  -->
+    <div id="snowflakeContainer">
+      <p class="snowflake">*</p>
+    </div>
 
     <!-- First row - Assignment description -->
     <div class="row">
@@ -159,7 +166,11 @@
 
     <!--  This div will have the footer (html/footer.html) loaded into it
           by the JS at the bottom of the page. -->
-    <div id="TheFooter"></div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <div id="TheFooter" class="highlight_centered_small"></div>
+    </div>
+    <div class="col-md-4"></div>
 
   </div>          <!-- This should be the end div of the main container. -->
 
@@ -187,6 +198,9 @@
 
   <!-- JS file that handles the multiplication table and validate code -->
   <script type='text/javascript' src="js/table_v3.js"></script>
+
+  <!-- SNOWFLAKES! because why not. -->
+  <script src="js/fallingsnow_v6.js"></script>
 
   <!-- Load the header/footer when the page is ready. Also load the validate() function -->
   <script>
