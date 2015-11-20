@@ -17,6 +17,10 @@
     fills in the table.
 */
 
+// This is a hack but whatever. jQuery UI is just plain annoying to use dynamically.
+// Basically, this is forced to start at 1 and continue counting up to prevent
+// bugs when the user removes a tab.
+var tabIndex = 1;
 
 /*
     This function tries to submit the form. It will only submit if the form is valid.
@@ -54,17 +58,14 @@ function save_tab() {
   // behave how I wanted them to.
   // URL: https://stackoverflow.com/questions/18572586/append-to-dynamically-created-tab
 
-  // Get the number of tabs
-  var tabCount = $('div#tabs ul li.tab').length;
+  // I've decided to only allow 25 tabs; the user will need to delete old tabs to add more.
+  var tabCount = $("#tabs li").length + 1;
+  console.log("Current tab count is: " + tabCount);
 
-  // I've decided to only allow five tabs; the user will need to delete old tabs to add more.
-  if(tabCount > 5) {
-    // NEED TO SEE HOW MANY TABS IS REASONABLE AND LIMIT TO THAT NUMBER.
-    // FIVE IS FAR TOO LOW.
-    //alert("Sorry, only 5 multiplication tables may be saved at the same time. Please delete one to save another table.");
+  if(tabCount > 24) {
+    alert("Sorry, only 24 multiplication tables may be saved at the same time. Please delete one to save another table.");
+    return false;
   }
-
-  tabCount++;   // Want numbers like 1 to 5, not 0 to 4.
 
   // This should initialize the jQuery UI tabs.
   $( "#tabs" ).tabs();
@@ -76,8 +77,10 @@ function save_tab() {
   var vert_start = Number(document.getElementById('vert_start').value);
   var vert_end = Number(document.getElementById('vert_end').value);
 
+  tabIndex++;   // Increment the index each time we add a new tab.
+
   // Create the title bar, this will be a string to send to .append()
-  var title = "<li class='tab'><a href='#tab-" + tabCount + "'>" + hor_start +
+  var title = "<li class='tab'><a href='#tab-" + tabIndex + "'>" + hor_start +
               " to " + hor_end + " by " + vert_start + " to " + vert_end + "</a>" +
               "<span class='ui-icon ui-icon-close' role='presentation'></span>" + "</li>";
 
@@ -85,7 +88,7 @@ function save_tab() {
   $( "div#tabs ul" ).append( title );
 
   // Add the current multiplication table.
-  $( "div#tabs" ).append('<div id="tab-' + tabCount + '">' + $("#multiplication_table").html() + '</div>');
+  $( "div#tabs" ).append('<div id="tab-' + tabIndex + '">' + $("#multiplication_table").html() + '</div>');
 
   // Refresh the tabs div so that the new tab shows up.
   $( "#tabs" ).tabs("refresh");
@@ -100,6 +103,8 @@ function save_tab() {
 
       // Refresh the tabs!
       // Using try / catch to prevent exceptions from appearing in the console.
+      // I think the destroy kind of breaks some of the jQuery UI stuff but
+      // it
       try {
         $( "#tabs" ).tabs("refresh");
       }
@@ -117,7 +122,7 @@ function save_tab() {
           //console.log(e);
         }
 
-        return false;
+        return false;   // This may prevent default behavior from occurring.
       }
   });
 }
