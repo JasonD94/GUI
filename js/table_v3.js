@@ -57,8 +57,10 @@ function save_tab() {
   // This Stackoverflow post was a good example to look at and modify to make the jQuery UI tabs
   // behave how I wanted them to.
   // URL: https://stackoverflow.com/questions/18572586/append-to-dynamically-created-tab
+  // This is the jsfiddle that I based my code around: https://jsfiddle.net/EKBqy/
 
   // I've decided to only allow 25 tabs; the user will need to delete old tabs to add more.
+  // URL: https://stackoverflow.com/questions/605969/jquery-count-number-of-list-elements
   var tabCount = $("#tabs li").length + 1;
   console.log("Current tab count is: " + tabCount);
 
