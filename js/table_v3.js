@@ -38,7 +38,9 @@
     to click enter either, as I run this code onkeyup as well in the validator.
 */
 function auto_submit() {
+  // If the form is valid
   if( $("form#mult_form").valid() == true ) {
+    // Then make it submit, which should update the tab in the process.
     $("form#mult_form").submit();
   }
 }
@@ -48,15 +50,76 @@ function auto_submit() {
  *    Saves the current multiplication table into a new tab.
  */
 function save_tab() {
-  var tabCount = 0;
+  // This Stackoverflow post was a good example to look at and modify to make the jQuery UI tabs
+  // behave how I wanted them to.
+  // URL: https://stackoverflow.com/questions/18572586/append-to-dynamically-created-tab
 
-  var title = "<li><a href='#tab" + tabCount + "''>Tab " + tabCount + "'</a></li>";
-  var content = "<div id='#tab" + tabCount + "'" + $("#multiplication_table").html() + "</div>";
+  // Get the number of tabs
+  var tabCount = $('div#tabs ul li.tab').length;
 
-  console.log(content);
+  // I've decided to only allow five tabs; the user will need to delete old tabs to add more.
+  if(tabCount > 5) {
+    // NEED TO SEE HOW MANY TABS IS REASONABLE AND LIMIT TO THAT NUMBER.
+    // FIVE IS FAR TOO LOW.
+    //alert("Sorry, only 5 multiplication tables may be saved at the same time. Please delete one to save another table.");
+  }
 
-  var tabs = $( "#table_tabs" ).tabs();
-  tabs.append(content);
+  tabCount++;   // Want numbers like 1 to 5, not 0 to 4.
+
+  // This should initialize the jQuery UI tabs.
+  $( "#tabs" ).tabs();
+
+  // Get the dimensions of the current table. I've decided to display the Tab title bar for each table as:
+  // 0 TO 12 (horizontal beginning to end) by 0 TO 12 (vertical beginning to end)
+  var hor_start = Number(document.getElementById('horiz_start').value);
+  var hor_end = Number(document.getElementById('horiz_end').value);
+  var vert_start = Number(document.getElementById('vert_start').value);
+  var vert_end = Number(document.getElementById('vert_end').value);
+
+  // Create the title bar, this will be a string to send to .append()
+  var title = "<li class='tab'><a href='#tab-" + tabCount + "'>" + hor_start +
+              " to " + hor_end + " by " + vert_start + " to " + vert_end + "</a>" +
+              "<span class='ui-icon ui-icon-close' role='presentation'></span>" + "</li>";
+
+  // Add a new Title bar.
+  $( "div#tabs ul" ).append( title );
+
+  // Add the current multiplication table.
+  $( "div#tabs" ).append('<div id="tab-' + tabCount + '">' + $("#multiplication_table").html() + '</div>');
+
+  // Refresh the tabs div so that the new tab shows up.
+  $( "#tabs" ).tabs("refresh");
+
+  // Make the new tab active, so that the user knows it updated.
+  $( "#tabs" ).tabs("option", "active", -1);
+
+  // Add a remove button, from jQuery UI's webpage: https://jqueryui.com/tabs/#manipulation
+  $( "#tabs" ).delegate( "span.ui-icon-close", "click", function() {
+      var panelID = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+      $( "#" + panelID ).remove();
+
+      // Refresh the tabs!
+      // Using try / catch to prevent exceptions from appearing in the console.
+      try {
+        $( "#tabs" ).tabs("refresh");
+      }
+      catch (e) {
+        //console.log(e);
+      }
+
+      // If this is the last tab, let's reset the page to way it was before.
+      // URL: https://api.jqueryui.com/tabs/#method-destroy
+      if( $('div#tabs ul li.tab').length == 0) {
+        try {
+          $("#tabs").tabs("destroy");
+        }
+        catch (e) {
+          //console.log(e);
+        }
+
+        return false;
+      }
+  });
 }
 
 /*
@@ -221,7 +284,8 @@ function validate() {
 
 // This function calculates the multiplication table.
 function table_calc() {
-  /*  User input - from the form on the assignment 6 HTML doc.
+  /*
+      User input - from the form on the assignment 6 HTML doc.
       Convert to a number using type casting. This fixed so many random bugs
       in my code. W3Schools helped a ton in figuring this out, as comparisons
       would fail randomly before I added this.

@@ -67,17 +67,18 @@
       <div class="col-md-3"></div>
       <div class="col-md-6">
         <div class="highlight_centered">Enter four numbers (range -12 to 12) to generate a dynamic multiplication table.</div>
-        <div class="highlight_centered">You may also save up to 5 multiplication tables.</div>
       </div>
       <div class="col-md-3"></div>
     </div>
 
     <br>
 
-    <!-- Title / form goes here -->
+    <!-- form goes here, along with current multiplication table -->
     <div class="row">
       <div class="col-md-1"></div>
-      <div class="col-md-4">
+
+      <!-- FIRST COLUMN: USER INPUT -->
+      <div class="col-md-5">
         <!-- Form to take user input.
         I used the following site for help with the form:
         http://www.w3schools.com/html/html_forms.asp
@@ -123,14 +124,35 @@
         </div>
       </div>
 
-      <div class="col-md-7">
+      <!-- SECOND COLUMN: CURRENT MULTIPLICATION TABLE -->
+      <div class="col-md-5">
         <!-- The CURRENT multiplication table will appear in this div -->
         <div id="multiplication_table"></div>
-
-        <!-- Old Tables will be saved here -->
-        <div id="table_tabs"></div>
       </div>
 
+      <div class="col-md-1"></div>
+    </div>
+
+    <br><br>              <!-- Adding line breaks to make the display nicer. -->
+
+    <div class="row">
+      <div class="col-md-1"></div>
+
+      <!-- PAST MULTIPLICATION TABLES -->
+      <div class="col-md-10">
+        <div class="highlight_centered">You may also save up to 5 multiplication tables.
+        They will appear below this line when the "Save Table" button is pressed.</div>
+
+        <br><br>              <!-- Adding line breaks to make the display nicer. -->
+
+        <!-- Old Tables will be saved here -->
+        <div id="tabs">
+          <ul>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-1"></div>
     </div>
 
     <br><br><br>               <!-- Adding line breaks to make the display nicer. -->
