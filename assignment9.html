@@ -59,19 +59,30 @@
         div by the JS at the bottom of this page. -->
   <div id="NavBarHeader"></div>
 
-    <!-- First row - Assignment description -->
+    <!-- First row - Scrabble -->
     <div class="row">
       <div class="col-md-12">
         <h1 class="name">
-          <span class="highlight_fun">Assignment #9</span>
+          <span class="highlight_fun">SCRABBLE</span>
         </h1>
       </div>
-      <div class="col-md-3"></div>
-      <div class="col-md-6">
-        <div class="highlight_centered"> LET'S PLAY A GAME OF SCRABBLE! </div>
-      </div>
-      <div class="col-md-3"></div>
     </div>
+
+    <!-- Second row - the Scrabble game board -->
+    <div class="row">
+      <div class="row-md-12">
+      <!--
+        Scrabble image from:
+        https://farm1.static.flickr.com/23/30997788_a595e9e158_o.jpg
+      -->
+        <div class="center_text_images">
+          <img class="resize" src="/img/scrabble/Scrabble_Board_OneLine.png">
+        </div>
+      </div>
+    </div>
+
+    <!-- Third row - the Scrabble pieces -->
+    <div id="scrabble_pieces"></div>
 
   </div>          <!-- This should be the end div of the main container. -->
 
@@ -100,6 +111,9 @@
   <!-- JS file to handle the scrabble game. -->
   <script type='text/javascript' src="js/scrabble.js"></script>
 
+  <!-- Hide Nav bar on load. Only show when the user scrolls. -->
+  <script type='text/javascript' src="js/hide_navbar.js"></script>
+
   <!-- Load the header/footer when the page is ready. Also load the validate() function -->
   <script>
     /*  This code is from a Stackoverflow post about how to load a HTML document
@@ -114,7 +128,6 @@
         $("#NavBarHeader").load("html/navbar.html");
         $("#TheFooter").load("html/footer.html");
 
-        // BUILD SOME JS FUNCTIONS AND PUT THEM HERE.
     });
   </script>
 

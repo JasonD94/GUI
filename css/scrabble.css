@@ -84,6 +84,25 @@ html {
   text-align: center;
 }
 
+/*
+    For the Scrabble board
+    Figured this out on Stackoverflow:
+    https://stackoverflow.com/questions/5969114/how-do-i-make-an-image-smaller-with-css
+*/
+.resize {
+  height: 125px;
+  width: auto;
+}
+
+
+/* Scrabble board CSS */
+
+
+
+
+
+
+
 /* The following is for the table in assignment #6 */
 
 /*
