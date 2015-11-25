@@ -85,20 +85,51 @@ var game_board = [
  *    When called, this function determine what the current word is, and prints it
  *    out to the HTML doc as well as the console for logging purposes.
  *
+ *    It also determines what the score is for the word that it finds.
+ *
  */
 function find_word() {
   var word = "";
+  var score = 0;
 
   // Go through the whole game board and generate a possible word.
   for(var i = 0; i < 15; i++) {
     if(game_board[i].tile != "pieceX") {
       word += find_letter(game_board[i].tile);
+      score += find_score(game_board[i].tile);
     }
   }
 
+  // Factor in the doubling of certain tiles. Since the should_double() function returns 0 or 1,
+  // this is easy to account for. If it's 0, 0 is added to the score. If it's 1, the score is doubled.
+  score += (score * should_double());
+
+  // Put the score of the dropped tile into the HTML doc.
+  $("#score").html(score);
+
+  // If the word is not empty, show it on the screen!
   if(word != "") {
     $("#word").html(word);
+    return;
   }
+
+  // Otherwise the word is now blank.
+  $("#word").html("____");
+}
+
+
+// Determine whether to double the word score or not.
+// Returns 1 for YES or 0 for NO.
+function should_double() {
+  if(game_board[2].tile != "pieceX") {
+    return 1;
+  }
+  if(game_board[12].tile != "pieceX") {
+    return 1;
+  }
+
+  // Otherwise return 0.
+  return 0;
 }
 
 
@@ -112,6 +143,7 @@ function find_word() {
 function find_score(given_id) {
   // First figure out which letter we have.
   var letter = find_letter(given_id);
+  var score = 0;
 
   // Since each "letter" is actually a spot in an array in the pieces.json file,
   // we gotta look at each object in the array before we can look at stuff.
@@ -121,14 +153,36 @@ function find_score(given_id) {
 
     // See if this is the right object.
     if(obj.letter == letter) {
-      //console.log("we got letter: " + obj.letter);
-      //console.log("value of letter is: " + obj.value);
-      return obj.value;
+      score = obj.value;
+
+      // Need to determine if this piece is a DOUBLE or not.
+      // Droppable zones 6 & 8 are DOUBLE letter scores.
+      score += (score * should_double_letter(given_id));
+
+      return score;
     }
   }
 
   // If we get here, then we weren't given a nice valid letter. >:(
   return -1;
+}
+
+
+// Given a tile ID, figures out which dropID this is and whether to double the
+// letter score or not.
+// Returns 1 for YES or 0 for NO.
+function should_double_letter(given_id) {
+  // Figure out which dropID this tile belongs to.
+  var dropID = find_tile_pos(given_id);
+
+  // Is this dropID a double spot or not?
+  if(dropID == "drop6" || dropID == "drop8") {
+    // YES, return 1.
+    return 1;
+  }
+
+  // Otherwise, NO, so return 0.
+  return 0;
 }
 
 
@@ -166,6 +220,19 @@ function find_board_pos(given_id) {
 }
 
 
+// Given a tile, figure out which drop_ID it belongs to.
+function find_tile_pos(given_id) {
+  for(var i = 0; i < 15; i++){
+    if(game_board[i].tile == given_id) {
+      return game_board[i].id;
+    }
+  }
+
+  // Errors return -1.
+  return -1;
+}
+
+
 /**
  *    This function loads up the scrabble pieces onto the rack.
  *    It also makes each of them draggable and sets various properties, including
@@ -185,8 +252,20 @@ function load_scrabble_pieces() {
   // Load up 7 pieces
   for(var i = 0; i < 7; i++) {
     // Get a random number so we can generate a random tile. There's 27 tiles,
-    // so we want a range of 0 to 26.
-    random_num = getRandomInt(0, 26);
+    // so we want a range of 0 to 26. Also make sure not to over use any tiles,
+    // so generate multiple random numbers if necessary.
+    var loop = true;
+    while(loop == true){
+      random_num = getRandomInt(0, 26);
+
+      // Need to make sure we remove words from the pieces data structure.
+      if(pieces[random_num].amount != 0) {
+        loop = false;
+        pieces[random_num].amount--;
+      }
+    }
+
+
 
     // Make the img HTML and img ID so we can easily append the tiles.
     piece = "<img class='pieces' id='piece" + i + "' src='" + base_url + pieces[random_num].letter + ".jpg" + "'></img>";
@@ -202,7 +281,7 @@ function load_scrabble_pieces() {
     // Now figure out where to reposition the board piece.
     // For left, the -200 shifts the tiles over 200px from the edge of the rack. the (50 * i) creates 50px gaps between tiles.
     // For top, the -130 shifts the tiles up 130px from the bottom of the rack.
-    var img_left = -200 + (50 * i);
+    var img_left = -165 + (50 * i);
     var img_top = -130;
 
     /* Load onto the page and make draggable.
@@ -265,6 +344,7 @@ function load_droppable_targets() {
     // Make the img droppable
     $(drop_ID).droppable({
       // Found this on the jQuery UI doc page, at this URL: https://jqueryui.com/droppable/#default
+      // When a tile is placed on a droppable zone, set the game_board var to hold that tile.
       drop: function(event, ui) {
         // To figure out which draggable / droppable ID was activated, I used this sweet code
         // from stackoverflow:
@@ -280,9 +360,32 @@ function load_droppable_targets() {
 
         // Figure out what word, if any, the user currently entered.
         find_word();
+      },
+      // When a tile is moved away, gotta remove it from the game board.
+      // Helpful info: https://api.jqueryui.com/droppable/#event-out
+      out: function(event, ui) {
+        var draggableID = ui.draggable.attr("id");
+        var droppableID = $(this).attr("id");
 
-        // Put the score of the dropped tile into the HTML doc.
-        $("#score").html(find_score(draggableID));
+        // See if this is a false alarm - someone moving tiles over this one by mistake.
+        // This is necessary to prevent "removing" of tiles by accident if another tile
+        // clips one that isn't being removed.
+        if(draggableID != game_board[find_board_pos(droppableID)].tile) {
+          // We found that someone did not actually move the tile outside of
+          // the drop zone, so this was clearly a mistake (clipping issue likely)
+          // So just log it and return to prevent accidently removing a valid tile.
+          console.log("FALSE ALARM DETECTED.");
+          return;
+        }
+
+        // Log this stuff for debugging.
+        console.log("Tile: " + draggableID + " - removed from " + droppableID);
+
+        // Mark that a tile was removed in the game_board variable.
+        game_board[find_board_pos(droppableID)].tile = "pieceX";
+
+        // Update the word that was just found.
+        find_word();
       }
     });
   }

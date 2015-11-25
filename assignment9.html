@@ -75,7 +75,7 @@
     </div>
 
     <!-- Adding spaces -->
-    <br><br><br><br>
+    <br>
 
     <!-- Second row - the Scrabble game board -->
     <div class="row">
@@ -99,8 +99,18 @@
     <div class="row">
       <div class="col-md-4"></div>
       <div class="col-md-4">
-        <div class="highlight_centered">Word: <span id="word">XXXXX</span> </div>
-        <div class="highlight_centered">Score: <span id="score">XXXXX</span> </div>
+        <div class="highlight_centered">Word: <span id="word">____</span> </div>
+        <div class="highlight_centered">Score: <span id="score">0</span> </div>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+
+    <!-- Third row - Scoring -->
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="highlight_centered">Word: <span id="word">____</span> </div>
+        <div class="highlight_centered">Score: <span id="score">0</span> </div>
       </div>
       <div class="col-md-4"></div>
     </div>
@@ -149,9 +159,6 @@
   <!-- JS file to handle the scrabble game. -->
   <script type='text/javascript' src="js/scrabble.js"></script>
 
-  <!-- Hide Nav bar on load. Only show when the user scrolls. -->
-  <script type='text/javascript' src="js/hide_navbar.js"></script>
-
   <!-- Load the header/footer when the page is ready. Also load the validate() function -->
   <script>
     /*  This code is from a Stackoverflow post about how to load a HTML document
@@ -168,9 +175,6 @@
 
         load_scrabble_pieces();     // Load up the 7 random Scrabble pieces.
         load_droppable_targets();   // Load up the 15 targets for the Scrabble pieces.
-
-        // Testing the find letter score function:
-        find_score("A");
     });
   </script>
 
