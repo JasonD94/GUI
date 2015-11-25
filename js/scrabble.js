@@ -63,6 +63,7 @@ var game_tiles = [
 // JavaScript object to keep track of the game board.
 // NOTE: "pieceX" means NO tile present on that drop zone.
 var game_board = [
+  {"id": "drop0",  "tile": "pieceX"},
   {"id": "drop1",  "tile": "pieceX"},
   {"id": "drop2",  "tile": "pieceX"},
   {"id": "drop3",  "tile": "pieceX"},
@@ -76,8 +77,7 @@ var game_board = [
   {"id": "drop11", "tile": "pieceX"},
   {"id": "drop12", "tile": "pieceX"},
   {"id": "drop13", "tile": "pieceX"},
-  {"id": "drop14", "tile": "pieceX"},
-  {"id": "drop15", "tile": "pieceX"}
+  {"id": "drop14", "tile": "pieceX"}
 ]
 
 
@@ -87,7 +87,18 @@ var game_board = [
  *
  */
 function find_word() {
+  var word = "";
 
+  // Go through the whole game board and generate a possible word.
+  for(var i = 0; i < 15; i++) {
+    if(game_board[i].tile != "pieceX") {
+      word += find_letter(game_board[i].tile);
+    }
+  }
+
+  if(word != "") {
+    $("#word").html(word);
+  }
 }
 
 
@@ -95,8 +106,8 @@ function find_word() {
  *    This function, given a letter, will return the letter's score based on
  *    the value in the pieces.json file.
  *
- *    parameters: a letter, such as "A", "B", "C", etc.
- *    returns: integer score, such as "1" or "2". On error, returns "-1"
+ *    parameters: an ID of a tile
+ *       returns: integer score, such as "1" or "2". On error, returns "-1".
  */
 function find_score(given_id) {
   // First figure out which letter we have.
@@ -123,7 +134,9 @@ function find_score(given_id) {
 
 /**
  *    This function, given a piece ID will return which letter it represents.
- *    Ex: given piece1, returns "A".
+ *
+ *    parameters: an ID of a tile
+ *       returns: the letter that tile represents. On error, returns "-1".
  */
 function find_letter(given_id) {
   // Go through the 7 pieces,
@@ -135,8 +148,23 @@ function find_letter(given_id) {
     }
   }
 
-  // If we get here, we weren't given a nice draggable ID like "piece1"
+  // If we get here, we weren't given a nice draggable ID like "piece1", so return -1
+  return -1;
 }
+
+
+// Give this function a droppable ID and it returns which position in the array it is.
+function find_board_pos(given_id) {
+  for(var i = 0; i < 15; i++){
+    if(game_board[i].id == given_id) {
+      return i;
+    }
+  }
+
+  // Errors return -1.
+  return -1;
+}
+
 
 /**
  *    This function loads up the scrabble pieces onto the rack.
@@ -216,7 +244,7 @@ function load_droppable_targets() {
   var drop = "<img class='droppable' id='drop" + i + "' src='" + img_url + "'></img>";
   var drop_ID = "#drop" + i;
 
-  for(var i = 1; i < 16; i++) {
+  for(var i = 0; i < 15; i++) {
     drop = "<img class='droppable' id='drop" + i + "' src='" + img_url + "'></img>";
     drop_ID = "#drop" + i;
 
@@ -248,7 +276,10 @@ function load_droppable_targets() {
         console.log("Tile: " + draggableID + " - dropped on " + droppableID);
 
         // Mark that a tile was dropped in the game_board variable.
+        game_board[find_board_pos(droppableID)].tile = draggableID;
 
+        // Figure out what word, if any, the user currently entered.
+        find_word();
 
         // Put the score of the dropped tile into the HTML doc.
         $("#score").html(find_score(draggableID));
