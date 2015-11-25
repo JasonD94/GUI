@@ -68,21 +68,40 @@
       </div>
     </div>
 
+    <!-- Adding spaces -->
+    <br><br><br><br>
+
     <!-- Second row - the Scrabble game board -->
     <div class="row">
       <div class="row-md-12">
       <!--
-        Scrabble image from:
+        Scrabble originally image from:
         https://farm1.static.flickr.com/23/30997788_a595e9e158_o.jpg
+
+        I edited this in GIMP, and added line brackets.
       -->
         <div class="center_text_images">
-          <img class="resize" src="img/scrabble/Scrabble_Board_OneLine.png">
+          <img class="resize_board" src="img/scrabble/Scrabble_Board_OneLine.png">
         </div>
       </div>
     </div>
 
+    <!-- Adding spaces to keep the board / rack separate -->
+    <br><br><br><br><br><br><br><br>
+
     <!-- Third row - the Scrabble pieces -->
-    <div id="scrabble_pieces"></div>
+    <div class="row">
+      <div class="row-md-12">
+      <!--
+        Scrabble rack from:
+        https://pixabay.com/static/uploads/photo/2014/07/31/20/48/scrabble-tile-holder-406774_640.png
+      -->
+        <div class="center_text_images">
+          <img class="resize_rack" src="img/scrabble/Scrabble_Rack.png">
+          <div id="rack"></div>
+        </div>
+      </div>
+    </div>
 
   </div>          <!-- This should be the end div of the main container. -->
 
@@ -128,6 +147,8 @@
         $("#NavBarHeader").load("html/navbar.html");
         $("#TheFooter").load("html/footer.html");
 
+        // Load up the 7 random Scrabble pieces
+        load_scrabble_pieces();
     });
   </script>
 

@@ -89,17 +89,20 @@ html {
     Figured this out on Stackoverflow:
     https://stackoverflow.com/questions/5969114/how-do-i-make-an-image-smaller-with-css
 */
-.resize {
+.resize_board {
   height: 125px;
   width: auto;
 }
 
+.resize_rack {
+  height: 125px;
+  width: 800px;
+}
 
-/* Scrabble board CSS */
-
-
-
-
+.pieces {
+  height: 100px;
+  width: 100px;
+}
 
 
 
