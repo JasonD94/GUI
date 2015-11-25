@@ -79,7 +79,7 @@
 
     <!-- Second row - the Scrabble game board -->
     <div class="row">
-      <div class="row-md-12">
+      <div class="col-md-12">
       <!--
         Scrabble originally image from:
         https://farm1.static.flickr.com/23/30997788_a595e9e158_o.jpg
@@ -87,17 +87,29 @@
         I edited this in GIMP, and added line brackets.
       -->
         <div class="center_text_images">
-          <img class="resize_board" src="img/scrabble/Scrabble_Board_OneLine.png">
+          <img class="resize_board" id="the_board" src="img/scrabble/Scrabble_Board_OneLine.png">
+          <div id="board"></div>
         </div>
       </div>
     </div>
 
     <!-- Adding spaces to keep the board / rack separate -->
-    <br><br><br><br><br><br><br><br>
 
-    <!-- Third row - the Scrabble pieces -->
+    <!-- Third row - Scoring -->
     <div class="row">
-      <div class="row-md-12">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="highlight_centered">Score: <span id="score">XXXXX</span> </div>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+
+    <!-- Adding spaces to keep the board / rack separate -->
+    <br><br>
+
+    <!-- Fourth row - the Scrabble pieces -->
+    <div class="row">
+      <div class="col-md-12">
       <!--
         Scrabble rack from:
         https://pixabay.com/static/uploads/photo/2014/07/31/20/48/scrabble-tile-holder-406774_640.png
@@ -153,8 +165,8 @@
         $("#NavBarHeader").load("html/navbar.html");
         $("#TheFooter").load("html/footer.html");
 
-        // Load up the 7 random Scrabble pieces
-        load_scrabble_pieces();
+        load_scrabble_pieces();     // Load up the 7 random Scrabble pieces.
+        load_droppable_targets();   // Load up the 15 targets for the Scrabble pieces.
     });
   </script>
 

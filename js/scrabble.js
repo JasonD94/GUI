@@ -38,24 +38,29 @@ function load_scrabble_pieces() {
     piece_ID = "#piece" + i;
 
     // Reposition the tile on top of the rack, nicely in a row with the other tiles.
+
     // We first get the rack's location on the screen. Idea from a Stackoverflow post,
     // URL: https://stackoverflow.com/questions/885144/how-to-get-current-position-of-an-image-in-jquery
     var pos = $("#the_rack").position();
 
     // Now figure out where to reposition the board piece.
-    // The "50 * i" part just moves the image over X number of 50px blocks. Basically it
-    // adjusts the pieces so they are in a nice line vs all on top of each other.
-    // The -75 just makes it line up better on the far left side with the rack.
-    var img_left = pos.left + -50 + (150 * i);
-    var img_top = pos.top - 30;
+    // For left, the -200 shifts the tiles over 200px from the edge of the rack. the (50 * i) creates 50px gaps between tiles.
+    // For top, the -130 shifts the tiles up 130px from the bottom of the rack.
+    var img_left = -200 + (50 * i);
+    var img_top = -130;
 
-    // Load onto the page and make draggable.
-    // The height / width get set using these tricks:
-    // https://stackoverflow.com/questions/10863658/load-image-with-jquery-and-append-it-to-the-dom
-    // https://stackoverflow.com/questions/2183863/how-to-set-height-width-to-image-using-jquery
-    // https://stackoverflow.com/questions/9704087/jquery-add-image-at-specific-co-ordinates
+    /* Load onto the page and make draggable.
+       The height / width get set using these tricks:
+       https://stackoverflow.com/questions/10863658/load-image-with-jquery-and-append-it-to-the-dom
+       https://stackoverflow.com/questions/2183863/how-to-set-height-width-to-image-using-jquery
+       https://stackoverflow.com/questions/9704087/jquery-add-image-at-specific-co-ordinates
+
+       The relative stuff came from this w3schools page. I realized I could set the top and left
+       relative to the rack (and the board for the droppable targets), which makes things wayyyyy
+       easier. URL: http://www.w3schools.com/css/css_positioning.asp
+    */
     $("#rack").append(piece);
-    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "absolute").draggable();
+    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "relative").draggable();
   }
 }
 
@@ -68,9 +73,29 @@ function load_scrabble_pieces() {
  *          also create transparent image of that size to load up.
  *          should probabl
  *
+ *    height should be 80px
+ *    width should be 75px
  */
 function load_droppable_targets() {
+  var img_url = "img/scrabble/Scrabble_Droppable.png";   // URL of the image
+  var drop = "<img class='droppable' id='drop" + i + "' src='" + img_url + "'></img>";
+  var drop_ID = "#drop" + i;
 
+  for(var i = 1; i < 16; i++) {
+    drop = "<img class='droppable' id='drop" + i + "' src='" + img_url + "'></img>";
+    drop_ID = "#drop" + i;
+
+    // ** The position stuff is similar to the tile function above. **
+    // Get board location.
+    var pos = $("#the_board").position();
+
+    // Figure out where to put the droppable targets.
+    var img_left = 0;
+    var img_top = -125;
+
+    $("#board").append(drop);
+    $(drop_ID).css("left", img_left).css("top", img_top).css("position", "relative").droppable();
+  }
 }
 
 /**

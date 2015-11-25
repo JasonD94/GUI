@@ -84,7 +84,7 @@ html {
   text-align: center;
 }
 
-/*
+/**************************************************************************************************************
     For the Scrabble board
     Figured this out on Stackoverflow:
     https://stackoverflow.com/questions/5969114/how-do-i-make-an-image-smaller-with-css
@@ -104,7 +104,12 @@ html {
   width: 100px;
 }
 
+.droppable {
+  height: 125px;
+  width: 118px;
+}
 
+/***************************************************************************************************************/
 
 /* The following is for the table in assignment #6 */
 
