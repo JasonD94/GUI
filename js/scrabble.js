@@ -11,6 +11,14 @@
     This JavaScript file is for the 9th assignment, "Scrabble".
 */
 
+/**
+ *    This function loads up the scrabble pieces onto the rack.
+ *    It also makes each of them draggable and sets various properties, including
+ *    the images location and class / ID.
+ *
+ *    the tile IDs are in the form "piece#", where # is between 1 and 7.
+ *
+ */
 function load_scrabble_pieces() {
   var base_url = "img/scrabble/Scrabble_Tile_";   // base URL of the image
   var tiles = [ "A", "B", "C", "Blank", "D", "E", "F", "G", "H", "I", "J", "K", "L",
@@ -39,15 +47,30 @@ function load_scrabble_pieces() {
     // adjusts the pieces so they are in a nice line vs all on top of each other.
     // The -75 just makes it line up better on the far left side with the rack.
     var img_left = pos.left + -50 + (150 * i);
-    var img_top = pos.top + 10;
+    var img_top = pos.top - 30;
 
     // Load onto the page and make draggable.
     // The height / width get set using these tricks:
     // https://stackoverflow.com/questions/10863658/load-image-with-jquery-and-append-it-to-the-dom
     // https://stackoverflow.com/questions/2183863/how-to-set-height-width-to-image-using-jquery
+    // https://stackoverflow.com/questions/9704087/jquery-add-image-at-specific-co-ordinates
     $("#rack").append(piece);
     $(piece_ID).css("left", img_left).css("top", img_top).css("position", "absolute").draggable();
   }
+}
+
+/**
+ *    This function will load up targets for the images to be dropped onto.
+ *    I figure they will be transparent images that are overlayed on top of
+ *    the game board.
+ *
+ *    TODO: figure out the size of these targets - maybe 50px by 50px?
+ *          also create transparent image of that size to load up.
+ *          should probabl
+ *
+ */
+function load_droppable_targets() {
+
 }
 
 /**
