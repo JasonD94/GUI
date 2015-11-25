@@ -59,8 +59,14 @@ function load_scrabble_pieces() {
        relative to the rack (and the board for the droppable targets), which makes things wayyyyy
        easier. URL: http://www.w3schools.com/css/css_positioning.asp
     */
+    // Add the piece to the screen
     $("#rack").append(piece);
-    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "relative").draggable();
+
+    // Move the piece relative to where the rack is located on the screen.
+    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "relative");
+
+    // Make the piece draggable.
+    $(piece_ID).draggable();
   }
 }
 
@@ -93,8 +99,24 @@ function load_droppable_targets() {
     var img_left = 0;
     var img_top = -125;
 
+    // Add the img to the screen.
     $("#board").append(drop);
-    $(drop_ID).css("left", img_left).css("top", img_top).css("position", "relative").droppable();
+
+    // Reposition the img relative to the board.
+    $(drop_ID).css("left", img_left).css("top", img_top).css("position", "relative");
+
+    // Make the img droppable
+    $(drop_ID).droppable({
+      // Found this on the jQuery UI doc page, at this URL: https://jqueryui.com/droppable/#default
+      drop: function(event, ui) {
+        // To figure out which draggable / droppable ID was activated, I used this sweet code
+        // from stackoverflow:
+        // https://stackoverflow.com/questions/5562853/jquery-ui-get-id-of-droppable-element-when-dropped-an-item
+        var draggableID = ui.draggable.attr("id");
+        var droppableID = $(this).attr("id");
+        $("#score").html("Tile: " + draggableID + " - dropped on " + droppableID);
+      }
+    });
   }
 }
 
