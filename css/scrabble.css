@@ -109,6 +109,16 @@ html {
   width: 118px;
 }
 
+button {
+  color: black;
+  font-family: "Advent Pro";
+  font-size: 150%;
+  font-weight: 900;
+  text-align: center;
+  height: 75px;
+  width: 200px;
+}
+
 /*
   This chunk contains all the highlight / text related CSS.
   Mostly center / left / right alignment and changing the color / font of text.
