@@ -89,24 +89,60 @@ html {
     Figured this out on Stackoverflow:
     https://stackoverflow.com/questions/5969114/how-do-i-make-an-image-smaller-with-css
 */
+
+/*
+    To right align a table, see this amazing Stackoverflow post!
+    URL: https://stackoverflow.com/questions/301147/css-way-to-horizontally-align-table
+*/
+table {
+  border: solid 10px black;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  background: #D2B48C;
+  border: solid 2px white;
+  height: 50px;
+  width: 50px;
+}
+
 .resize_board {
   height: 125px;
   width: auto;
 }
 
+/* This is the Rack image */
 .resize_rack {
+  /*
+      Rotate image 90 degrees.
+      URL: https://stackoverflow.com/questions/11832131/cross-browser-way-to-rotate-image-using-css
+  */
+  behavior:url(-ms-transform.htc);
+  /* Firefox */
+  -moz-transform:rotate(90deg);
+  /* Safari and Chrome */
+  -webkit-transform:rotate(90deg);
+  /* Opera */
+  -o-transform:rotate(90deg);
+  /* IE9 */
+  -ms-transform:rotate(90deg);
+
+  position: absolute;
+  top: 300px;
+  left: -100px;
+
   height: 125px;
-  width: 1200px;
+  width: 600px;
 }
 
 .pieces {
-  height: 100px;
-  width: 100px;
+  height: 50px;
+  width: 50px;
 }
 
+/* Do I need this? Can make each table spot droppable instead. */
 .droppable {
-  height: 125px;
-  width: 118px;
 }
 
 button {

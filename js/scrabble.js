@@ -81,6 +81,12 @@ var game_board = [
 ]
 
 
+// Go through the Table with the Scrabble board and fill in special spaces.
+function fill_in_table() {
+
+}
+
+
 /**
  *    When called, this function determine what the current word is, and prints it
  *    out to the HTML doc as well as the console for logging purposes.
@@ -279,10 +285,14 @@ function load_scrabble_pieces() {
     var pos = $("#the_rack").position();
 
     // Now figure out where to reposition the board piece.
-    // For left, the -200 shifts the tiles over 200px from the edge of the rack. the (50 * i) creates 50px gaps between tiles.
-    // For top, the -130 shifts the tiles up 130px from the bottom of the rack.
-    var img_left = -165 + (50 * i);
-    var img_top = -130;
+    // For left, I first start with the rack's left and then shift back 50 * i spaces so the tiles will line up
+    // For top, I first start with the rack's top, then shift down 30 for the first tile to appear in a good spot,
+    // and then I need to shift down 50 * i to make the tiles line up (see the left's 50 * i). I do 80 so that I get
+    // 30px spacing between all the tiles.
+    // Also all the * i does is make nothing happen when i = 0 (anything * 0 = 0 after all) and then on the next couple tiles
+    // it shifts equally given the tile # we are dealing with.
+    var img_left = pos.left - (50 * i);
+    var img_top = pos.top + 30 + (80 * i);
 
     /* Load onto the page and make draggable.
        The height / width get set using these tricks:
