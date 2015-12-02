@@ -15,38 +15,44 @@
  *    Global variables for ease of use. Lazy lazy lazy but whatever.
  */
 
-// JavaScript array of objects for the amounts and value of each letter.
-// I didn't make this data structure, this was originally found on Piazza and made by Ramon Meza.
-// Also, I didn't feel like figuring out how to load a JSON file again so I did the easy way
-// and just made a pieces array with all the stuff I need. Obviously lazy but it works way easier SO WHY NOT.
+
+/*
+    JavaScript array of objects for the amounts and value of each letter.
+    I didn't make this data structure, this was originally found on Piazza and made by Ramon Meza.
+    Also, I didn't feel like figuring out how to load a JSON file again so I did the easy way
+    and just made a pieces array with all the stuff I need. Obviously lazy but it works way easier SO WHY NOT.
+
+    Note that I modified this to include a "remaining" property as well, just like
+    Prof. Heines showed in class for his associative array.
+*/
 var pieces = [
-  {"letter":"A", "value":1,  "amount":9},
-  {"letter":"B", "value":3,  "amount":2},
-  {"letter":"C", "value":3,  "amount":2},
-  {"letter":"D", "value":2,  "amount":4},
-  {"letter":"E", "value":1,  "amount":12},
-  {"letter":"F", "value":4,  "amount":2},
-  {"letter":"G", "value":2,  "amount":3},
-  {"letter":"H", "value":4,  "amount":2},
-  {"letter":"I", "value":1,  "amount":9},
-  {"letter":"J", "value":8,  "amount":1},
-  {"letter":"K", "value":5,  "amount":1},
-  {"letter":"L", "value":1,  "amount":4},
-  {"letter":"M", "value":3,  "amount":2},
-  {"letter":"N", "value":1,  "amount":6},
-  {"letter":"O", "value":1,  "amount":8},
-  {"letter":"P", "value":3,  "amount":2},
-  {"letter":"Q", "value":10, "amount":1},
-  {"letter":"R", "value":1,  "amount":6},
-  {"letter":"S", "value":1,  "amount":4},
-  {"letter":"T", "value":1,  "amount":6},
-  {"letter":"U", "value":1,  "amount":4},
-  {"letter":"V", "value":4,  "amount":2},
-  {"letter":"W", "value":4,  "amount":2},
-  {"letter":"X", "value":8,  "amount":1},
-  {"letter":"Y", "value":4,  "amount":2},
-  {"letter":"Z", "value":10, "amount":1},
-  {"letter":"_", "value":0,  "amount":2}
+  {"letter":"A", "value":  1,  "amount":  9,  "remaining":  9},
+  {"letter":"B", "value":  3,  "amount":  2,  "remaining":  2},
+  {"letter":"C", "value":  3,  "amount":  2,  "remaining":  2},
+  {"letter":"D", "value":  2,  "amount":  4,  "remaining":  4},
+  {"letter":"E", "value":  1,  "amount": 12,  "remaining": 12},
+  {"letter":"F", "value":  4,  "amount":  2,  "remaining":  2},
+  {"letter":"G", "value":  2,  "amount":  3,  "remaining":  3},
+  {"letter":"H", "value":  4,  "amount":  2,  "remaining":  2},
+  {"letter":"I", "value":  1,  "amount":  9,  "remaining":  9},
+  {"letter":"J", "value":  8,  "amount":  1,  "remaining":  1},
+  {"letter":"K", "value":  5,  "amount":  1,  "remaining":  1},
+  {"letter":"L", "value":  1,  "amount":  4,  "remaining":  4},
+  {"letter":"M", "value":  3,  "amount":  2,  "remaining":  2},
+  {"letter":"N", "value":  1,  "amount":  6,  "remaining":  6},
+  {"letter":"O", "value":  1,  "amount":  8,  "remaining":  8},
+  {"letter":"P", "value":  3,  "amount":  2,  "remaining":  2},
+  {"letter":"Q", "value": 10,  "amount":  1,  "remaining":  1},
+  {"letter":"R", "value":  1,  "amount":  6,  "remaining":  6},
+  {"letter":"S", "value":  1,  "amount":  4,  "remaining":  4},
+  {"letter":"T", "value":  1,  "amount":  6,  "remaining":  6},
+  {"letter":"U", "value":  1,  "amount":  4,  "remaining":  4},
+  {"letter":"V", "value":  4,  "amount":  2,  "remaining":  2},
+  {"letter":"W", "value":  4,  "amount":  2,  "remaining":  2},
+  {"letter":"X", "value":  8,  "amount":  1,  "remaining":  1},
+  {"letter":"Y", "value":  4,  "amount":  2,  "remaining":  2},
+  {"letter":"Z", "value": 10,  "amount":  1,  "remaining":  1},
+  {"letter":"_", "value":  0,  "amount":  2,  "remaining":  2}
 ];
 
 // JavaScript array of objects to determine what letter each piece is.
@@ -62,24 +68,10 @@ var game_tiles = [
 
 // JavaScript object to keep track of the game board.
 // NOTE: "pieceX" means NO tile present on that drop zone.
-
-// REDO to include row0, row1, etc.
+// Also note this is EMPTY until tiles are placed onto the game board.
 var game_board = [
-  {"id": "drop0",  "tile": "pieceX"},
-  {"id": "drop1",  "tile": "pieceX"},
-  {"id": "drop2",  "tile": "pieceX"},
-  {"id": "drop3",  "tile": "pieceX"},
-  {"id": "drop4",  "tile": "pieceX"},
-  {"id": "drop5",  "tile": "pieceX"},
-  {"id": "drop6",  "tile": "pieceX"},
-  {"id": "drop7",  "tile": "pieceX"},
-  {"id": "drop8",  "tile": "pieceX"},
-  {"id": "drop9",  "tile": "pieceX"},
-  {"id": "drop10", "tile": "pieceX"},
-  {"id": "drop11", "tile": "pieceX"},
-  {"id": "drop12", "tile": "pieceX"},
-  {"id": "drop13", "tile": "pieceX"},
-  {"id": "drop14", "tile": "pieceX"}
+  // Example of what WOULD be in this array. An obj with "id" of the dropable spot and the tile that was dropped.
+  //{"id": "drop0",  "tile": "pieceX"},
 ]
 
 
@@ -90,21 +82,11 @@ function fill_in_table() {
   var row = 0;
   var col = 0;
 
-  // Add the for the special spaces.
-  // Some ideas from: https://stackoverflow.com/questions/7986581/jquery-change-table-cell-text-color-based-on-text
-  //$('.double_letter').html("<div class='cell_style'>Double Letter</div>");
-  $('.triple_letter').html("<div class='cell_style'>Triple Letter</div>");
-  $('.double_word').html("<div class='cell_style'>Double Word</div>");
-  $('.triple_word').html("<div class='cell_style'>Triple Word</div>");
+  // CURRENTLY USING BACKGROUND IMAGES FOR THE SPECIAL SPACES.
 
   // I did not create this image.
   // Found at this URL: http://vignette3.wikia.nocookie.net/fantendo/images/4/49/Super_Star_NSMB2.png/revision/20120731024244
   $('.star').html("<img id='star_img' src='img/star.png'>");
-
-  // Fix star position
-  // var pos = $(this).position();
-  // $('#star_img').css("left", pos.left).css("top", pos.top).css("position", "relative");
-
 
   $('#scrabble_board tr').each(function() {
     col = 0;
@@ -310,8 +292,6 @@ function load_scrabble_pieces() {
       }
     }
 
-
-
     // Make the img HTML and img ID so we can easily append the tiles.
     piece = "<img class='pieces' id='piece" + i + "' src='" + base_url + pieces[random_num].letter + ".jpg" + "'></img>";
     piece_ID = "#piece" + i;
@@ -339,7 +319,6 @@ function load_scrabble_pieces() {
         Pretty fancy.
 
     */
-
 
     // For left, I first start with the rack's left and then shift back 50 * i spaces so the tiles will line up
     // For top, I first start with the rack's top, then shift down 30 for the first tile to appear in a good spot,
@@ -369,8 +348,8 @@ function load_scrabble_pieces() {
     // Make the piece draggable.
     $(piece_ID).draggable({
       appendTo: scrabble_board,
-      //revert: true,
-      snap: true
+      revert: true
+      //snap: true
     });
   }
 }
@@ -399,12 +378,18 @@ function load_droppable_targets() {
       var draggableID = ui.draggable.attr("id");
       var droppableID = $(this).attr("id");
 
-      if ( $(this).hasClass('double_letter') ) {
-        //$(this).html('');
-        //console.log("This: " + $(this));
-        // #row0col3 > div
-        //$(droppableID).children().first().remove();
-      }
+      // For debugging purposes.
+      console.log("draggableID: " + draggableID );
+      console.log("droppableID: " + droppableID );
+
+      /*
+            Logic needed here to prevent multiple tiles on the space spot,
+            and to determine if a tile drop is legal or not.
+
+       */
+
+
+
 
       // This from Stackoverflow, it snaps to where it was dropped.
       // URL: https://stackoverflow.com/questions/30122234/how-to-make-an-accept-condition-for-droppable-td-to-accept-only-the-class-within
@@ -412,11 +397,6 @@ function load_droppable_targets() {
       ui.draggable.css("top", $(this).css("top"))
       ui.draggable.css("left", $(this).css("left"))
       ui.draggable.css("position", "relative")
-
-      //$('.double_letter').html("<div class='cell_style'>Double Letter</div>");
-
-      console.log("draggableID: " + draggableID );
-      console.log("droppableID: " + droppableID );
     },
     zIndex: -1
   });

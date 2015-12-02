@@ -90,6 +90,11 @@ html {
     https://stackoverflow.com/questions/5969114/how-do-i-make-an-image-smaller-with-css
 */
 
+/* The ID for the Table itself. */
+#scrabble_board {
+
+}
+
 /*
     To right align a table, see this amazing Stackoverflow post!
     URL: https://stackoverflow.com/questions/301147/css-way-to-horizontally-align-table
@@ -126,6 +131,22 @@ td {
   text-align: center;
 }
 
+/*
+      Note that I made the "special tile" lettering appear as background images.
+      If I tried doing plain old text, it LOOKED fine, until I tried dropping a
+      tile onto a special tile. Then the tile would appear above the tile which
+      is not what I wanted. The current behavior is much nicer, the tile appears
+      over the droppable space, and no letters appear when this happens.
+
+      I created these four images (double / triple ones) myself using GIMP.
+      They are just 50px by 50px images with a colored background layer and
+      a text field. The original template can be found in the /img/ folder as
+      a .xcf file, "special_tile.xcf". You may edit this if you dislike my colors
+      but you'll need to replace all the double / triple images if you do so, or
+      copy my images if you just want to use this code.
+
+*/
+
 /* Double / Triple letter CSS */
 .double_letter {
   /*background: #0080ff; */
@@ -133,16 +154,19 @@ td {
 }
 
 .triple_letter {
-  background: blue;
+  /* background: blue;  */
+  background: url(/img/triple_letter.png);
 }
 
 /* Double / Triple word CSS */
 .double_word {
-  background: #e5acb6;
+  /*background: #e5acb6;*/
+  background: url(/img/double_word.png);
 }
 
 .triple_word {
-  background: red;
+  /*background: red;*/
+  background: url(/img/triple_word.png);
 }
 
 .star {
