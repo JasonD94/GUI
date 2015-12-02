@@ -118,13 +118,12 @@ function fill_in_table() {
 function find_word() {
   var word = "";
   var score = 0;
+  var board_length = game_board.length;
 
-  // Go through the whole game board and generate a possible word.
-  for(var i = 0; i < 15; i++) {
-    if(game_board[i].tile != "pieceX") {
-      word += find_letter(game_board[i].tile);
-      score += find_score(game_board[i].tile);
-    }
+  // Go through the game board and generate a possible word.
+  for(var i = 0; i < board_length; i++) {
+    word += find_letter(game_board[i].tile);
+    score += find_score(game_board[i].tile);
   }
 
   // Factor in the doubling of certain tiles. Since the should_double() function returns 0 or 1,
@@ -148,12 +147,15 @@ function find_word() {
 // Determine whether to double the word score or not.
 // Returns 1 for YES or 0 for NO.
 function should_double() {
-  if(game_board[2].tile != "pieceX") {
-    return 1;
-  }
-  if(game_board[12].tile != "pieceX") {
-    return 1;
-  }
+
+  // NEEDS TO BE REDONE TAKING INTO ACCOUNT CLASSES DOUBLE_WORD / TRIPLE_WORD
+
+  // if(game_board[2].tile != "pieceX") {
+  //   return 1;
+  // }
+  // if(game_board[12].tile != "pieceX") {
+  //   return 1;
+  // }
 
   // Otherwise return 0.
   return 0;
@@ -220,6 +222,7 @@ function should_double_letter(given_id) {
  *       returns: the letter that tile represents. On error, returns "-1".
  */
 function find_letter(given_id) {
+
   // Go through the 7 pieces,
   for(var i = 0; i < 7; i++) {
     // If we found the piece we're looking for, awesome!
@@ -401,11 +404,53 @@ function load_droppable_targets() {
 
        */
 
+      // Get board array length. This will be useful for our checks next.
+      var gameboard_length = game_board.length;
+
+      // Add the current items to the game board array.
+      // Style should be like: {"id": "drop0",  "tile": "pieceX"},
+      var obj = {};
+      obj['id'] = droppableID;          // testing
+      obj['tile'] = draggableID;
+
+      // does this work?
+      game_board.push(obj);
+
+      console.log("Array looks like: " + game_board);
+
+      // Empty array check.
+      if (gameboard_length == 0) {
+        console.log("Any placement is allowed.");
+
+      }
+      else {
+        if(gameboard_length == 1) {
+          // Disable diagonal placement.
+          // TO DO: ALGORITHM FOR DIAGONALS.
+          /*
+              Example:
+
+              X*X
+              *+*
+              X*X
+
+              X = not allowed
+              * = allowed
+              + = current location
+          */
+
+          console.log("Diagonals are not allowed.");
+        }
+        else {
+          // Now there should only be up and down placement.
+          console.log("Only up and down should be allowed.");
+        }
+      }
 
 
       // This makes it so only the given tile may be dropped on the current spot.
       // See this Stackoverflow post for more info: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
-      $(this).droppable('option', 'accept', ui.draggable);
+      //$(this).droppable('option', 'accept', ui.draggable);
       $(this).droppable('disable');
 
       // This from Stackoverflow, it snaps to where it was dropped.
@@ -414,9 +459,13 @@ function load_droppable_targets() {
       ui.draggable.css("top", $(this).css("top"))
       ui.draggable.css("left", $(this).css("left"))
       ui.draggable.css("position", "relative")
+
+      // Update the word as it stands now.
+      find_word();
     },
     out: function(event, ui) {
-      // not sure if this is needed anymore.
+      // Now we need to remove the piece from the game_board array...
+      // Use its ID if possible to find it and do a .remove()
     },
     zIndex: -1
   });
