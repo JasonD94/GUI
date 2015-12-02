@@ -348,7 +348,7 @@ function load_scrabble_pieces() {
     // Make the piece draggable.
     $(piece_ID).draggable({
       appendTo: scrabble_board,
-      revert: true
+      revert: "invalid"
       //snap: true
     });
   }
@@ -368,6 +368,11 @@ function load_scrabble_pieces() {
  *    width should be 75px
  */
 function load_droppable_targets() {
+
+  // Make the rack droppable for placing tiles back if you don't want them.
+  $("#the_rack").droppable( {
+
+  });
 
   $("#scrabble_board td").droppable({
     appendTo: "body",
