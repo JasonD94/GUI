@@ -98,6 +98,7 @@ table {
   border: solid 10px black;
   margin-left: auto;
   margin-right: auto;
+  table-layout: fixed;
 }
 
 td {
@@ -105,8 +106,59 @@ td {
   border: solid 2px white;
   height: 50px;
   width: 50px;
+  z-index: 3;   /*  THIS IS INCREDIBLY IMPORTANT. SEE THIS URL FOR DETAILS:
+                    https://stackoverflow.com/questions/15712011/why-does-drag-go-behind-target-div */
 }
 
+/* Special spaces text */
+.cell_style {
+  color: black;
+  font-family: "Ubuntu";
+  font-size: 80%;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Double / Triple letter CSS */
+.double_letter {
+  background: #0080ff;
+}
+
+.triple_letter {
+  background: blue;
+}
+
+/* Double / Triple word CSS */
+.double_word {
+  background: #e5acb6;
+}
+
+.triple_word {
+  background: red;
+}
+
+.star {
+  background: #e5acb6;
+}
+
+/* The middle star's style. */
+#star_img {
+  /*  This chunk SOME HOW centers the image.
+      I honestly just kept messing with the margin to force it to be as
+      centered as I could tell.
+      This post on Stackoverflow was the idea for that:
+      https://stackoverflow.com/questions/10371355/css-how-to-vertically-and-horizontally-align-an-image */
+  display: block;
+  margin-left: 5px;
+  margin-top: -20px;
+  position: absolute;
+
+  height: 40px;
+  width: 40px;
+  z-index: 0;
+}
+
+/* Need to figure out what this is for. */
 .resize_board {
   height: 125px;
   width: auto;
@@ -137,8 +189,11 @@ td {
 }
 
 .pieces {
-  height: 50px;
-  width: 50px;
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  z-index: 1;           /*  THIS MUST BE LOWER THAN THE TARGET. PIECES IS DRAGGABLE, DROPPABLE TABLE IS THE TARGET.
+                            URL FOR DETAILS: https://stackoverflow.com/questions/15712011/why-does-drag-go-behind-target-div */
 }
 
 /* Do I need this? Can make each table spot droppable instead. */

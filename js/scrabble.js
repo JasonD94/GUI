@@ -62,6 +62,8 @@ var game_tiles = [
 
 // JavaScript object to keep track of the game board.
 // NOTE: "pieceX" means NO tile present on that drop zone.
+
+// REDO to include row0, row1, etc.
 var game_board = [
   {"id": "drop0",  "tile": "pieceX"},
   {"id": "drop1",  "tile": "pieceX"},
@@ -82,8 +84,45 @@ var game_board = [
 
 
 // Go through the Table with the Scrabble board and fill in special spaces.
+// This Stackoverflow post was handy:
+// URL: https://stackoverflow.com/questions/3065342/how-do-i-iterate-through-table-rows-and-cells-in-javascript
 function fill_in_table() {
+  var row = 0;
+  var col = 0;
 
+  // Add the for the special spaces.
+  // Some ideas from: https://stackoverflow.com/questions/7986581/jquery-change-table-cell-text-color-based-on-text
+  $('.double_letter').html("<p class='cell_style'>Double Letter</p>");
+  $('.triple_letter').html("<p class='cell_style'>Triple Letter</p>");
+  $('.double_word').html("<p class='cell_style'>Double Word</p>");
+  $('.triple_word').html("<p class='cell_style'>Triple Word</p>");
+
+  // I did not create this image.
+  // Found at this URL: http://vignette3.wikia.nocookie.net/fantendo/images/4/49/Super_Star_NSMB2.png/revision/20120731024244
+  $('.star').html("<img id='star_img' src='img/star.png'>");
+
+  // Fix star position
+  var pos = $(this).position();
+  $('#star_img').css("left", pos.left).css("top", pos.top).css("position", "relative");
+
+
+  $('#scrabble_board tr').each(function() {
+    col = 0;
+    /**
+     *    Note, here "$(this)" refers to the given cell we are looking at currently.
+     *    This code goes through ALL cells in order, so that we can apply some properties to certain cells.
+     */
+    $(this).find('td').each(function() {
+
+      // Add a unique id consisting of row#col# to the cell, where "row#" is the row number
+      // and "col#" is the column number. Ex: row0col0 is the top left most cell in the table.
+      // Helpful link: https://stackoverflow.com/questions/2176986/jquery-add-id-instead-of-class
+      $(this).attr('id', 'row' + row + 'col' + col);
+      col++;
+
+    });
+    row++;
+  });
 }
 
 
@@ -291,8 +330,8 @@ function load_scrabble_pieces() {
     // 30px spacing between all the tiles.
     // Also all the * i does is make nothing happen when i = 0 (anything * 0 = 0 after all) and then on the next couple tiles
     // it shifts equally given the tile # we are dealing with.
-    var img_left = pos.left - (50 * i);
-    var img_top = pos.top + 30 + (80 * i);
+    var img_left = pos.left - 30 - (40 * i);
+    var img_top = pos.top + 50 + (70 * i);
 
     /* Load onto the page and make draggable.
        The height / width get set using these tricks:
@@ -311,7 +350,9 @@ function load_scrabble_pieces() {
     $(piece_ID).css("left", img_left).css("top", img_top).css("position", "relative");
 
     // Make the piece draggable.
-    $(piece_ID).draggable();
+    $(piece_ID).draggable({
+      appendTo: scrabble_board
+    });
   }
 }
 
@@ -329,11 +370,32 @@ function load_scrabble_pieces() {
  *    width should be 75px
  */
 function load_droppable_targets() {
-  var img_url = "img/scrabble/Scrabble_Droppable.png";   // URL of the image
-  var drop = "<img class='droppable' id='drop" + i + "' src='" + img_url + "'></img>";
-  var drop_ID = "#drop" + i;
 
-  for(var i = 0; i < 15; i++) {
+  $("#scrabble_board td").droppable({
+    appendTo: "body",
+    drop: function(event, ui) {
+      // To figure out which draggable / droppable ID was activated, I used this sweet code
+      // from stackoverflow:
+      // https://stackoverflow.com/questions/5562853/jquery-ui-get-id-of-droppable-element-when-dropped-an-item
+      var draggableID = ui.draggable.attr("id");
+      var droppableID = $(this).attr("id");
+
+      // This from Stackoverflow, it snaps to where it was dropped.
+      // URL: https://stackoverflow.com/questions/30122234/how-to-make-an-accept-condition-for-droppable-td-to-accept-only-the-class-within
+      $(this).append($(ui.draggable));
+      ui.draggable.css("top", $(this).css("top"))
+      ui.draggable.css("left", $(this).css("left"))
+
+      console.log("draggableID: " + draggableID );
+      console.log("droppableID: " + droppableID );
+    },
+    zIndex: -1
+  });
+
+
+
+
+/*  for(var i = 0; i < 15; i++) {
     drop = "<img class='droppable' id='drop" + i + "' src='" + img_url + "'></img>";
     drop_ID = "#drop" + i;
 
@@ -398,7 +460,7 @@ function load_droppable_targets() {
         find_word();
       }
     });
-  }
+  }*/
 }
 
 /**
