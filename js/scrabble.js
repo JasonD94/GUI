@@ -401,6 +401,9 @@ function load_droppable_targets() {
 
       if ( $(this).hasClass('double_letter') ) {
         //$(this).html('');
+        //console.log("This: " + $(this));
+        // #row0col3 > div
+        //$(droppableID).children().first().remove();
       }
 
       // This from Stackoverflow, it snaps to where it was dropped.
