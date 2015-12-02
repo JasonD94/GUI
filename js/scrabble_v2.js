@@ -318,6 +318,8 @@ function load_scrabble_pieces() {
 
         Pretty fancy.
 
+
+        (Even this comment isn't 100% right. Just messing with the numbers to make things look good is enough.)
     */
 
     // For left, I first start with the rack's left and then shift back 50 * i spaces so the tiles will line up
@@ -326,8 +328,8 @@ function load_scrabble_pieces() {
     // 30px spacing between all the tiles.
     // Also all the * i does is make nothing happen when i = 0 (anything * 0 = 0 after all) and then on the next couple tiles
     // it shifts equally given the tile # we are dealing with.
-    var img_left = pos.left + 50;     // THIS IS THE OLD MATH: - 30 - (40 * i);
-    var img_top = pos.top + 50 + (70 * i);
+    var img_left = pos.left + 90;     // THIS IS THE OLD MATH: - 30 - (40 * i);
+    var img_top = pos.top + 80 + (70 * i);
 
     /* Load onto the page and make draggable.
        The height / width get set using these tricks:
@@ -348,8 +350,13 @@ function load_scrabble_pieces() {
     // Make the piece draggable.
     $(piece_ID).draggable({
       appendTo: scrabble_board,
-      revert: "invalid"
-      //snap: true
+      revert: "invalid",
+      start: function(ev, ui) {
+        // Stackoverflow post: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
+        $('.ui-droppable').each(function(i, el) {
+          if (!$(el).find('.ui-draggable').length) $(el).droppable('enable');
+        });
+      }
     });
   }
 }
@@ -375,6 +382,7 @@ function load_droppable_targets() {
   });
 
   $("#scrabble_board td").droppable({
+    accept: ".ui-draggable",
     appendTo: "body",
     drop: function(event, ui) {
       // To figure out which draggable / droppable ID was activated, I used this sweet code
@@ -395,6 +403,10 @@ function load_droppable_targets() {
 
 
 
+      // This makes it so only the given tile may be dropped on the current spot.
+      // See this Stackoverflow post for more info: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
+      $(this).droppable('option', 'accept', ui.draggable);
+      $(this).droppable('disable');
 
       // This from Stackoverflow, it snaps to where it was dropped.
       // URL: https://stackoverflow.com/questions/30122234/how-to-make-an-accept-condition-for-droppable-td-to-accept-only-the-class-within
@@ -402,6 +414,9 @@ function load_droppable_targets() {
       ui.draggable.css("top", $(this).css("top"))
       ui.draggable.css("left", $(this).css("left"))
       ui.draggable.css("position", "relative")
+    },
+    out: function(event, ui) {
+      // not sure if this is needed anymore.
     },
     zIndex: -1
   });
