@@ -92,18 +92,18 @@ function fill_in_table() {
 
   // Add the for the special spaces.
   // Some ideas from: https://stackoverflow.com/questions/7986581/jquery-change-table-cell-text-color-based-on-text
-  $('.double_letter').html("<p class='cell_style'>Double Letter</p>");
-  $('.triple_letter').html("<p class='cell_style'>Triple Letter</p>");
-  $('.double_word').html("<p class='cell_style'>Double Word</p>");
-  $('.triple_word').html("<p class='cell_style'>Triple Word</p>");
+  $('.double_letter').html("<div class='cell_style'>Double Letter</div>");
+  $('.triple_letter').html("<div class='cell_style'>Triple Letter</div>");
+  $('.double_word').html("<div class='cell_style'>Double Word</div>");
+  $('.triple_word').html("<div class='cell_style'>Triple Word</div>");
 
   // I did not create this image.
   // Found at this URL: http://vignette3.wikia.nocookie.net/fantendo/images/4/49/Super_Star_NSMB2.png/revision/20120731024244
   $('.star').html("<img id='star_img' src='img/star.png'>");
 
   // Fix star position
-  var pos = $(this).position();
-  $('#star_img').css("left", pos.left).css("top", pos.top).css("position", "relative");
+  // var pos = $(this).position();
+  // $('#star_img').css("left", pos.left).css("top", pos.top).css("position", "relative");
 
 
   $('#scrabble_board tr').each(function() {
@@ -324,13 +324,30 @@ function load_scrabble_pieces() {
     var pos = $("#the_rack").position();
 
     // Now figure out where to reposition the board piece.
+
+    /*
+        IGNORE THE BOTTOM COMMENTS UNTIL I FIGURE OUT IF I LIKE HOW EVERYTHING WORKS
+
+        HOW IT IS CURRENTLY SET UP:
+        left is just +50 so everything shifts over 50 px.
+        I have no idea why top works but somehow it's making stuff 50 or 70px apart.
+
+        Some jQuery is making the tiles absolute at first, so that they don't move around when
+        tiles are placed (annoying formal bug) and then when placed on a tile some more
+        jquery snaps the tile to the center of the droppable target.
+
+        Pretty fancy.
+
+    */
+
+
     // For left, I first start with the rack's left and then shift back 50 * i spaces so the tiles will line up
     // For top, I first start with the rack's top, then shift down 30 for the first tile to appear in a good spot,
     // and then I need to shift down 50 * i to make the tiles line up (see the left's 50 * i). I do 80 so that I get
     // 30px spacing between all the tiles.
     // Also all the * i does is make nothing happen when i = 0 (anything * 0 = 0 after all) and then on the next couple tiles
     // it shifts equally given the tile # we are dealing with.
-    var img_left = pos.left - 30 - (40 * i);
+    var img_left = pos.left + 50;     // THIS IS THE OLD MATH: - 30 - (40 * i);
     var img_top = pos.top + 50 + (70 * i);
 
     /* Load onto the page and make draggable.
@@ -347,11 +364,13 @@ function load_scrabble_pieces() {
     $("#rack").append(piece);
 
     // Move the piece relative to where the rack is located on the screen.
-    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "relative");
+    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "absolute");
 
     // Make the piece draggable.
     $(piece_ID).draggable({
-      appendTo: scrabble_board
+      appendTo: scrabble_board,
+      //revert: true,
+      snap: true
     });
   }
 }
@@ -380,11 +399,18 @@ function load_droppable_targets() {
       var draggableID = ui.draggable.attr("id");
       var droppableID = $(this).attr("id");
 
+      if ( $(this).hasClass('double_letter') ) {
+        //$(this).html('');
+      }
+
       // This from Stackoverflow, it snaps to where it was dropped.
       // URL: https://stackoverflow.com/questions/30122234/how-to-make-an-accept-condition-for-droppable-td-to-accept-only-the-class-within
       $(this).append($(ui.draggable));
       ui.draggable.css("top", $(this).css("top"))
       ui.draggable.css("left", $(this).css("left"))
+      ui.draggable.css("position", "relative")
+
+      //$('.double_letter').html("<div class='cell_style'>Double Letter</div>");
 
       console.log("draggableID: " + draggableID );
       console.log("droppableID: " + droppableID );

@@ -112,6 +112,13 @@ td {
 
 /* Special spaces text */
 .cell_style {
+  /*  This part is so the text appears behind the tiles.
+      Found at this stackoverflow post: https://stackoverflow.com/questions/19561585/how-to-make-div-go-behind-another-div
+  */
+  display: block;
+  position: relative;
+  z-index: 0;
+
   color: black;
   font-family: "Ubuntu";
   font-size: 80%;
@@ -147,15 +154,20 @@ td {
       I honestly just kept messing with the margin to force it to be as
       centered as I could tell.
       This post on Stackoverflow was the idea for that:
-      https://stackoverflow.com/questions/10371355/css-how-to-vertically-and-horizontally-align-an-image */
-  display: block;
-  margin-left: 5px;
-  margin-top: -20px;
+      https://stackoverflow.com/questions/10371355/css-how-to-vertically-and-horizontally-align-an-image
+
+      ACTUALLY, this one worked better. The other post is a good reference too though!
+      https://css-tricks.com/snippets/css/absolute-center-vertical-horizontal-an-image/
+  */
   position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -20px;   /* These are half the high and width! */
+  margin-top: -20px;
 
   height: 40px;
   width: 40px;
-  z-index: 0;
+  z-index: 0;           /* This needs to be below the pieces z-index of 1. */
 }
 
 /* Need to figure out what this is for. */
@@ -189,10 +201,10 @@ td {
 }
 
 .pieces {
-  position: absolute;
+  position: absolute;   /* Try absolute or relative and see what works. */
   height: 40px;
   width: 40px;
-  z-index: 1;           /*  THIS MUST BE LOWER THAN THE TARGET. PIECES IS DRAGGABLE, DROPPABLE TABLE IS THE TARGET.
+  z-index: 9999;           /*  THIS MUST BE LOWER THAN THE TARGET. PIECES IS DRAGGABLE, DROPPABLE TABLE IS THE TARGET.
                             URL FOR DETAILS: https://stackoverflow.com/questions/15712011/why-does-drag-go-behind-target-div */
 }
 
