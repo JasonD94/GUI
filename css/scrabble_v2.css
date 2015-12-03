@@ -233,8 +233,24 @@ td {
                             URL FOR DETAILS: https://stackoverflow.com/questions/15712011/why-does-drag-go-behind-target-div */
 }
 
-/* Do I need this? Can make each table spot droppable instead. */
-.droppable {
+/* For messages to user on the right side of the page. */
+.highlight_centered_smaller {
+  background-color: black;
+  color: white;
+  font-family: "Advent Pro";
+  font-size: 150%;
+  font-weight: 900;
+  text-align: center;
+}
+
+/* Error version of the above message. */
+.highlight_centered_error {
+  background-color: black;
+  color: red;
+  font-family: "Advent Pro";
+  font-size: 150%;
+  font-weight: 900;
+  text-align: center;
 }
 
 button {

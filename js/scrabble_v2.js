@@ -25,35 +25,40 @@
     Note that I modified this to include a "remaining" property as well, just like
     Prof. Heines showed in class for his associative array.
 */
-var pieces = [
-  {"letter":"A", "value":  1,  "amount":  9,  "remaining":  9},
-  {"letter":"B", "value":  3,  "amount":  2,  "remaining":  2},
-  {"letter":"C", "value":  3,  "amount":  2,  "remaining":  2},
-  {"letter":"D", "value":  2,  "amount":  4,  "remaining":  4},
-  {"letter":"E", "value":  1,  "amount": 12,  "remaining": 12},
-  {"letter":"F", "value":  4,  "amount":  2,  "remaining":  2},
-  {"letter":"G", "value":  2,  "amount":  3,  "remaining":  3},
-  {"letter":"H", "value":  4,  "amount":  2,  "remaining":  2},
-  {"letter":"I", "value":  1,  "amount":  9,  "remaining":  9},
-  {"letter":"J", "value":  8,  "amount":  1,  "remaining":  1},
-  {"letter":"K", "value":  5,  "amount":  1,  "remaining":  1},
-  {"letter":"L", "value":  1,  "amount":  4,  "remaining":  4},
-  {"letter":"M", "value":  3,  "amount":  2,  "remaining":  2},
-  {"letter":"N", "value":  1,  "amount":  6,  "remaining":  6},
-  {"letter":"O", "value":  1,  "amount":  8,  "remaining":  8},
-  {"letter":"P", "value":  3,  "amount":  2,  "remaining":  2},
-  {"letter":"Q", "value": 10,  "amount":  1,  "remaining":  1},
-  {"letter":"R", "value":  1,  "amount":  6,  "remaining":  6},
-  {"letter":"S", "value":  1,  "amount":  4,  "remaining":  4},
-  {"letter":"T", "value":  1,  "amount":  6,  "remaining":  6},
-  {"letter":"U", "value":  1,  "amount":  4,  "remaining":  4},
-  {"letter":"V", "value":  4,  "amount":  2,  "remaining":  2},
-  {"letter":"W", "value":  4,  "amount":  2,  "remaining":  2},
-  {"letter":"X", "value":  8,  "amount":  1,  "remaining":  1},
-  {"letter":"Y", "value":  4,  "amount":  2,  "remaining":  2},
-  {"letter":"Z", "value": 10,  "amount":  1,  "remaining":  1},
-  {"letter":"_", "value":  0,  "amount":  2,  "remaining":  2}
-];
+var pieces;
+
+// Made this a function for an easy way to reset the pieces array/objects.
+function load_pieces_array() {
+  pieces = [
+    {"letter":"A", "value":  1,  "amount":  9,  "remaining":  9},
+    {"letter":"B", "value":  3,  "amount":  2,  "remaining":  2},
+    {"letter":"C", "value":  3,  "amount":  2,  "remaining":  2},
+    {"letter":"D", "value":  2,  "amount":  4,  "remaining":  4},
+    {"letter":"E", "value":  1,  "amount": 12,  "remaining": 12},
+    {"letter":"F", "value":  4,  "amount":  2,  "remaining":  2},
+    {"letter":"G", "value":  2,  "amount":  3,  "remaining":  3},
+    {"letter":"H", "value":  4,  "amount":  2,  "remaining":  2},
+    {"letter":"I", "value":  1,  "amount":  9,  "remaining":  9},
+    {"letter":"J", "value":  8,  "amount":  1,  "remaining":  1},
+    {"letter":"K", "value":  5,  "amount":  1,  "remaining":  1},
+    {"letter":"L", "value":  1,  "amount":  4,  "remaining":  4},
+    {"letter":"M", "value":  3,  "amount":  2,  "remaining":  2},
+    {"letter":"N", "value":  1,  "amount":  6,  "remaining":  6},
+    {"letter":"O", "value":  1,  "amount":  8,  "remaining":  8},
+    {"letter":"P", "value":  3,  "amount":  2,  "remaining":  2},
+    {"letter":"Q", "value": 10,  "amount":  1,  "remaining":  1},
+    {"letter":"R", "value":  1,  "amount":  6,  "remaining":  6},
+    {"letter":"S", "value":  1,  "amount":  4,  "remaining":  4},
+    {"letter":"T", "value":  1,  "amount":  6,  "remaining":  6},
+    {"letter":"U", "value":  1,  "amount":  4,  "remaining":  4},
+    {"letter":"V", "value":  4,  "amount":  2,  "remaining":  2},
+    {"letter":"W", "value":  4,  "amount":  2,  "remaining":  2},
+    {"letter":"X", "value":  8,  "amount":  1,  "remaining":  1},
+    {"letter":"Y", "value":  4,  "amount":  2,  "remaining":  2},
+    {"letter":"Z", "value": 10,  "amount":  1,  "remaining":  1},
+    {"letter":"_", "value":  0,  "amount":  2,  "remaining":  2}
+  ];
+}
 
 // JavaScript array of objects to determine what letter each piece is.
 var game_tiles = [
@@ -109,6 +114,23 @@ function fill_in_table() {
 
 
 /**
+ *      This function calls find_word(), and then determines if the word is valid
+ *      or not. This will be implemented at some point using an external API
+ *      or some sort of Google search thing.
+ *
+ *      For now all it does is display something in an ID called "le_submit"
+ */
+function submit_word() {
+  // Call find_word to update the word.
+  find_word();
+
+  // Now just display some crap in the "le_submit" ID.
+  $("#le_submit").html("<br><div class='highlight_centered_smaller'>Sorry, I have yet to find an acceptable API to use for this feature. \
+  ¯\\_(ツ)_/¯ </div>");
+}
+
+
+/**
  *    When called, this function determine what the current word is, and prints it
  *    out to the HTML doc as well as the console for logging purposes.
  *
@@ -119,6 +141,12 @@ function find_word() {
   var word = "";
   var score = 0;
   var board_length = game_board.length;
+
+  if (board_length == 0) {
+    // The word is now blank.
+    $("#word").html("____");
+    $("#score").html(score);
+  }
 
   // Go through the game board and generate a possible word.
   for(var i = 0; i < board_length; i++) {
@@ -201,14 +229,17 @@ function find_score(given_id) {
 // letter score or not.
 // Returns 1 for YES or 0 for NO.
 function should_double_letter(given_id) {
-  // Figure out which dropID this tile belongs to.
-  var dropID = find_tile_pos(given_id);
 
-  // Is this dropID a double spot or not?
-  if(dropID == "drop6" || dropID == "drop8") {
-    // YES, return 1.
-    return 1;
-  }
+  // THIS ALSO MUST BE REDONE. AND ADD A TRIPLE LETTER FUNCTION TOO.
+
+  // Figure out which dropID this tile belongs to.
+  // var dropID = find_tile_pos(given_id);
+
+  // // Is this dropID a double spot or not?
+  // if(dropID == "drop6" || dropID == "drop8") {
+  //   // YES, return 1.
+  //   return 1;
+  // }
 
   // Otherwise, NO, so return 0.
   return 0;
@@ -363,6 +394,47 @@ function load_scrabble_pieces() {
     });
   }
 }
+
+
+/**
+ *      This function resets the game board.
+ *      It does so by reusing several functions:
+ *      load_pieces_array()       -> resets the pieces array
+ *      reset_tiles()             -> removes all the tiles on the screen.
+ *      load_scrabble_pieces()    -> loads up new tiles.
+ *      find_word()               -> resets what the word looked like.
+ */
+function reset_tiles() {
+  console.log("Resetting the game board! Buckle up!");
+
+  // First clear the game board array.
+  game_board = [];    // Easy way of doing this.
+  // URL for more ways of doing this: https://stackoverflow.com/questions/1232040/how-do-i-empty-an-array-in-javascript
+
+  // Now reset the pieces array.
+  load_pieces_array();
+
+  // Remove all the scrabble tiles on the board / in the rack.
+  for(var i = 0; i < 7; i++) {
+    var tileID = '#' + game_tiles[i].id;
+    $(tileID).draggable("destroy");    // Destroys the draggable element.
+    $(tileID).remove();                // Removes the tile from the page.
+    // URL for more info: https://stackoverflow.com/questions/11452677/jqueryui-properly-removing-a-draggable-element
+  }
+
+  // Load up some new Scrabble pieces!
+  load_scrabble_pieces();
+
+  // Resets the HTML "Word: " and "Score: " display.
+  find_word();    // Technically this returns -1 and just wipes the display clean.
+
+  // Reset the "submit_word" div, just in case the user tried to submit the word.
+  $("#le_submit").html("");
+
+  // Now we're done! Woot!
+  return;
+}
+
 
 
 /**

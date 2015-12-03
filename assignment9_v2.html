@@ -833,13 +833,15 @@
 
           <br>
 
-          <div class="highlight_centered">LET'S PLAY SOME SCRABBLE!</div>
-          <div class="highlight_centered"><a href="http://scrabble.hasbro.com/en-us/rules/">RULES FOUND HERE.</a></div>
+          <div class="highlight_centered_smaller">LET'S PLAY SOME SCRABBLE!</div>
+          <div class="highlight_centered_smaller"><a href="http://scrabble.hasbro.com/en-us/rules/">RULES FOUND HERE.</a></div>
 
           <br>
 
           <div class="highlight_centered">Word: <span id="word">____</span> </div>
           <div class="highlight_centered">Score: <span id="score">0</span> </div>
+
+          <div id="le_submit"></div>
 
           <br>
 
@@ -852,8 +854,12 @@
                   possibly think about adding more rows for Scrabble. (non-trivial)
 
           -->
-          <button onclick="javascript: alert('NOT IMPLEMENTED');">Submit Word</button>
-          <button onclick="javascript: alert('NOT IMPLEMENTED');">Reset Tiles</button>
+          <button onclick="submit_word();">Submit Word</button>
+          <button onclick="reset_tiles();">Reset Tiles</button>
+
+          <br><br>
+
+          <div class="highlight_centered_smaller" id="get_new_tile"><br><br>Get new tile! (drop here) (**not implemented**)<br><br><br></div>
         </div>
 
       </div>
@@ -900,6 +906,7 @@
         $("#NavBarHeader").load("html/navbar.html");
         $("#TheFooter").load("html/footer.html");
 
+        load_pieces_array();        // Load up the defaul pieces array.
         load_scrabble_pieces();     // Load up the 7 random Scrabble pieces.
         load_droppable_targets();   // Load up the targets for the Scrabble pieces.
         fill_in_table();            // Add special items to the table.
