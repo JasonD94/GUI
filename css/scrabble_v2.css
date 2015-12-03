@@ -95,6 +95,16 @@ html {
 
 }
 
+/* Get new tile space CSS */
+#get_new_tile {
+  background-color: #FFD700;
+  color: white;
+  font-family: "Ubuntu";
+  font-size: 150%;
+  font-weight: 900;
+  text-align: center;
+}
+
 /*
     To right align a table, see this amazing Stackoverflow post!
     URL: https://stackoverflow.com/questions/301147/css-way-to-horizontally-align-table
@@ -150,23 +160,23 @@ td {
 /* Double / Triple letter CSS */
 .double_letter {
   /*background: #0080ff; */
-  background: url("../img/double_letter.png");
+  background: url("../img/scrabble/double_letter.png");
 }
 
 .triple_letter {
   /* background: blue;  */
-  background: url("../img/triple_letter.png");
+  background: url("../img/scrabble/triple_letter.png");
 }
 
 /* Double / Triple word CSS */
 .double_word {
   /*background: #e5acb6;*/
-  background: url("../img/double_word.png");
+  background: url("../img/scrabble/double_word.png");
 }
 
 .triple_word {
   /*background: red;*/
-  background: url("../img/triple_word.png");
+  background: url("../img/scrabble/triple_word.png");
 }
 
 .star {

@@ -56,7 +56,7 @@ function load_pieces_array() {
     {"letter":"X", "value":  8,  "amount":  1,  "remaining":  1},
     {"letter":"Y", "value":  4,  "amount":  2,  "remaining":  2},
     {"letter":"Z", "value": 10,  "amount":  1,  "remaining":  1},
-    {"letter":"_", "value":  0,  "amount":  2,  "remaining":  2}
+    {"letter":"_", "value":  0,  "amount":  0,  "remaining":  0}    // Temp disabled to 0 until I implement them.
   ];
 }
 
@@ -91,7 +91,7 @@ function fill_in_table() {
 
   // I did not create this image.
   // Found at this URL: http://vignette3.wikia.nocookie.net/fantendo/images/4/49/Super_Star_NSMB2.png/revision/20120731024244
-  $('.star').html("<img id='star_img' src='img/star.png'>");
+  $('.star').html("<img id='star_img' src='img/scrabble/star.png'>");
 
   $('#scrabble_board tr').each(function() {
     col = 0;
@@ -104,7 +104,7 @@ function fill_in_table() {
       // Add a unique id consisting of row#col# to the cell, where "row#" is the row number
       // and "col#" is the column number. Ex: row0col0 is the top left most cell in the table.
       // Helpful link: https://stackoverflow.com/questions/2176986/jquery-add-id-instead-of-class
-      $(this).attr('id', 'row' + row + 'col' + col);
+      $(this).attr('id', 'row' + row + ',' + 'col' + col);
       col++;
 
     });
@@ -148,6 +148,60 @@ function find_word() {
     $("#score").html(score);
   }
 
+  // We need to first sort the game board in order of left to right,
+  // or top to bottom.
+  // Let's first get the rows and columns into an array.
+  rows = [];
+  cols = [];
+
+  // Go through the game board and save all the row / col indexes.
+  for(var i = 0; i < board_length; i++) {
+    // Get ID
+    var cur = game_board[i].id;
+    //console.log("Cur is: " + cur);
+
+    // Figure out the row / col
+    var test = String(cur).split(',');    // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
+    var row = String(test[0]).split('row');
+    row = row[1];
+    var col = String(test[1]).split('col');
+    col = col[1];
+
+    // Debugging
+    //console.log("The row index is: " + row + " The col index is: " + col);
+
+    // Save each row / col to an array.
+    rows.push(row);
+    cols.push(col);
+  }
+
+  // Debugging.
+  console.log("The rows array is: " + rows + " The cols array is: " + cols);
+
+  var left_to_right = false;
+
+  // Do we want to look left to right or top to bottom?
+  // If the rows index is all the same, then left to right.
+  // If the cols index is all the same, then top to bottom.
+  if (rows.length > 1) {
+    if (rows[0] == rows[1]) {     // If two are the same, the rest should be the same too.
+      left_to_right = true;       // (once the proper restrictions are in place anyway.)
+    }
+  }
+
+  // Now sort the game_board in either left to right or top to bottom.
+  if (rows.length > 1) {
+    if (left_to_right == true) {
+      // Left to right it is.
+
+    }
+    else {
+      // Guess we're doing top to bottom.
+
+    }
+  }
+
+
   // Go through the game board and generate a possible word.
   for(var i = 0; i < board_length; i++) {
     word += find_letter(game_board[i].tile);
@@ -156,7 +210,7 @@ function find_word() {
 
   // Factor in the doubling of certain tiles. Since the should_double() function returns 0 or 1,
   // this is easy to account for. If it's 0, 0 is added to the score. If it's 1, the score is doubled.
-  score += (score * should_double());
+  score += (score * should_double_triple());
 
   // Put the score of the dropped tile into the HTML doc.
   $("#score").html(score);
@@ -172,20 +226,27 @@ function find_word() {
 }
 
 
-// Determine whether to double the word score or not.
+// Determine whether to double or triple the word score or not.
 // Returns 1 for YES or 0 for NO.
-function should_double() {
+function should_double_triple() {
+  // Get board array length. This will be useful for our checks next.
+  var gameboard_length = game_board.length;
 
-  // NEEDS TO BE REDONE TAKING INTO ACCOUNT CLASSES DOUBLE_WORD / TRIPLE_WORD
+  // Go through the game board and see if any spots have the
+  // class "double_word" or "triple_word"
+  for (var i = 0; i < gameboard_length; i++) {
+    var space_ID = "#" + game_board[i].id;
+    if ( $(space_ID).hasClass("double_word") ) {
+      // Sweet! Double the word's value!
+      return 1;
+    }
+    else if ( $(space_ID).hasClass("triple_word") ) {
+      // SWEET! IT'S A TRIPLE!
+      return 2;
+    }
+  }
 
-  // if(game_board[2].tile != "pieceX") {
-  //   return 1;
-  // }
-  // if(game_board[12].tile != "pieceX") {
-  //   return 1;
-  // }
-
-  // Otherwise return 0.
+  // Otherwise return 0, so algorithm returns 0. Cuz X * 0 = 0. and + 0 does nothing. Ha!
   return 0;
 }
 
@@ -243,6 +304,30 @@ function should_double_letter(given_id) {
 
   // Otherwise, NO, so return 0.
   return 0;
+}
+
+
+/*
+      Get's row / col index for given droppableID
+ */
+function find_table_position(droppableID) {
+
+  // Figure out the row / col
+  var test = String(droppableID).split(',');    // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
+  var row = String(test[0]).split('row');
+  row = row[1];
+  var col = String(test[1]).split('col');
+  col = col[1];
+
+  var arry = [];
+  arry.push(row);
+  arry.push(col);
+
+  // Debugging
+  console.log(arry);
+
+  // Return the row / col in an array.
+  return arry;
 }
 
 
@@ -444,13 +529,6 @@ function reset_tiles() {
  *    This function will load up targets for the images to be dropped onto.
  *    I figure they will be transparent images that are overlayed on top of
  *    the game board.
- *
- *    TODO: figure out the size of these targets - maybe 50px by 50px?
- *          also create transparent image of that size to load up.
- *          should probabl
- *
- *    height should be 80px
- *    width should be 75px
  */
 function load_droppable_targets() {
 
@@ -486,13 +564,12 @@ function load_droppable_targets() {
           var posX = ui.offset.left - $(this).offset().left;
           var posY = ui.offset.top - $(this).offset().top;
 
+          // Move the draggable image so it doesn't fly around randomly like to the bottom of the screen or whatever.
           ui.draggable.css("left", posX + 60);        // The +60 just makes the draggable object not fly to the left for some reason.
           ui.draggable.css("top", posY);
           ui.draggable.css("position", "absolute");
 
           // Move the tile over to the rack. Prevents weird bugs where the table changes sizes and thinks there's two tiles in one spot.
-          // URL: https://stackoverflow.com/questions/6199890/jquery-droppable-receiving-events-during-drag-over-not-just-on-initial-drag-o
-          //$(ui.draggable).detach().css({top: 0, left: 0}).appendTo($(this));
           $('#rack').append($(ui.draggable));
 
           // Quit now.
@@ -511,16 +588,11 @@ function load_droppable_targets() {
       var draggableID = ui.draggable.attr("id");
       var droppableID = $(this).attr("id");
       var duplicate = false;
+      var dup_index = 0;
 
       // For debugging purposes.
       console.log("draggableID: " + draggableID );
       console.log("droppableID: " + droppableID );
-
-      /*
-            Logic needed here to prevent multiple tiles on the space spot,
-            and to determine if a tile drop is legal or not.
-
-       */
 
       // Get board array length. This will be useful for our checks next.
       var gameboard_length = game_board.length;
@@ -531,27 +603,41 @@ function load_droppable_targets() {
           // We've got a duplicate.
           console.log("Found a duplicate! ");
           duplicate = true;
+          dup_index = i;      // Save the index for later.
+        }
+      }
+
+      // Add the current items to the game board array.
+      // Style should be like: {"id": "drop0",  "tile": "pieceX"},
+      var obj = {};
+      obj['id'] = droppableID;          // This style works as an object.
+      obj['tile'] = draggableID;
+
+      // If it's a duplicate, just move it.
+      if (duplicate == true) {
+        if (dup_index == 0) {
+          // remove then add it back.
+          game_board.splice(dup_index, 1);
+          game_board.push(obj);
         }
       }
 
       // Don't add duplicates to the array again!
       if (duplicate == false) {
-        // Add the current items to the game board array.
-        // Style should be like: {"id": "drop0",  "tile": "pieceX"},
-        var obj = {};
-        obj['id'] = droppableID;          // This style works as an object.
-        obj['tile'] = draggableID;
-
         // Push back to the game board array.
         game_board.push(obj);
       }
 
+      // Recalculate this.
+      gameboard_length = game_board.length;
 
-      if (gameboard_length + 1 == 1) {
+      if (gameboard_length == 1) {
         console.log("Can place this tile anywhere on the board.");
+        // We don't need to worry about this case, the user may place the
+        // tile anywhere on the table.
       }
 
-      if (gameboard_length + 1 == 2) {
+      if (gameboard_length == 2) {
         console.log("Diagonals are not allowed.");
 
         // Disable diagonal placement.
@@ -568,11 +654,54 @@ function load_droppable_targets() {
             + = current location
         */
 
+        // If we get here, we should determine what the index is of our current
+        // tile. Then we can use some math to determine what moves are allowed.
+        var past_pos = find_table_position(game_board[0].id);
+        var cur_pos = find_table_position(droppableID);
 
+        // Debugging
+        console.log("Past pos = " + past_pos + " Proposed position: " + cur_pos);
+
+        /*  If this was 7,7 then the allowed positions would be:
+
+            (6,7) & (8,7) => allowed, left to right read.
+            (7,6) & (7,8) => allowed, top to bottom read.
+
+            this could be written as past_pos needing to be equal to:
+            (cur_pos[0] - 1, cur_pos[1]) & (cur_pos[0] + 1, cur_pos[1])   -> l/r
+            or
+            (cur_pos[0], cur_pos[1] - 1) & (cur_pos[0], cur_pos[1] + 1)   -> t/b
+        */
+        allowed_arrays = [
+          [ parseInt(past_pos[0]) - 1, past_pos[1] ],     // these two are l / r
+          [ parseInt(past_pos[0]) + 1, past_pos[1] ],
+          [ past_pos[0], parseInt(past_pos[1]) - 1],     // these two are t / b
+          [ past_pos[0], parseInt(past_pos[1]) + 1]
+        ];
+
+        // Debugging
+        console.log("allowed positions are: " + allowed_arrays[0] + ' & ' + allowed_arrays[1] + ' & ' + allowed_arrays[2] + ' & ' + allowed_arrays[3]);
+
+        // See if we have one of the allowed positions.
+        var test = cur_pos.toString();
+        if (test == allowed_arrays[0].toString() || test == allowed_arrays[1].toString() ) {
+          // Yep! And it's left to right too!
+          console.log("Allowed. L/R");
+
+        }
+        else if (test == allowed_arrays[2].toString() || test == allowed_arrays[3].toString() ) {
+          // Yeah! And it's top to bottom!
+          console.log("Allowed. T/B");
+        }
+        else {
+          // Not allowed. Mark this as invalid?
+          console.log("NOT ALLOWED. Bad user! >:(");
+          return;
+        }
 
       }
 
-      if (gameboard_length + 1 > 3) {
+      if (gameboard_length > 3) {
         // Now there should only be up and down placement.
         console.log("Only up and down should be allowed.");
       }
@@ -594,81 +723,10 @@ function load_droppable_targets() {
       find_word();
     },
     out: function(event, ui) {
-      // Now we need to remove the piece from the game_board array...
-      // Use its ID if possible to find it and do a .remove()
+      // Not even sure if we need this but let's see first.
     },
     zIndex: -1
   });
-
-
-
-
-/*  for(var i = 0; i < 15; i++) {
-    drop = "<img class='droppable' id='drop" + i + "' src='" + img_url + "'></img>";
-    drop_ID = "#drop" + i;
-
-    // ** The position stuff is similar to the tile function above. **
-    // Get board location.
-    var pos = $("#the_board").position();
-
-    // Figure out where to put the droppable targets.
-    var img_left = 0;
-    var img_top = -125;
-
-    // Add the img to the screen.
-    $("#board").append(drop);
-
-    // Reposition the img relative to the board.
-    $(drop_ID).css("left", img_left).css("top", img_top).css("position", "relative");
-
-    // Make the img droppable
-    $(drop_ID).droppable({
-      // Found this on the jQuery UI doc page, at this URL: https://jqueryui.com/droppable/#default
-      // When a tile is placed on a droppable zone, set the game_board var to hold that tile.
-      drop: function(event, ui) {
-        // To figure out which draggable / droppable ID was activated, I used this sweet code
-        // from stackoverflow:
-        // https://stackoverflow.com/questions/5562853/jquery-ui-get-id-of-droppable-element-when-dropped-an-item
-        var draggableID = ui.draggable.attr("id");
-        var droppableID = $(this).attr("id");
-
-        // Log this stuff for debugging.
-        console.log("Tile: " + draggableID + " - dropped on " + droppableID);
-
-        // Mark that a tile was dropped in the game_board variable.
-        game_board[find_board_pos(droppableID)].tile = draggableID;
-
-        // Figure out what word, if any, the user currently entered.
-        find_word();
-      },
-      // When a tile is moved away, gotta remove it from the game board.
-      // Helpful info: https://api.jqueryui.com/droppable/#event-out
-      out: function(event, ui) {
-        var draggableID = ui.draggable.attr("id");
-        var droppableID = $(this).attr("id");
-
-        // See if this is a false alarm - someone moving tiles over this one by mistake.
-        // This is necessary to prevent "removing" of tiles by accident if another tile
-        // clips one that isn't being removed.
-        if(draggableID != game_board[find_board_pos(droppableID)].tile) {
-          // We found that someone did not actually move the tile outside of
-          // the drop zone, so this was clearly a mistake (clipping issue likely)
-          // So just log it and return to prevent accidently removing a valid tile.
-          console.log("FALSE ALARM DETECTED.");
-          return;
-        }
-
-        // Log this stuff for debugging.
-        console.log("Tile: " + draggableID + " - removed from " + droppableID);
-
-        // Mark that a tile was removed in the game_board variable.
-        game_board[find_board_pos(droppableID)].tile = "pieceX";
-
-        // Update the word that was just found.
-        find_word();
-      }
-    });
-  }*/
 }
 
 /**
