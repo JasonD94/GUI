@@ -150,23 +150,23 @@ td {
 /* Double / Triple letter CSS */
 .double_letter {
   /*background: #0080ff; */
-  background: url("/img/double_letter.png");
+  background: url("../img/double_letter.png");
 }
 
 .triple_letter {
   /* background: blue;  */
-  background: url("/img/triple_letter.png");
+  background: url("../img/triple_letter.png");
 }
 
 /* Double / Triple word CSS */
 .double_word {
   /*background: #e5acb6;*/
-  background: url("/img/double_word.png");
+  background: url("../img/double_word.png");
 }
 
 .triple_word {
   /*background: red;*/
-  background: url("/img/triple_word.png");
+  background: url("../img/triple_word.png");
 }
 
 .star {
