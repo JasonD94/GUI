@@ -257,7 +257,9 @@ function should_double_triple_word() {
   // class "double_word" or "triple_word"
   for (var i = 0; i < gameboard_length; i++) {
     var space_ID = "#" + game_board[i].id
-    console.log("space_ID = " + space_ID);
+
+    // Debugging
+    // console.log("space_ID = " + space_ID);
 
     if ( $(space_ID).hasClass('double_word') == true ) {
       // Sweet! Double the word's value!
@@ -300,7 +302,8 @@ function find_score(given_id) {
 
       // Need to determine if this piece is a DOUBLE or not.
       // Droppable zones 6 & 8 are DOUBLE letter scores.
-      score = (score * should_double_triple_letter(given_id));
+      var extra = score * should_double_triple_letter(given_id);
+      score = score + extra;
 
       return score;
     }
@@ -315,28 +318,30 @@ function find_score(given_id) {
 // letter score or not.
 // Returns 2 or 3 for YES or 1 for NO.
 function should_double_triple_letter(given_id) {
-  // Get board array length. This will be useful for our checks next.
-  var gameboard_length = game_board.length;
+  var space;
 
-  // Go through the game board and see if any spots have the
-  // class "double_word" or "triple_word"
-  for (var i = 0; i < gameboard_length; i++) {
-    var space_ID = "#" + game_board[i].id;
-
-    if ( $(space_ID).hasClass("double_letter") == true ) {
-      // Sweet! Double the letter's value!
-      console.log("Doubling letter's value.");
-      return 2;
-    }
-    else if ( $(space_ID).hasClass("triple_letter") == true ) {
-      // SWEET! IT'S A TRIPLE!
-      console.log("Tripling letter's value.");
-      return 3;
+  for(var i = 0; i < game_board.length; i++) {
+    if(game_board[i].tile == given_id){
+      space = "#" + game_board[i].id;
     }
   }
 
+  // Debugging
+  //console.log("Space is: " + space);
+
+  if ( $(space).hasClass("double_letter") == true ) {
+    // Sweet! Double the letter's value!
+    console.log("Doubling letter's value.");
+    return 1;
+  }
+  else if ( $(space).hasClass("triple_letter") == true ) {
+    // SWEET! IT'S A TRIPLE!
+    console.log("Tripling letter's value.");
+    return 2;
+  }
+
   // Otherwise return 1.
-  return 1;
+  return 0;
 }
 
 
