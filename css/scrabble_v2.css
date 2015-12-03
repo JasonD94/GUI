@@ -1,5 +1,5 @@
 /*
-    File: ~/css/scrabble.css
+    File: ~/css/scrabble_v2.css
     91.461 Assignment 9: Implementing a Bit of Scrabble with Drag-and-Drop
     Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
     Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu
@@ -97,8 +97,8 @@ html {
 
 /* Get new tile space CSS */
 #get_new_tile {
-  background-color: #FFD700;
-  color: white;
+  background-color: #ccac00;
+  color: blue;
   font-family: "Ubuntu";
   font-size: 150%;
   font-weight: 900;
@@ -253,11 +253,21 @@ td {
   text-align: center;
 }
 
+/* Success version of the error message. */
+.highlight_centered_success {
+  background-color: black;
+  color: green;
+  font-family: "Ubuntu";
+  font-size: 150%;
+  font-weight: 900;
+  text-align: center;
+}
+
 /* Error version of the above message. */
 .highlight_centered_error {
   background-color: black;
   color: red;
-  font-family: "Advent Pro";
+  font-family: "Ubuntu";
   font-size: 150%;
   font-weight: 900;
   text-align: center;

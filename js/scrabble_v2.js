@@ -1,5 +1,5 @@
 /*
-    File: ~/js/scrabble.js
+    File: ~/js/scrabble_v2.js
     91.461 Assignment 9: Implementing a Bit of Scrabble with Drag-and-Drop
     Jason Downing - student at UMass Lowell in 91.461 GUI Programming I
     Contact: jdowning@cs.uml.edu or jason_downing@student.uml.edu
@@ -73,6 +73,23 @@ var game_tiles = [
   {"id": "piece6", "letter": "G"}
 ]
 
+// URL for this source code: http://ejohn.org/blog/dictionary-lookups-in-javascript/
+// See the "Submit word" function for more info.
+// The dictionary lookup object
+var dict = {};
+
+// Do a jQuery Ajax request for the text dictionary
+$.get( "/files/dictionary.txt", function( txt ) {
+    // Get an array of all the words
+    var words = txt.split( "\n" );
+
+    // And add them as properties to the dictionary lookup
+    // This will allow for fast lookups later
+    for ( var i = 0; i < words.length; i++ ) {
+        dict[ words[i] ] = true;
+    }
+});
+
 // JavaScript object to keep track of the game board.
 // NOTE: "pieceX" means NO tile present on that drop zone.
 // Also note this is EMPTY until tiles are placed onto the game board.
@@ -120,15 +137,56 @@ function fill_in_table() {
  *      or not. This will be implemented at some point using an external API
  *      or some sort of Google search thing.
  *
- *      For now all it does is display something in an ID called "le_submit"
+ *      I used an awesome website to figure this one out, so just check out the
+ *      this URL for details: http://ejohn.org/blog/dictionary-lookups-in-javascript/
+ *
  */
 function submit_word() {
   // Call find_word to update the word.
   find_word();
 
-  // Now just display some crap in the "le_submit" ID.
-  $("#le_submit").html("<br><div class='highlight_centered_smaller'>Sorry, I have yet to find an acceptable API to use for this feature. \
-  ¯\\_(ツ)_/¯ </div>");
+  var word = $("#word").html();
+
+  // The user needs to play a tile first...
+  if (word == "____") {
+    // User isn't so smart. Tell them to try again.
+    $("#le_submit").html("<br><div class='highlight_centered_error'> \
+    Sorry, but you need to play a tile before I can check the word for you!</div>");
+    console.log("Please play some tiles first.");
+    return -1;
+  }
+
+  // Make sure the word is lower cased or it might not be found in the dictionary!
+  word = word.toLowerCase();
+
+  /*
+
+      The following is taken from this awesome website. I got the dictionary file off
+      my Linux OS, and it was found in "/usr/share/dict/words". It actually redirected me
+      to "/etc/dictionaries-common/words" on Ubuntu 14.04 LTS. But I opened it in Sublime text
+      anyway and saved it to my GitHub.
+
+      URL for the source code: http://ejohn.org/blog/dictionary-lookups-in-javascript/
+  */
+
+  // Let's see if our word is in the dictionary.
+  if ( dict[ word ] ) {
+    // If it is, AWESOME! The user is so smart.
+    $("#le_submit").html("<br><div class='highlight_centered_success'> \
+    Nice job! \"" + word + "\" is considered a word by the game's dictionary!<br> \
+    (FUTURE: BUTTON TO SAVE WORD / SCORE & PLAY ANOTHER WORD.)</div>");
+    console.log("Hey! That's a legit word! NICE JOB!");
+    return 1;
+  }
+  else {
+    // User isn't so smart. Tell them to try again.
+    $("#le_submit").html("<br><div class='highlight_centered_error'> \
+    Sorry. \"" + word + "\" is not a word in the English dictionary. \
+    I suggest trying a different word. Or try resetting your tiles and trying again.</div>");
+    console.log("Sorry, that doesn't seem to be a word.");
+    return -1;
+  }
+
 }
 
 
@@ -149,89 +207,6 @@ function find_word(read_left) {
     $("#word").html("____");
     $("#score").html(score);
   }
-
-//   // Determine if we should read left to right OR top to bottom.
-//   if(read_left == true) {
-//     // Left to right! Let's sort the game board array then.
-//     // Modified sort from Stackoverflow.
-//     // URL: https://stackoverflow.com/questions/8837454/sort-array-of-objects-by-single-key-with-date-value
-//     // https://stackoverflow.com/questions/5503900/how-to-sort-an-array-of-objects-with-jquery-or-javascript
-
-//     function SortByID(a, b){
-//       var aID = a.id.toLowerCase();
-//       var bID = b.id.toLowerCase();
-//       return ((aID < bID) ? -1 : ((aID > bID) ? 1 : 0));
-//     }
-
-//     game_board.sort(SortByID);
-//   }
-//   else {
-//     // Top to bottom! Let's sort the game board array then.
-//     game_board.sort();
-// /*    for(var i = 0; i < board_length; i++) {
-
-//     }*/
-//   }
-
-
-  /**
-    *     This whole chunk of code isn't even needed. ^_^
-    *
-    */
-
-  // // We need to first sort the game board in order of left to right,
-  // // or top to bottom.
-  // // Let's first get the rows and columns into an array.
-  // rows = [];
-  // cols = [];
-
-  // // Go through the game board and save all the row / col indexes.
-  // for(var i = 0; i < board_length; i++) {
-  //   // Get ID
-  //   var cur = game_board[i].id;
-  //   //console.log("Cur is: " + cur);
-
-  //   // Figure out the row / col
-  //   var test = String(cur).split(',');    // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
-  //   var row = String(test[0]).split('row');
-  //   row = row[1];
-  //   var col = String(test[1]).split('col');
-  //   col = col[1];
-
-  //   // Debugging
-  //   //console.log("The row index is: " + row + " The col index is: " + col);
-
-  //   // Save each row / col to an array.
-  //   rows.push(row);
-  //   cols.push(col);
-  // }
-
-  // // Debugging.
-  // console.log("The rows array is: " + rows + " The cols array is: " + cols);
-
-  // var left_to_right = false;
-
-  // // Do we want to look left to right or top to bottom?
-  // // If the rows index is all the same, then left to right.
-  // // If the cols index is all the same, then top to bottom.
-  // if (rows.length > 1) {
-  //   if (rows[0] == rows[1]) {     // If two are the same, the rest should be the same too.
-  //     left_to_right = true;       // (once the proper restrictions are in place anyway.)
-  //   }
-  // }
-
-  // // Now sort the game_board in either left to right or top to bottom.
-  // if (rows.length > 1) {
-  //   if (left_to_right == true) {
-  //     // Left to right it is.
-
-  //   }
-  //   else {
-  //     // Guess we're doing top to bottom.
-
-  //   }
-  // }
-
 
   // Go through the game board and generate a possible word.
   for(var i = 0; i < board_length; i++) {
