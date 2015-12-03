@@ -81,7 +81,7 @@ var game_tiles = [
 var dict = {};
 
 // Do a jQuery Ajax request for the text dictionary
-$.get( "/files/dictionary.txt", function( txt ) {
+$.get( "files/dictionary.txt", function( txt ) {
     // Get an array of all the words
     var words = txt.split( "\n" );
 
