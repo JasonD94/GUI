@@ -146,8 +146,8 @@ function update_remaining_table() {
   var x = 0;
 
   // Go through every cell in the table and update it.
-  $('#letters_remain tr').each(function(){
-    $(this).find('td').each(function(){
+  $('#letters_remain tr').each(function() {
+    $(this).find('td').each(function() {
       // DO NOT go over the limit of the array! Currently there is 27 elements in the
       // array. So we should stop at 27, since we are going 0 to 26.
       if (x > 27) {
@@ -163,8 +163,8 @@ function update_remaining_table() {
       $(this).html(letter + ": " + remaining);
 
       x++;
-    })
-  })
+    });
+  });
 
 
 

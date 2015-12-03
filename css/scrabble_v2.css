@@ -12,6 +12,7 @@
     Mainly because my Index got way too large.
 */
 
+
 /* CSS Reset */
 * {
   margin: 0;
@@ -97,8 +98,8 @@ html {
 
 /* Get new tile space CSS */
 #get_new_tile {
-  background-color: #ccac00;
-  color: blue;
+  background-color: red;
+  color: white;
   font-family: "Ubuntu";
   font-size: 150%;
   font-weight: 900;
