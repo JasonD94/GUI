@@ -615,7 +615,7 @@ function load_droppable_targets() {
           var posY = ui.offset.top - $(this).offset().top;
 
           // Move the draggable image so it doesn't fly around randomly like to the bottom of the screen or whatever.
-          ui.draggable.css("left", posX + 60);        // The +60 just makes the draggable object not fly to the left for some reason.
+          ui.draggable.css("left", posX + 175);        // The +60 just makes the draggable object not fly to the left for some reason.
           ui.draggable.css("top", posY);
           ui.draggable.css("position", "absolute");
 

@@ -38,13 +38,21 @@
   <title>Scrabble</title>
 
   <!--  Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+ -->
+
+  <!-- Custom Bootstrap! 14 grids instead of 12! -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <!-- Custom theme too! -->
+  <link rel="stylesheet" href="css/bootstrap-theme.min.css">
 
   <!--  Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-
+<!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+ -->
   <!--  jQuery UI Theme -->
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/dark-hive/jquery-ui.min.css">
+<!--   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/dark-hive/jquery-ui.min.css">
+ -->
 
   <!-- Sweet Alerts! AWESOME! -->
   <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
@@ -69,7 +77,7 @@
     <div class="row">
 
       <!-- The game rack should appear in this column! -->
-      <div class="col-sm-12 col-md-2">
+      <div class="col-sm-12 col-md-4">
 
         <!--
           Scrabble rack from:
@@ -83,60 +91,58 @@
           <div id="rack"></div>
         </div>
         <br>
-        <div class="highlight_centered_smaller" id="remaining_letters">
-        <table>
-          <tr>
-            <td colspan="5">LETTERS REMAINING</td>
-          </tr>
-          <tr>
-            <td>A: 9</td>
-            <td>B: 2</td>
-            <td>C: 2</td>
-            <td>D: 4</td>
-            <td>E: 12</td>
-          </tr>
-          <tr>
-            <td>F: 2</td>
-            <td>G: 3</td>
-            <td>H: 2</td>
-            <td>I: 9</td>
-            <td>J: 1</td>
-          </tr>
-          <tr>
-            <td>K: 1</td>
-            <td>L: 4</td>
-            <td>M: 2</td>
-            <td>N: 6</td>
-            <td>O: 8</td>
-          </tr>
-          <tr>
-            <td>P: 2</td>
-            <td>Q: 1</td>
-            <td>R: 6</td>
-            <td>S: 2</td>
-            <td>T: 6</td>
-          </tr>
-          <tr>
-            <td>U: 8</td>
-            <td>V: 2</td>
-            <td>X: 1</td>
-            <td>Y: 6</td>
-            <td>Z: 1</td>
-          </tr>
 
+        <!--
+              Table to show the letters remaining in the "Bag" of tiles
 
+              Each row is 9 columns long.
+              The very last row has the blank, "_", as well as an empty cell.
 
-<!--           A:  9    J: 1    S: 4
-          B:  2    K: 1    T: 6
-          C:  2    L: 4    U: 4
-          D:  4    M: 2    V: 2
-          E: 12    N: 6    W: 2
-          F:  2    0: 8    X: 1
-          G:  3    P: 2    Y: 2
-          H:  2    Q: 1    Z: 1
-          I:  9    R: 6 -->
+              This is currently hard coded but should be updatable via a JavaScript
+              function. Should be possible to get each row of this table and
+              iterate through the cells and change the inside HTML to say the new
+              letter amount.
+
+              This should also be resetable whenever the game is reset.
+        -->
+        <table id="letters_remain">
+          <tr>
+            <td class="larger_td" colspan="9">LETTERS REMAINING</td>
+          </tr>
+          <tr>
+            <td class="larger_td">A: 9</td>
+            <td class="larger_td">B: 2</td>
+            <td class="larger_td">C: 2</td>
+            <td class="larger_td">D: 4</td>
+            <td class="larger_td">E: 12</td>
+            <td class="larger_td">F: 2</td>
+            <td class="larger_td">G: 3</td>
+            <td class="larger_td">H: 2</td>
+            <td class="larger_td">I: 9</td>
+          </tr>
+          <tr>
+            <td class="larger_td">J: 1</td>
+            <td class="larger_td">K: 1</td>
+            <td class="larger_td">L: 4</td>
+            <td class="larger_td">M: 2</td>
+            <td class="larger_td">N: 6</td>
+            <td class="larger_td">O: 8</td>
+            <td class="larger_td">P: 2</td>
+            <td class="larger_td">Q: 1</td>
+            <td class="larger_td">R: 6</td>
+          </tr>
+          <tr>
+            <td class="larger_td">S: 2</td>
+            <td class="larger_td">T: 6</td>
+            <td class="larger_td">U: 8</td>
+            <td class="larger_td">V: 2</td>
+            <td class="larger_td">X: 1</td>
+            <td class="larger_td">Y: 6</td>
+            <td class="larger_td">Z: 1</td>
+            <td class="larger_td">_: 2</td>
+            <td class="larger_td"></td>
+          </tr>
         </table>
-        </div>
       </div>
       <!--
                 Scrabble Game table.
@@ -155,7 +161,7 @@
                 Game board based off of this image of Scrabble:
                 https://farm1.static.flickr.com/23/30997788_a595e9e158_o.jpg
       -->
-      <div class="col-sm-12 col-md-7">
+      <div class="col-sm-12 col-md-6">
         <div class="center_text_images">
           <table id="scrabble_board">
             <!-- First Row -->
@@ -881,12 +887,12 @@
         </div>
       </div>
 
-      <div class="col-sm-12 col-md-3">
+      <div class="col-sm-12 col-md-4">
 
         <div class="center_text_images">
 
           <h1 class="name">
-            <span class="highlight_fun">SCRABBLE v2.0</span>
+            <span class="highlight_fun">SCRABBLE v2.1</span>
           </h1>
 
           <br>
@@ -937,12 +943,11 @@
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins). -->
   <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-  <!-- Latest compiled and minified JavaScript -->
-  <script type='text/javascript' src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <!-- Custom Bootstrap with 14 grid! JavaScript file for it. -->
+  <script type='text/javascript' src="js/bootstrap.min.js"></script>
 
-  <!-- jQuery Validation plugin -->
-  <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.js"></script>
-  <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/additional-methods.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <!-- <script type='text/javascript' src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> -->
 
   <!-- jQuery UI Slider and Tab Wigets -->
   <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>

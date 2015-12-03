@@ -125,6 +125,22 @@ td {
                     https://stackoverflow.com/questions/15712011/why-does-drag-go-behind-target-div */
 }
 
+/* For the "Letters Remaining" Table */
+table#letters_remain {
+  border: solid 5px red;
+}
+
+/* For the "Letters Remaining" section */
+td.larger_td {
+  background: black;      /* Text properties */
+  color: white;
+  font-size: 150%;
+  text-align: center;      /* Center text */
+  border: solid 2px red;
+  height: 50px;
+  width: 50px;
+}
+
 /* Special spaces text */
 .cell_style {
   /*  This part is so the text appears behind the tiles.
