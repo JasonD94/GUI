@@ -714,7 +714,7 @@ function load_droppable_targets() {
         // tile anywhere on the table.
       }
 
-      if (gameboard_length == 1) {
+      if (gameboard_length == 1 || (gameboard_length == 2 && duplicate == true) ) {
         console.log("Diagonals are not allowed.");
 
         // Disable diagonal placement.
@@ -893,10 +893,15 @@ function load_droppable_targets() {
 
       // If it's a duplicate, just move it.
       if (duplicate == true) {
-        if (dup_index == 0) {
-          // remove then add it back.
+        if (insert_beg == false) {
+          // remove then add it back at the end.
           game_board.splice(dup_index, 1);
           game_board.push(obj);
+        }
+        else{
+          // remove then add it back at the beginning.
+          game_board.splice(dup_index, 1);
+          game_board.unshift(obj);
         }
       }
 
