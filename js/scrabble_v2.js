@@ -150,18 +150,28 @@ function find_word(read_left) {
     $("#score").html(score);
   }
 
-  // Determine if we should read left to right OR top to bottom.
-  if(read_left == true) {
-    // Left to right! Let's sort the game board array then.
-    game_board.sort();
-  }
-  else {
-    // Top to bottom! Let's sort the game board array then.
-    game_board.sort();
-/*    for(var i = 0; i < board_length; i++) {
+//   // Determine if we should read left to right OR top to bottom.
+//   if(read_left == true) {
+//     // Left to right! Let's sort the game board array then.
+//     // Modified sort from Stackoverflow.
+//     // URL: https://stackoverflow.com/questions/8837454/sort-array-of-objects-by-single-key-with-date-value
+//     // https://stackoverflow.com/questions/5503900/how-to-sort-an-array-of-objects-with-jquery-or-javascript
 
-    }*/
-  }
+//     function SortByID(a, b){
+//       var aID = a.id.toLowerCase();
+//       var bID = b.id.toLowerCase();
+//       return ((aID < bID) ? -1 : ((aID > bID) ? 1 : 0));
+//     }
+
+//     game_board.sort(SortByID);
+//   }
+//   else {
+//     // Top to bottom! Let's sort the game board array then.
+//     game_board.sort();
+// /*    for(var i = 0; i < board_length; i++) {
+
+//     }*/
+//   }
 
 
   /**
@@ -632,6 +642,7 @@ function load_droppable_targets() {
       var droppableID = $(this).attr("id");
       var duplicate = false;
       var dup_index = 0;
+      var insert_beg = false;
 
       // For debugging purposes.
       console.log("draggableID: " + draggableID );
@@ -707,11 +718,22 @@ function load_droppable_targets() {
           // Yeah! And it's top to bottom!
           console.log("Allowed. T/B");
           left_right = false;
+
+          // Need to insert at the front if we're inserting at the top.
+          if (test == allowed_arrays[0].toString()) {
+            console.log("Inserting at the beginning of the game board array.");
+            insert_beg = true;
+          }
         }
         else if (test == allowed_arrays[2].toString() || test == allowed_arrays[3].toString() ) {
           // Yep! And it's left to right too!
           console.log("Allowed. L/R");
           left_right = true;
+
+          // Need to insert at the front if we're inserting from the left.
+          if (test == allowed_arrays[2].toString()) {
+            insert_beg = true;
+          }
         }
         else {
           console.log("NOT ALLOWED. >:(");
@@ -759,6 +781,10 @@ function load_droppable_targets() {
 
           // See if this is a valid move!
           if ( test == valid_left.toString() || test == valid_right.toString() ) {
+            if( test == valid_left.toString() ) {
+              insert_beg = true;
+            }
+
             // Yes! It is allowed!
             console.log("Allowed. L/R. Game board length = " + gameboard_length);
           }
@@ -789,6 +815,10 @@ function load_droppable_targets() {
 
           // See if this is a valid move!
           if ( test == valid_top.toString() || test == valid_bottom.toString() ) {
+            if (test == valid_top.toString()) {
+              insert_beg = true;
+            }
+
             // Yes! It is allowed!
             console.log("Allowed. T/B. Game board length = " + gameboard_length);
           }
@@ -825,8 +855,15 @@ function load_droppable_targets() {
 
       // Don't add duplicates to the array again!
       if (duplicate == false) {
-        // Push back to the game board array.
-        game_board.push(obj);
+        if (insert_beg == false) {
+          // Push back to the game board array.
+          game_board.push(obj);
+        }
+        else {
+          // Push to the front of the game board array.
+          game_board.unshift(obj);    // URL for info: https://stackoverflow.com/questions/8159524/javascript-pushing-element-at-the-beginning-of-an-array
+        }
+
       }
 
       // Recalculate this.
