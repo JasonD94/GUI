@@ -58,8 +58,8 @@ function load_pieces_array() {
     {"letter":"X", "value":  8,  "amount":  1,  "remaining":  1},
     {"letter":"Y", "value":  4,  "amount":  2,  "remaining":  2},
     {"letter":"Z", "value": 10,  "amount":  1,  "remaining":  1},
-    {"letter":"_", "value":  0,  "amount":  0,  "remaining":  0}    // Temp disabled to 0 until I implement them.
-  ];
+    {"letter":"_", "value":  0,  "amount":  0,  "remaining":  0}    // Temporary set to 0 until I implement this.
+  ];                                                                // Normally 2 should be in the array.
 }
 
 // JavaScript array of objects to determine what letter each piece is.
@@ -131,6 +131,56 @@ function fill_in_table() {
     });
     row++;
   });
+}
+
+/**
+ *      This function will update the "Letters Remaining" table.
+ *      The table has 3 rows of 9 cells, but the very last cell (row 3, cell 9)
+ *      is empty and should remain empty.
+ *
+ *      URL for info on this function:
+ *      https://stackoverflow.com/questions/3065342/how-do-i-iterate-through-table-rows-and-cells-in-javascript
+ *
+ */
+function update_remaining_table() {
+  var x = 0;
+
+  // Go through every cell in the table and update it.
+  $('#letters_remain tr').each(function(){
+    $(this).find('td').each(function(){
+      // DO NOT go over the limit of the array! Currently there is 27 elements in the
+      // array. So we should stop at 27, since we are going 0 to 26.
+      if (x > 27) {
+        // Quit before bad things happen.
+        return;
+      }
+
+      // Easier to use variables for this stuff.
+      var letter = pieces[x].letter;
+      var remaining = pieces[x].remaing;
+
+      // Using "$(this)" access each cell.
+      $(this).html(letter + ": " + remaining);
+
+      x++;
+    })
+  })
+
+
+
+
+  // // Get the table so we can modify it.
+  // var table = document.getElementById("letters_remain");
+
+  // // Outer for loop for the rows.
+  // for(var i = 0; i < 3; i++) {
+  //   var row = table.rows[i];
+
+  //   // Inner for loop for each column.
+  //   for(var x = 0; x < 9; x++) {
+  //     var col = row.cols[x];
+  //   }
+  // }
 }
 
 
@@ -450,9 +500,9 @@ function load_scrabble_pieces() {
       random_num = getRandomInt(0, 26);
 
       // Need to make sure we remove words from the pieces data structure.
-      if(pieces[random_num].amount != 0) {
+      if(pieces[random_num].remaining != 0) {
         loop = false;
-        pieces[random_num].amount--;
+        pieces[random_num].remaining--;
       }
     }
 
