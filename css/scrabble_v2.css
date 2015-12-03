@@ -273,6 +273,17 @@ td {
   text-align: center;
 }
 
+/* Success button, let's the user save the word and play another one. */
+.smaller_button {
+  color: black;
+  font-family: "Ubuntu";
+  font-size: 60%;
+  font-weight: 900;
+  text-align: center;
+  height: 50px;
+  width: 150px;
+}
+
 button {
   color: black;
   font-family: "Advent Pro";

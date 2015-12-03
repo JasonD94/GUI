@@ -76,6 +76,8 @@ var game_tiles = [
 // URL for this source code: http://ejohn.org/blog/dictionary-lookups-in-javascript/
 // See the "Submit word" function for more info.
 // The dictionary lookup object
+// Also, future note, a better dictionary file might be found here:
+// http://www.math.sjsu.edu/~foster/dictionary.txt
 var dict = {};
 
 // Do a jQuery Ajax request for the text dictionary
@@ -173,8 +175,8 @@ function submit_word() {
   if ( dict[ word ] ) {
     // If it is, AWESOME! The user is so smart.
     $("#le_submit").html("<br><div class='highlight_centered_success'> \
-    Nice job! \"" + word + "\" is considered a word by the game's dictionary!<br> \
-    (FUTURE: BUTTON TO SAVE WORD / SCORE & PLAY ANOTHER WORD.)</div>");
+    Nice job! \"" + word + "\" is considered a word by the game's dictionary!<br><br> \
+    <button class='smaller_button' onclick='save_word();'>Save Word & Play Again.</button><br><br></div>");
     console.log("Hey! That's a legit word! NICE JOB!");
     return 1;
   }
@@ -187,6 +189,26 @@ function submit_word() {
     return -1;
   }
 
+}
+
+
+/**
+ *    This function will (when implemented) save the currently played word / score
+ *    and provide the user with new tiles to play with. This will let them play
+ *    as many words as they would like and keep their score as well.
+ *
+ */
+function save_word() {
+  // Currently this function does nothing but make a popup using Sweetalerts.
+  // JUST A PLACE HOLDER / TROLL.
+  sweetAlert("NOT IMPLEMENTED", "¯\\_(ツ)_/¯", "error");
+  swal({
+    title: "NOT IMPLEMENTED YET.",
+    text: "¯\\_(ツ)_/¯",
+    imageUrl: "img/its_happening.gif",
+    imageSize: "312x213",
+    allowOutsideClick: "true"
+  });
 }
 
 
