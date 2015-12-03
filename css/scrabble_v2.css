@@ -237,7 +237,7 @@ td {
 .highlight_centered_smaller {
   background-color: black;
   color: white;
-  font-family: "Advent Pro";
+  font-family: "Ubuntu";
   font-size: 150%;
   font-weight: 900;
   text-align: center;
@@ -336,7 +336,7 @@ h1.name {
 .highlight_centered {
   background-color: black;
   color: white;
-  font-family: "Advent Pro";
+  font-family: "Ubuntu";
   font-size: 200%;
   font-weight: 900;
   text-align: center;

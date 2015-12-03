@@ -384,11 +384,14 @@ function load_scrabble_pieces() {
     // Make the piece draggable.
     $(piece_ID).draggable({
       appendTo: scrabble_board,
-      revert: "invalid",
+      revert: "invalid",            // This is key. Only the rack and game board are considered valid!
+                                    // HA, try dropping the game pieces where ever you want!
       start: function(ev, ui) {
         // Stackoverflow post: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
         $('.ui-droppable').each(function(i, el) {
-          if (!$(el).find('.ui-draggable').length) $(el).droppable('enable');
+          if (!$(el).find('.ui-draggable').length) {
+            $(el).droppable('enable');
+          }
         });
       }
     });
@@ -453,18 +456,61 @@ function load_droppable_targets() {
 
   // Make the rack droppable for placing tiles back if you don't want them.
   $("#the_rack").droppable( {
+    accept: ".ui-draggable",
+    appendTo: "body",
+    drop: function(event, ui) {
+      var draggableID = ui.draggable.attr("id");
+      var droppableID = $(this).attr("id");
 
+      // Get board array length. This will be useful for our checks next.
+      var gameboard_length = game_board.length;
+
+      // See if this element is in the array and at the beginning or end.
+      for(var i = 0; i < gameboard_length; i++) {
+        if (game_board[i].tile == draggableID) {
+          console.log("Found the object to remove!");
+
+          // Make the spot droppable again.
+          var spot_id = "#" + game_board[i].id;
+          $(spot_id).droppable("enable");
+
+          // We found it! Remove it from the game board array.
+          // URL for this help: https://stackoverflow.com/questions/5767325/remove-a-particular-element-from-an-array-in-javascript
+          game_board.splice(i, 1);
+
+          // Update the word & score.
+          find_word();
+
+          // This trick comes from Stackoverflow.
+          // URL: https://stackoverflow.com/questions/849030/how-do-i-get-the-coordinate-position-after-using-jquery-drag-and-drop
+          var posX = ui.offset.left - $(this).offset().left;
+          var posY = ui.offset.top - $(this).offset().top;
+
+          ui.draggable.css("left", posX + 60);        // The +60 just makes the draggable object not fly to the left for some reason.
+          ui.draggable.css("top", posY);
+          ui.draggable.css("position", "absolute");
+
+          // Move the tile over to the rack. Prevents weird bugs where the table changes sizes and thinks there's two tiles in one spot.
+          // URL: https://stackoverflow.com/questions/6199890/jquery-droppable-receiving-events-during-drag-over-not-just-on-initial-drag-o
+          //$(ui.draggable).detach().css({top: 0, left: 0}).appendTo($(this));
+          $('#rack').append($(ui.draggable));
+
+          // Quit now.
+          return;
+        }
+      }
+    }
   });
 
   $("#scrabble_board td").droppable({
     accept: ".ui-draggable",
     appendTo: "body",
     drop: function(event, ui) {
-      // To figure out which draggable / droppable ID was activated, I used this sweet code
-      // from stackoverflow:
+      // To figure out which draggable / droppable ID was activated, I used this sweet code from stackoverflow:
       // https://stackoverflow.com/questions/5562853/jquery-ui-get-id-of-droppable-element-when-dropped-an-item
       var draggableID = ui.draggable.attr("id");
       var droppableID = $(this).attr("id");
+      var duplicate = false;
 
       // For debugging purposes.
       console.log("draggableID: " + draggableID );
@@ -479,44 +525,56 @@ function load_droppable_targets() {
       // Get board array length. This will be useful for our checks next.
       var gameboard_length = game_board.length;
 
-      // Add the current items to the game board array.
-      // Style should be like: {"id": "drop0",  "tile": "pieceX"},
-      var obj = {};
-      obj['id'] = droppableID;          // testing
-      obj['tile'] = draggableID;
+      // See if this is a duplicate
+      for (var i = 0; i < gameboard_length; i++) {
+        if (game_board[i].tile == draggableID) {
+          // We've got a duplicate.
+          console.log("Found a duplicate! ");
+          duplicate = true;
+        }
+      }
 
-      // does this work?
-      game_board.push(obj);
+      // Don't add duplicates to the array again!
+      if (duplicate == false) {
+        // Add the current items to the game board array.
+        // Style should be like: {"id": "drop0",  "tile": "pieceX"},
+        var obj = {};
+        obj['id'] = droppableID;          // This style works as an object.
+        obj['tile'] = draggableID;
 
-      console.log("Array looks like: " + game_board);
+        // Push back to the game board array.
+        game_board.push(obj);
+      }
 
-      // Empty array check.
-      if (gameboard_length == 0) {
-        console.log("Any placement is allowed.");
+
+      if (gameboard_length + 1 == 1) {
+        console.log("Can place this tile anywhere on the board.");
+      }
+
+      if (gameboard_length + 1 == 2) {
+        console.log("Diagonals are not allowed.");
+
+        // Disable diagonal placement.
+        // TO DO: ALGORITHM FOR DIAGONALS.
+        /*
+            Example:
+
+            X*X
+            *+*
+            X*X
+
+            X = not allowed
+            * = allowed
+            + = current location
+        */
+
+
 
       }
-      else {
-        if(gameboard_length == 1) {
-          // Disable diagonal placement.
-          // TO DO: ALGORITHM FOR DIAGONALS.
-          /*
-              Example:
 
-              X*X
-              *+*
-              X*X
-
-              X = not allowed
-              * = allowed
-              + = current location
-          */
-
-          console.log("Diagonals are not allowed.");
-        }
-        else {
-          // Now there should only be up and down placement.
-          console.log("Only up and down should be allowed.");
-        }
+      if (gameboard_length + 1 > 3) {
+        // Now there should only be up and down placement.
+        console.log("Only up and down should be allowed.");
       }
 
 
@@ -528,9 +586,9 @@ function load_droppable_targets() {
       // This from Stackoverflow, it snaps to where it was dropped.
       // URL: https://stackoverflow.com/questions/30122234/how-to-make-an-accept-condition-for-droppable-td-to-accept-only-the-class-within
       $(this).append($(ui.draggable));
-      ui.draggable.css("top", $(this).css("top"))
-      ui.draggable.css("left", $(this).css("left"))
-      ui.draggable.css("position", "relative")
+      ui.draggable.css("top", $(this).css("top"));
+      ui.draggable.css("left", $(this).css("left"));
+      ui.draggable.css("position", "relative");
 
       // Update the word as it stands now.
       find_word();
