@@ -27,6 +27,8 @@
 */
 var pieces;
 
+var left_right = false;   /* Boolean for reading left to right or top to bottom */
+
 // Made this a function for an easy way to reset the pieces array/objects.
 function load_pieces_array() {
   pieces = [
@@ -104,7 +106,7 @@ function fill_in_table() {
       // Add a unique id consisting of row#col# to the cell, where "row#" is the row number
       // and "col#" is the column number. Ex: row0col0 is the top left most cell in the table.
       // Helpful link: https://stackoverflow.com/questions/2176986/jquery-add-id-instead-of-class
-      $(this).attr('id', 'row' + row + ',' + 'col' + col);
+      $(this).attr('id', 'row' + row + '_' + 'col' + col);
       col++;
 
     });
@@ -137,7 +139,7 @@ function submit_word() {
  *    It also determines what the score is for the word that it finds.
  *
  */
-function find_word() {
+function find_word(read_left) {
   var word = "";
   var score = 0;
   var board_length = game_board.length;
@@ -148,58 +150,77 @@ function find_word() {
     $("#score").html(score);
   }
 
-  // We need to first sort the game board in order of left to right,
-  // or top to bottom.
-  // Let's first get the rows and columns into an array.
-  rows = [];
-  cols = [];
+  // Determine if we should read left to right OR top to bottom.
+  if(read_left == true) {
+    // Left to right! Let's sort the game board array then.
+    game_board.sort();
+  }
+  else {
+    // Top to bottom! Let's sort the game board array then.
+    game_board.sort();
+/*    for(var i = 0; i < board_length; i++) {
 
-  // Go through the game board and save all the row / col indexes.
-  for(var i = 0; i < board_length; i++) {
-    // Get ID
-    var cur = game_board[i].id;
-    //console.log("Cur is: " + cur);
-
-    // Figure out the row / col
-    var test = String(cur).split(',');    // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
-    var row = String(test[0]).split('row');
-    row = row[1];
-    var col = String(test[1]).split('col');
-    col = col[1];
-
-    // Debugging
-    //console.log("The row index is: " + row + " The col index is: " + col);
-
-    // Save each row / col to an array.
-    rows.push(row);
-    cols.push(col);
+    }*/
   }
 
-  // Debugging.
-  console.log("The rows array is: " + rows + " The cols array is: " + cols);
 
-  var left_to_right = false;
+  /**
+    *     This whole chunk of code isn't even needed. ^_^
+    *
+    */
 
-  // Do we want to look left to right or top to bottom?
-  // If the rows index is all the same, then left to right.
-  // If the cols index is all the same, then top to bottom.
-  if (rows.length > 1) {
-    if (rows[0] == rows[1]) {     // If two are the same, the rest should be the same too.
-      left_to_right = true;       // (once the proper restrictions are in place anyway.)
-    }
-  }
+  // // We need to first sort the game board in order of left to right,
+  // // or top to bottom.
+  // // Let's first get the rows and columns into an array.
+  // rows = [];
+  // cols = [];
 
-  // Now sort the game_board in either left to right or top to bottom.
-  if (rows.length > 1) {
-    if (left_to_right == true) {
-      // Left to right it is.
+  // // Go through the game board and save all the row / col indexes.
+  // for(var i = 0; i < board_length; i++) {
+  //   // Get ID
+  //   var cur = game_board[i].id;
+  //   //console.log("Cur is: " + cur);
 
-    }
-    else {
-      // Guess we're doing top to bottom.
+  //   // Figure out the row / col
+  //   var test = String(cur).split(',');    // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
+  //   var row = String(test[0]).split('row');
+  //   row = row[1];
+  //   var col = String(test[1]).split('col');
+  //   col = col[1];
 
-    }
-  }
+  //   // Debugging
+  //   //console.log("The row index is: " + row + " The col index is: " + col);
+
+  //   // Save each row / col to an array.
+  //   rows.push(row);
+  //   cols.push(col);
+  // }
+
+  // // Debugging.
+  // console.log("The rows array is: " + rows + " The cols array is: " + cols);
+
+  // var left_to_right = false;
+
+  // // Do we want to look left to right or top to bottom?
+  // // If the rows index is all the same, then left to right.
+  // // If the cols index is all the same, then top to bottom.
+  // if (rows.length > 1) {
+  //   if (rows[0] == rows[1]) {     // If two are the same, the rest should be the same too.
+  //     left_to_right = true;       // (once the proper restrictions are in place anyway.)
+  //   }
+  // }
+
+  // // Now sort the game_board in either left to right or top to bottom.
+  // if (rows.length > 1) {
+  //   if (left_to_right == true) {
+  //     // Left to right it is.
+
+  //   }
+  //   else {
+  //     // Guess we're doing top to bottom.
+
+  //   }
+  // }
 
 
   // Go through the game board and generate a possible word.
@@ -210,7 +231,7 @@ function find_word() {
 
   // Factor in the doubling of certain tiles. Since the should_double() function returns 0 or 1,
   // this is easy to account for. If it's 0, 0 is added to the score. If it's 1, the score is doubled.
-  score += (score * should_double_triple());
+  score += (score * should_double_triple_word());
 
   // Put the score of the dropped tile into the HTML doc.
   $("#score").html(score);
@@ -227,26 +248,30 @@ function find_word() {
 
 
 // Determine whether to double or triple the word score or not.
-// Returns 1 for YES or 0 for NO.
-function should_double_triple() {
+// Returns 1 or 2 for YES and 0 for NO.
+function should_double_triple_word() {
   // Get board array length. This will be useful for our checks next.
   var gameboard_length = game_board.length;
 
   // Go through the game board and see if any spots have the
   // class "double_word" or "triple_word"
   for (var i = 0; i < gameboard_length; i++) {
-    var space_ID = "#" + game_board[i].id;
-    if ( $(space_ID).hasClass("double_word") ) {
+    var space_ID = "#" + game_board[i].id
+    console.log("space_ID = " + space_ID);
+
+    if ( $(space_ID).hasClass('double_word') == true ) {
       // Sweet! Double the word's value!
+      console.log("Doubling word value.");
       return 1;
     }
-    else if ( $(space_ID).hasClass("triple_word") ) {
+    else if ( $(space_ID).hasClass('triple_word') == true ) {
       // SWEET! IT'S A TRIPLE!
+      console.log("Tripling word value");
       return 2;
     }
   }
 
-  // Otherwise return 0, so algorithm returns 0. Cuz X * 0 = 0. and + 0 does nothing. Ha!
+  // Otherwise return 0.
   return 0;
 }
 
@@ -275,7 +300,7 @@ function find_score(given_id) {
 
       // Need to determine if this piece is a DOUBLE or not.
       // Droppable zones 6 & 8 are DOUBLE letter scores.
-      score += (score * should_double_letter(given_id));
+      score = (score * should_double_triple_letter(given_id));
 
       return score;
     }
@@ -288,22 +313,30 @@ function find_score(given_id) {
 
 // Given a tile ID, figures out which dropID this is and whether to double the
 // letter score or not.
-// Returns 1 for YES or 0 for NO.
-function should_double_letter(given_id) {
+// Returns 2 or 3 for YES or 1 for NO.
+function should_double_triple_letter(given_id) {
+  // Get board array length. This will be useful for our checks next.
+  var gameboard_length = game_board.length;
 
-  // THIS ALSO MUST BE REDONE. AND ADD A TRIPLE LETTER FUNCTION TOO.
+  // Go through the game board and see if any spots have the
+  // class "double_word" or "triple_word"
+  for (var i = 0; i < gameboard_length; i++) {
+    var space_ID = "#" + game_board[i].id;
 
-  // Figure out which dropID this tile belongs to.
-  // var dropID = find_tile_pos(given_id);
+    if ( $(space_ID).hasClass("double_letter") == true ) {
+      // Sweet! Double the letter's value!
+      console.log("Doubling letter's value.");
+      return 2;
+    }
+    else if ( $(space_ID).hasClass("triple_letter") == true ) {
+      // SWEET! IT'S A TRIPLE!
+      console.log("Tripling letter's value.");
+      return 3;
+    }
+  }
 
-  // // Is this dropID a double spot or not?
-  // if(dropID == "drop6" || dropID == "drop8") {
-  //   // YES, return 1.
-  //   return 1;
-  // }
-
-  // Otherwise, NO, so return 0.
-  return 0;
+  // Otherwise return 1.
+  return 1;
 }
 
 
@@ -313,7 +346,7 @@ function should_double_letter(given_id) {
 function find_table_position(droppableID) {
 
   // Figure out the row / col
-  var test = String(droppableID).split(',');    // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
+  var test = String(droppableID).split('_');    // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
   var row = String(test[0]).split('row');
   row = row[1];
   var col = String(test[1]).split('col');
@@ -478,6 +511,11 @@ function load_scrabble_pieces() {
             $(el).droppable('enable');
           }
         });
+      },
+      stop: function() {
+        // If an invalid event is found, this will return the draggable object to its
+        // default "invalid" option. From this Stackoverflow post (also used in the droppable part.)
+        $(this).draggable('option','revert','invalid');
       }
     });
   }
@@ -607,37 +645,13 @@ function load_droppable_targets() {
         }
       }
 
-      // Add the current items to the game board array.
-      // Style should be like: {"id": "drop0",  "tile": "pieceX"},
-      var obj = {};
-      obj['id'] = droppableID;          // This style works as an object.
-      obj['tile'] = draggableID;
-
-      // If it's a duplicate, just move it.
-      if (duplicate == true) {
-        if (dup_index == 0) {
-          // remove then add it back.
-          game_board.splice(dup_index, 1);
-          game_board.push(obj);
-        }
-      }
-
-      // Don't add duplicates to the array again!
-      if (duplicate == false) {
-        // Push back to the game board array.
-        game_board.push(obj);
-      }
-
-      // Recalculate this.
-      gameboard_length = game_board.length;
-
-      if (gameboard_length == 1) {
+      if (gameboard_length == 0) {
         console.log("Can place this tile anywhere on the board.");
         // We don't need to worry about this case, the user may place the
         // tile anywhere on the table.
       }
 
-      if (gameboard_length == 2) {
+      if (gameboard_length == 1) {
         console.log("Diagonals are not allowed.");
 
         // Disable diagonal placement.
@@ -685,26 +699,133 @@ function load_droppable_targets() {
         // See if we have one of the allowed positions.
         var test = cur_pos.toString();
         if (test == allowed_arrays[0].toString() || test == allowed_arrays[1].toString() ) {
-          // Yep! And it's left to right too!
-          console.log("Allowed. L/R");
-
-        }
-        else if (test == allowed_arrays[2].toString() || test == allowed_arrays[3].toString() ) {
           // Yeah! And it's top to bottom!
           console.log("Allowed. T/B");
+          left_right = false;
+        }
+        else if (test == allowed_arrays[2].toString() || test == allowed_arrays[3].toString() ) {
+          // Yep! And it's left to right too!
+          console.log("Allowed. L/R");
+          left_right = true;
         }
         else {
-          // Not allowed. Mark this as invalid?
-          console.log("NOT ALLOWED. Bad user! >:(");
+          console.log("NOT ALLOWED. >:(");
+
+          // Force the draggable to revert. Idea from:
+          // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+          ui.draggable.draggable('option', 'revert', true);
           return;
         }
 
       }
 
-      if (gameboard_length > 3) {
+      if (gameboard_length >= 2) {
         // Now there should only be up and down placement.
         console.log("Only up and down should be allowed.");
+
+        /*
+            X+X
+            X*X
+            X*X
+            X+X
+
+            * = the first / second tiles
+            + = valid space
+            X = NOT VALID SPACE
+
+            Assuming (7,7) & (8,7) are already placed, then two valid places are
+            (6,7) & (9,7)
+
+        */
+        if (left_right == true) {
+          // First col - 1 and last col + 1 are valid, with same row.
+          var valid_left = find_table_position(game_board[0].id);
+          var valid_right = find_table_position(game_board[gameboard_length - 1].id);
+          var cur_pos = find_table_position(droppableID);
+
+          // Add or subtract for the valid position.
+          valid_left[1] = parseInt(valid_left[1]) - 1;
+          valid_right[1] = parseInt(valid_right[1]) + 1;
+
+          // Debugging
+          console.log("Valid left pos = " + valid_left + " Valid right position: " + valid_right + " Proposed position: " + cur_pos);
+
+          var test = cur_pos.toString();
+
+          // See if this is a valid move!
+          if ( test == valid_left.toString() || test == valid_right.toString() ) {
+            // Yes! It is allowed!
+            console.log("Allowed. L/R. Game board length = " + gameboard_length);
+          }
+          else {
+            // Not allowed.
+            console.log("NOT Allowed. L/R. Game board length = " + gameboard_length);
+
+            // Force the draggable to revert. Idea from:
+            // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+            ui.draggable.draggable('option', 'revert', true);
+            return;
+          }
+        }
+        else {
+          // First row - 1 and last row + 1 are valid, with same col.
+          var valid_top = find_table_position(game_board[0].id);
+          var valid_bottom = find_table_position(game_board[gameboard_length - 1].id);
+          var cur_pos = find_table_position(droppableID);
+
+          // Add or subtract for the valid position.
+          valid_top[0] = parseInt(valid_top[0]) - 1;
+          valid_bottom[0] = parseInt(valid_bottom[0]) + 1;
+
+          // Debugging
+          console.log("Valid top pos = " + valid_top + " Valid bottom position: " + valid_bottom + " Proposed position: " + cur_pos);
+
+          var test = cur_pos.toString();
+
+          // See if this is a valid move!
+          if ( test == valid_top.toString() || test == valid_bottom.toString() ) {
+            // Yes! It is allowed!
+            console.log("Allowed. T/B. Game board length = " + gameboard_length);
+          }
+          else {
+            // Not allowed.
+            console.log("NOT Allowed. T/B. Game board length = " + gameboard_length);
+
+            // Force the draggable to revert. Idea from:
+            // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+            ui.draggable.draggable('option', 'revert', true);
+            return;
+          }
+        }
       }
+
+      //**********************************
+      //* IF WE GET HERE, this is valid. *
+      //**********************************
+
+      // Add the current items to the game board array.
+      // Style should be like: {"id": "drop0",  "tile": "pieceX"},
+      var obj = {};
+      obj['id'] = droppableID;          // This style works as an object.
+      obj['tile'] = draggableID;
+
+      // If it's a duplicate, just move it.
+      if (duplicate == true) {
+        if (dup_index == 0) {
+          // remove then add it back.
+          game_board.splice(dup_index, 1);
+          game_board.push(obj);
+        }
+      }
+
+      // Don't add duplicates to the array again!
+      if (duplicate == false) {
+        // Push back to the game board array.
+        game_board.push(obj);
+      }
+
+      // Recalculate this.
+      gameboard_length = game_board.length;
 
 
       // This makes it so only the given tile may be dropped on the current spot.
