@@ -289,7 +289,24 @@ button {
   font-weight: 900;
   text-align: center;
   height: 75px;
-  width: 200px;
+  width: 120px;
+}
+
+/**
+ *    Handy class from this Stackoverflow post (ignore the tile):
+ *    https://stackoverflow.com/questions/5119711/whats-the-easiest-way-to-put-space-between-2-side-by-side-buttons-in-asp-net
+ */
+.divider {
+  width: 25px;
+  height: auto;
+  display: inline-block;
+}
+
+/**
+ *    Another useful class for dividing vertical elements.
+ */
+.space_top {
+  margin-top: 20px;
 }
 
 /*

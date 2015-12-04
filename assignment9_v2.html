@@ -70,828 +70,61 @@
         div by the JS at the bottom of this page. -->
   <!--  <div id="NavBarHeader"></div>  -->
 
-    <!-- Adding spaces -->
-    <br>
+  <!-- Adding spaces -->
+  <br>
 
-    <!-- First row - the Scrabble game board -->
-    <div class="row-fluid">
+  <!-- First row - the Scrabble game board -->
+  <div class="row-fluid">
 
-      <div class="col-sm-14 col-md-14 col-lg-4">
+    <div class="col-sm-14 col-md-5 col-lg-7">
 
-        <div class="center_text_images">
+      <div class="center_text_images">
 
-          <h1 class="name">
-            <span class="highlight_fun">SCRABBLE v2.2</span>
-          </h1>
+        <h1 class="name">
+          <span class="highlight_fun">SCRABBLE v2.2</span>
+        </h1>
 
+        <br>
+
+        <div class="col-sm-7 col-md-7 col-lg-7">
+          <div class="highlight_centered_smaller">LET'S PLAY SOME SCRABBLE!</div>
           <br>
+        </div>
 
-          <div class="col-sm-4 col-md-7 col-lg-7">
-            <div class="highlight_centered_smaller">LET'S PLAY SOME SCRABBLE!</div>
-            <br>
-          </div>
+        <div class="col-sm-7 col-md-7 col-lg-7">
+          <div class="highlight_centered_smaller"><a href="http://scrabble.hasbro.com/en-us/rules/">RULES FOUND HERE.</a></div>
+        </div>
 
-          <div class="col-sm-4 col-md-7 col-lg-7">
-            <div class="highlight_centered_smaller"><a href="http://scrabble.hasbro.com/en-us/rules/">RULES FOUND HERE.</a></div>
-          </div>
-
-          <div class="col-sm-6 col-md-14 col-lg-14">
-            <div class="highlight_centered">
-              Word: <span id="word">____</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- Spaces -->
-              Score: <span id="score">0</span>
-            </div>
-          </div>
-
-          <div class="col-sm-14 col-md-7 col-lg-14">
-            <div id="le_submit"></div>
-          </div>
-          <!--
-                  Submit word: should verify that the entered word is real through some
-                  dictionary or API.
-
-                  Reset tiles: should wipe the board for a new game.
-
-                  possibly think about adding more rows for Scrabble. (non-trivial)
-
-          -->
-          <div class="col-sm-14 col-md-7 col-lg-14">
-            <button onclick="submit_word();">Submit Word</button>
-            <button onclick="reset_tiles();">Reset Tiles</button>
+        <div class="col-sm-14 col-md-14 col-lg-14">
+          <div class="highlight_centered">
+            Word: <span id="word">____</span>
+            <div class="divider"></div>
+            Score: <span id="score">0</span>
           </div>
         </div>
-      </div>
 
-      <!--
-                Scrabble Game table.
-
-                Important classes:
-
-                double_word     ->  make the word double value
-                triple_word     ->  make the word tripple value
-                double_letter   ->  make the letter double value
-                triple_letter   ->  make the letter tripple value
-
-                If a tile does not have one of those four classes, then it is worth
-                normal value. Double / Tripple word tiles can still increase the
-                value of the word however if any one tile has landed on that space.
-
-                Game board based off of this image of Scrabble:
-                https://farm1.static.flickr.com/23/30997788_a595e9e158_o.jpg
-      -->
-      <div class="col-sm-14 col-md-9 col-lg-6">
-        <br><br>
-        <div class="center_text_images">
-          <table id="scrabble_board">
-            <!-- First Row -->
-            <tr>
-              <td class="triple_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_word">
-              </td>
-            </tr>
-
-            <!-- Second Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- Third Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 4th Row -->
-            <tr>
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-            </tr>
-
-            <!-- 5th Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 6th Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 7th Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 8th Row -->
-            <tr>
-              <td class="triple_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="star">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-            </tr>
-
-            <!-- 9th Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 10th Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 11th Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 12th Row -->
-            <tr>
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-            </tr>
-
-            <!-- 13th Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 14th Row -->
-            <tr>
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_word">
-              </td>
-
-              <td>
-              </td>
-            </tr>
-
-            <!-- 15th Row -->
-            <tr>
-              <td class="triple_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_word">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="double_letter">
-              </td>
-
-              <td>
-              </td>
-
-              <td>
-              </td>
-
-              <td class="triple_word">
-              </td>
-            </tr>
-          </table>
-        </div>
-        <br><br>
-        <div class="center_text_images">
-          <img id="the_rack" src="img/scrabble/Scrabble_Rack_flat.resized.png">
-          <div id="rack"></div>
-        </div>
-      </div>
-
-      <!-- Game rack / swap tile space / letters remaining -->
-      <div class="col-sm-14 col-md-5 col-lg-4">
-        <!-- The game rack should appear in this column! -->
-        <div class="col-sm-4 col-md-7 col-lg-7">
-          <br><br>
-          <!--
-            Scrabble rack from:
-            https://pixabay.com/static/uploads/photo/2014/07/31/20/48/scrabble-tile-holder-406774_640.png
-
-            NO LONGER USING THIS CLASS. SAVED FOR FUTURE REFERENCE.
-            class="resize_rack"
-          -->
-<!--           <div class="center_text_images">
-            <img id="the_rack" src="img/scrabble/Scrabble_Rack_rotated180.png">
-            <div id="rack"></div>
-          </div> -->
-          <br>
+        <!--
+                Submit word: should verify that the entered word is real through some
+                dictionary or API.
+
+                Reset tiles: should wipe the board for a new game.
+
+                possibly think about adding more rows for Scrabble. (non-trivial)
+
+        -->
+        <div class="col-sm-7 col-md-14 col-lg-14">
+          <!--  Add some vertical spacing between the word/score and the two submit buttons
+                on medium / large devices. -->
+          <div class="space_top"></div>
+          <button onclick="submit_word();">Submit Word</button>
+          <!--  Add some horizontal spacing between the two buttons. -->
+          <div class="divider"></div>
+          <button onclick="reset_tiles();">Reset Tiles</button>
         </div>
 
         <!-- Get a new tile spot. -->
-        <div class="col-sm-4 col-md-7 col-lg-7">
-          <br><br>
+        <div class="col-sm-7 col-md-14 col-lg-14">
+          <br>
             <div id="get_new_tile">
               <p>Swap a tile for a new one!</p>
               <p>(drop the tile here)</p>
@@ -899,7 +132,8 @@
           <br><br>
         </div>
 
-        <div class="col-sm-6 col-md-14 col-lg-14">
+        <!-- Letters Remaining Table -->
+        <div class="col-sm-7 col-md-14 col-lg-14">
           <!--
                 Table to show the letters remaining in the "Bag" of tiles
 
@@ -951,10 +185,774 @@
               <td class="larger_td"></td>
             </tr>
           </table>
-
         </div>
+
+        <!-- Error / Success messages appear in this div. -->
+        <div class="col-sm-7 col-md-14 col-lg-14">
+          <div id="le_submit"></div>
+        </div>
+
+      </div>
     </div>
-  </div>          <!-- This should be the end div of the main container. -->
+
+    <!-- Scrabble board / Rack are in this column. -->
+    <div class="col-sm-14 col-md-9 col-lg-7">
+      <br><br>
+      <!--
+          Scrabble Game table.
+
+          Important classes:
+
+          double_word     ->  make the word double value
+          triple_word     ->  make the word tripple value
+          double_letter   ->  make the letter double value
+          triple_letter   ->  make the letter tripple value
+
+          If a tile does not have one of those four classes, then it is worth
+          normal value. Double / Tripple word tiles can still increase the
+          value of the word however if any one tile has landed on that space.
+
+          Game board based off of this image of Scrabble:
+          https://farm1.static.flickr.com/23/30997788_a595e9e158_o.jpg
+      -->
+      <div class="center_text_images">
+        <table id="scrabble_board">
+          <!-- First Row -->
+          <tr>
+            <td class="triple_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_word">
+            </td>
+          </tr>
+
+          <!-- Second Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- Third Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 4th Row -->
+          <tr>
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+          </tr>
+
+          <!-- 5th Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 6th Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 7th Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 8th Row -->
+          <tr>
+            <td class="triple_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="star">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+          </tr>
+
+          <!-- 9th Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 10th Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 11th Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 12th Row -->
+          <tr>
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+          </tr>
+
+          <!-- 13th Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 14th Row -->
+          <tr>
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_word">
+            </td>
+
+            <td>
+            </td>
+          </tr>
+
+          <!-- 15th Row -->
+          <tr>
+            <td class="triple_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_word">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="double_letter">
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            </td>
+
+            <td class="triple_word">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <br>
+
+      <!--
+        Scrabble rack from:
+        https://pixabay.com/static/uploads/photo/2014/07/31/20/48/scrabble-tile-holder-406774_640.png
+
+        NO LONGER USING THIS CLASS. SAVED FOR FUTURE REFERENCE.
+        class="resize_rack"
+      -->
+      <div class="center_text_images">
+        <img id="the_rack" src="img/scrabble/Scrabble_Rack_flat.resized.png">
+        <div id="rack"></div>   <!-- THIS ID IS REQUIRED TO APPEND THE TILES TO. -->
+      </div>
+    </div>
+  </div>        <!-- End of the row-fluid container -->
 
   <!--
       These are moved to the bottom of the <body> tag to decrease website load time.
