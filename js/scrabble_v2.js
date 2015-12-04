@@ -515,31 +515,8 @@ function load_scrabble_pieces() {
 
     // Now figure out where to reposition the board piece.
 
-    /*
-        IGNORE THE BOTTOM COMMENTS UNTIL I FIGURE OUT IF I LIKE HOW EVERYTHING WORKS
-
-        HOW IT IS CURRENTLY SET UP:
-        left is just +50 so everything shifts over 50 px.
-        I have no idea why top works but somehow it's making stuff 50 or 70px apart.
-
-        Some jQuery is making the tiles absolute at first, so that they don't move around when
-        tiles are placed (annoying formal bug) and then when placed on a tile some more
-        jquery snaps the tile to the center of the droppable target.
-
-        Pretty fancy.
-
-
-        (Even this comment isn't 100% right. Just messing with the numbers to make things look good is enough.)
-    */
-
-    // For left, I first start with the rack's left and then shift back 50 * i spaces so the tiles will line up
-    // For top, I first start with the rack's top, then shift down 30 for the first tile to appear in a good spot,
-    // and then I need to shift down 50 * i to make the tiles line up (see the left's 50 * i). I do 80 so that I get
-    // 30px spacing between all the tiles.
-    // Also all the * i does is make nothing happen when i = 0 (anything * 0 = 0 after all) and then on the next couple tiles
-    // it shifts equally given the tile # we are dealing with.
-    var img_left = pos.left + 90;     // THIS IS THE OLD MATH: - 30 - (40 * i);
-    var img_top = pos.top + 80 + (70 * i);
+    var img_left = pos.left + 30 + (50 * i);      // This controls left to right placement.
+    var img_top = pos.top + 30;                   // This controls top to bottom placement.
 
     /* Load onto the page and make draggable.
        The height / width get set using these tricks:
