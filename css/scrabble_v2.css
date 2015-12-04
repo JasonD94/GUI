@@ -196,8 +196,13 @@ td.larger_td {
   background: url("../img/scrabble/triple_word.png");
 }
 
+/**
+ *      I did not create this star. I found it at this URL:
+ *      http://vignette3.wikia.nocookie.net/fantendo/images/4/49/Super_Star_NSMB2.png/revision/20120731024244
+ */
 .star {
-  background: #e5acb6;
+  /*background: #e5acb6;*/
+  background: url("../img/scrabble/star.png");
 }
 
 /* The middle star's style. */
@@ -226,30 +231,6 @@ td.larger_td {
 .resize_board {
   height: 125px;
   width: auto;
-}
-
-/* This is the Rack image */
-.resize_rack {
-  /*
-      Rotate image 90 degrees.
-      URL: https://stackoverflow.com/questions/11832131/cross-browser-way-to-rotate-image-using-css
-  */
-  behavior:url(-ms-transform.htc);
-  /* Firefox */
-  -moz-transform:rotate(90deg);
-  /* Safari and Chrome */
-  -webkit-transform:rotate(90deg);
-  /* Opera */
-  -o-transform:rotate(90deg);
-  /* IE9 */
-  -ms-transform:rotate(90deg);
-
-  position: absolute;
-  top: 300px;
-  left: -100px;
-
-  height: 125px;
-  width: 600px;
 }
 
 .pieces {

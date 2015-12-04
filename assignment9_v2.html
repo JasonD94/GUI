@@ -81,23 +81,30 @@
         <div class="center_text_images">
 
           <h1 class="name">
-            <span class="highlight_fun">SCRABBLE v2.1</span>
+            <span class="highlight_fun">SCRABBLE v2.2</span>
           </h1>
 
           <br>
 
-          <div class="highlight_centered_smaller">LET'S PLAY SOME SCRABBLE!</div>
-          <div class="highlight_centered_smaller"><a href="http://scrabble.hasbro.com/en-us/rules/">RULES FOUND HERE.</a></div>
+          <div class="col-sm-4 col-md-7 col-lg-7">
+            <div class="highlight_centered_smaller">LET'S PLAY SOME SCRABBLE!</div>
+            <br>
+          </div>
 
-          <br>
+          <div class="col-sm-4 col-md-7 col-lg-7">
+            <div class="highlight_centered_smaller"><a href="http://scrabble.hasbro.com/en-us/rules/">RULES FOUND HERE.</a></div>
+          </div>
 
-          <div class="highlight_centered">Word: <span id="word">____</span> </div>
-          <div class="highlight_centered">Score: <span id="score">0</span> </div>
+          <div class="col-sm-6 col-md-14 col-lg-14">
+            <div class="highlight_centered">
+              Word: <span id="word">____</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!-- Spaces -->
+              Score: <span id="score">0</span>
+            </div>
+          </div>
 
-          <div id="le_submit"></div>
-
-          <br>
-
+          <div class="col-sm-14 col-md-7 col-lg-14">
+            <div id="le_submit"></div>
+          </div>
           <!--
                   Submit word: should verify that the entered word is real through some
                   dictionary or API.
@@ -107,14 +114,10 @@
                   possibly think about adding more rows for Scrabble. (non-trivial)
 
           -->
-          <button onclick="submit_word();">Submit Word</button>
-          <button onclick="reset_tiles();">Reset Tiles</button>
-
-          <br><br>
-
-          <div id="get_new_tile"><br><br>Swap a tile for a new one!<br> (drop the tile here)<br> (**not implemented**)<br><br><br></div>
-
-          <br><br>
+          <div class="col-sm-14 col-md-7 col-lg-14">
+            <button onclick="submit_word();">Submit Word</button>
+            <button onclick="reset_tiles();">Reset Tiles</button>
+          </div>
         </div>
       </div>
 
@@ -136,6 +139,7 @@
                 https://farm1.static.flickr.com/23/30997788_a595e9e158_o.jpg
       -->
       <div class="col-sm-14 col-md-9 col-lg-6">
+        <br><br>
         <div class="center_text_images">
           <table id="scrabble_board">
             <!-- First Row -->
@@ -861,75 +865,89 @@
         </div>
       </div>
 
-      <!-- The game rack should appear in this column! -->
+      <!-- Game rack / swap tile space / letters remaining -->
       <div class="col-sm-14 col-md-5 col-lg-4">
+        <!-- The game rack should appear in this column! -->
+        <div class="col-sm-4 col-md-7 col-lg-7">
+          <br><br>
+          <!--
+            Scrabble rack from:
+            https://pixabay.com/static/uploads/photo/2014/07/31/20/48/scrabble-tile-holder-406774_640.png
 
-        <!--
-          Scrabble rack from:
-          https://pixabay.com/static/uploads/photo/2014/07/31/20/48/scrabble-tile-holder-406774_640.png
-
-          NO LONGER USING THIS CLASS. SAVED FOR FUTURE REFERENCE.
-          class="resize_rack"
-        -->
-        <div class="center_text_images">
-          <img id="the_rack" src="img/scrabble/Scrabble_Rack_rotated.png">
-          <div id="rack"></div>
+            NO LONGER USING THIS CLASS. SAVED FOR FUTURE REFERENCE.
+            class="resize_rack"
+          -->
+          <div class="center_text_images">
+            <img id="the_rack" src="img/scrabble/Scrabble_Rack_rotated180.png">
+            <div id="rack"></div>
+          </div>
+          <br>
         </div>
-        <br>
 
-        <!--
-              Table to show the letters remaining in the "Bag" of tiles
+        <!-- Get a new tile spot. -->
+        <div class="col-sm-4 col-md-7 col-lg-7">
+          <br><br>
+            <div id="get_new_tile">
+              <p>Swap a tile for a new one!</p>
+              <p>(drop the tile here)</p>
+            </div>
+          <br><br>
+        </div>
 
-              Each row is 9 columns long.
-              The very last row has the blank, "_", as well as an empty cell.
+        <div class="col-sm-6 col-md-14 col-lg-14">
+          <!--
+                Table to show the letters remaining in the "Bag" of tiles
 
-              This is currently hard coded but should be updatable via a JavaScript
-              function. Should be possible to get each row of this table and
-              iterate through the cells and change the inside HTML to say the new
-              letter amount.
+                Each row is 9 columns long.
+                The very last row has the blank, "_", as well as an empty cell.
 
-              This should also be resetable whenever the game is reset.
-        -->
-        <table id="letters_remain">
-          <tr>
-            <td class="larger_td" colspan="9">LETTERS REMAINING</td>
-          </tr>
-          <tr>
-            <td class="larger_td">A: 9</td>
-            <td class="larger_td">B: 2</td>
-            <td class="larger_td">C: 2</td>
-            <td class="larger_td">D: 4</td>
-            <td class="larger_td">E: 12</td>
-            <td class="larger_td">F: 2</td>
-            <td class="larger_td">G: 3</td>
-            <td class="larger_td">H: 2</td>
-            <td class="larger_td">I: 9</td>
-          </tr>
-          <tr>
-            <td class="larger_td">J: 1</td>
-            <td class="larger_td">K: 1</td>
-            <td class="larger_td">L: 4</td>
-            <td class="larger_td">M: 2</td>
-            <td class="larger_td">N: 6</td>
-            <td class="larger_td">O: 8</td>
-            <td class="larger_td">P: 2</td>
-            <td class="larger_td">Q: 1</td>
-            <td class="larger_td">R: 6</td>
-          </tr>
-          <tr>
-            <td class="larger_td">S: 2</td>
-            <td class="larger_td">T: 6</td>
-            <td class="larger_td">U: 8</td>
-            <td class="larger_td">V: 2</td>
-            <td class="larger_td">X: 1</td>
-            <td class="larger_td">Y: 6</td>
-            <td class="larger_td">Z: 1</td>
-            <td class="larger_td">_: 2</td>
-            <td class="larger_td"></td>
-          </tr>
-        </table>
+                This is currently hard coded but should be updatable via a JavaScript
+                function. Should be possible to get each row of this table and
+                iterate through the cells and change the inside HTML to say the new
+                letter amount.
 
-      </div>
+                This should also be resetable whenever the game is reset.
+          -->
+          <table id="letters_remain">
+            <tr>
+              <td class="larger_td" colspan="9">LETTERS REMAINING (not implemented)</td>
+            </tr>
+            <tr>
+              <td class="larger_td">A: 9</td>
+              <td class="larger_td">B: 2</td>
+              <td class="larger_td">C: 2</td>
+              <td class="larger_td">D: 4</td>
+              <td class="larger_td">E: 12</td>
+              <td class="larger_td">F: 2</td>
+              <td class="larger_td">G: 3</td>
+              <td class="larger_td">H: 2</td>
+              <td class="larger_td">I: 9</td>
+            </tr>
+            <tr>
+              <td class="larger_td">J: 1</td>
+              <td class="larger_td">K: 1</td>
+              <td class="larger_td">L: 4</td>
+              <td class="larger_td">M: 2</td>
+              <td class="larger_td">N: 6</td>
+              <td class="larger_td">O: 8</td>
+              <td class="larger_td">P: 2</td>
+              <td class="larger_td">Q: 1</td>
+              <td class="larger_td">R: 6</td>
+            </tr>
+            <tr>
+              <td class="larger_td">S: 2</td>
+              <td class="larger_td">T: 6</td>
+              <td class="larger_td">U: 8</td>
+              <td class="larger_td">V: 2</td>
+              <td class="larger_td">X: 1</td>
+              <td class="larger_td">Y: 6</td>
+              <td class="larger_td">Z: 1</td>
+              <td class="larger_td">_: 2</td>
+              <td class="larger_td"></td>
+            </tr>
+          </table>
+
+        </div>
     </div>
   </div>          <!-- This should be the end div of the main container. -->
 

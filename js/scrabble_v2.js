@@ -110,10 +110,6 @@ function fill_in_table() {
 
   // CURRENTLY USING BACKGROUND IMAGES FOR THE SPECIAL SPACES.
 
-  // I did not create this image.
-  // Found at this URL: http://vignette3.wikia.nocookie.net/fantendo/images/4/49/Super_Star_NSMB2.png/revision/20120731024244
-  $('.star').html("<img id='star_img' src='img/scrabble/star.png'>");
-
   $('#scrabble_board tr').each(function() {
     col = 0;
     /**
