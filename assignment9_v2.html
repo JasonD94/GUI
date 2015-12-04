@@ -64,15 +64,8 @@
         URL: http://orig10.deviantart.net/7bc3/f/2013/338/8/8/flat_scrabble_icon_by_awesomestwinner-d6wpolw.png -->
   <link rel="shortcut icon" href="img/scrabble.ico" type="image/x-icon">
 </head>
+
 <body>
-
-  <!--  Navbar div. See html/navbar.html for that code. It gets loaded into this
-        div by the JS at the bottom of this page. -->
-  <!--  <div id="NavBarHeader"></div>  -->
-
-  <!-- Adding spaces -->
-  <br>
-
   <!-- First row - the Scrabble game board -->
   <div class="row-fluid">
 
@@ -81,7 +74,7 @@
       <div class="center_text_images">
 
         <h1 class="name">
-          <span class="highlight_fun">SCRABBLE v2.2</span>
+          <span class="highlight_fun">SCRABBLE v2.3</span>
         </h1>
 
         <br>
@@ -117,16 +110,21 @@
                 on medium / large devices. -->
           <div class="space_top"></div>
           <button onclick="submit_word();">Submit Word</button>
-          <!--  Add some horizontal spacing between the two buttons. -->
+
+          <!--  Add some horizontal spacing between the three buttons. -->
           <div class="divider"></div>
           <button onclick="reset_tiles();">Reset Tiles</button>
+
+          <!--  Add some horizontal spacing between the three buttons. -->
+          <div class="divider"></div>
+          <button onclick="reset_game_board();">Reset Board</button>
         </div>
 
         <!-- Get a new tile spot. -->
         <div class="col-sm-7 col-md-14 col-lg-14">
           <br>
             <div id="get_new_tile">
-              <p>Swap a tile for a new one!</p>
+              <p>Swap a tile for a new one! (not implemented)</p>
               <p>(drop the tile here)</p>
             </div>
           <br><br>
@@ -149,7 +147,7 @@
           -->
           <table id="letters_remain">
             <tr>
-              <td class="larger_td" colspan="9">LETTERS REMAINING (not implemented)</td>
+              <td class="larger_td" colspan="9">LETTERS REMAINING</td>
             </tr>
             <tr>
               <td class="larger_td">A: 9</td>
@@ -178,11 +176,11 @@
               <td class="larger_td">T: 6</td>
               <td class="larger_td">U: 8</td>
               <td class="larger_td">V: 2</td>
+              <td class="larger_td">W: 2</td>
               <td class="larger_td">X: 1</td>
-              <td class="larger_td">Y: 6</td>
+              <td class="larger_td">Y: 2</td>
               <td class="larger_td">Z: 1</td>
               <td class="larger_td">_: 2</td>
-              <td class="larger_td"></td>
             </tr>
           </table>
         </div>
@@ -998,6 +996,7 @@
         load_pieces_array();        // Load up the defaul pieces array.
         load_scrabble_pieces();     // Load up the 7 random Scrabble pieces.
         load_droppable_targets();   // Load up the targets for the Scrabble pieces.
+        update_remaining_table();   // Update the Letters Remaining table.
         fill_in_table();            // Add special items to the table.
     });
   </script>

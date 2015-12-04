@@ -297,7 +297,7 @@ button {
  *    https://stackoverflow.com/questions/5119711/whats-the-easiest-way-to-put-space-between-2-side-by-side-buttons-in-asp-net
  */
 .divider {
-  width: 25px;
+  width: 15px;
   height: auto;
   display: inline-block;
 }

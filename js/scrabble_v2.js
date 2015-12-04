@@ -29,6 +29,8 @@ var pieces;
 
 var left_right = false;   /* Boolean for reading left to right or top to bottom */
 
+var number_of_words = 0;  /* For detecting multiple words played. */
+
 // Made this a function for an easy way to reset the pieces array/objects.
 function load_pieces_array() {
   pieces = [
@@ -129,6 +131,7 @@ function fill_in_table() {
   });
 }
 
+
 /**
  *      This function will update the "Letters Remaining" table.
  *      The table has 3 rows of 9 cells, but the very last cell (row 3, cell 9)
@@ -140,43 +143,48 @@ function fill_in_table() {
  */
 function update_remaining_table() {
   var x = 0;
+  var first = true;
 
   // Go through every cell in the table and update it.
   $('#letters_remain tr').each(function() {
+
+    // DO NOT go over the limit of the array! Currently there is 27 elements in the
+    // array. So we should stop at 27, since we are going 0 to 26.
+    // Make sure to return false for this to work (THANK YOU STACKOVERFLOW)
+    // URL for that amazing tip: https://stackoverflow.com/questions/1784780/how-to-break-out-of-jquery-each-loop
+    if (x > 26) {
+      // Quit before bad things happen.
+      return true;
+    }
+
     $(this).find('td').each(function() {
+      // Skip the first row, we don't want to mess with it.
+      if (first == true) {
+        first = false;
+        return false;
+      }
+
       // DO NOT go over the limit of the array! Currently there is 27 elements in the
       // array. So we should stop at 27, since we are going 0 to 26.
-      if (x > 27) {
+      if (x > 26) {
         // Quit before bad things happen.
-        return;
+        return false;
       }
 
       // Easier to use variables for this stuff.
       var letter = pieces[x].letter;
-      var remaining = pieces[x].remaing;
+      var remaining = pieces[x].remaining;
 
       // Using "$(this)" access each cell.
       $(this).html(letter + ": " + remaining);
 
-      x++;
+      x++;    // Keep looping
+      return true;
     });
+    return true;
   });
 
-
-
-
-  // // Get the table so we can modify it.
-  // var table = document.getElementById("letters_remain");
-
-  // // Outer for loop for the rows.
-  // for(var i = 0; i < 3; i++) {
-  //   var row = table.rows[i];
-
-  //   // Inner for loop for each column.
-  //   for(var x = 0; x < 9; x++) {
-  //     var col = row.cols[x];
-  //   }
-  // }
+  return true;
 }
 
 
@@ -566,7 +574,7 @@ function load_scrabble_pieces() {
  *      find_word()               -> resets what the word looked like.
  */
 function reset_tiles() {
-  console.log("Resetting the game board! Buckle up!");
+  console.log("Resetting the game board!");
 
   // First clear the game board array.
   game_board = [];    // Easy way of doing this.
@@ -589,6 +597,9 @@ function reset_tiles() {
   // Resets the HTML "Word: " and "Score: " display.
   find_word();    // Technically this returns -1 and just wipes the display clean.
 
+  // Update the "Letters Remaining" table.
+  update_remaining_table();
+
   // Reset the "submit_word" div, just in case the user tried to submit the word.
   $("#le_submit").html("");
 
@@ -596,6 +607,22 @@ function reset_tiles() {
   return;
 }
 
+
+/*
+ *    This function will reset the entire game board.
+ */
+function reset_game_board() {
+  // Currently this function does nothing but make a popup using Sweetalerts.
+  // JUST A PLACE HOLDER / TROLL.
+  sweetAlert("NOT IMPLEMENTED", "¯\\_(ツ)_/¯", "error");
+  swal({
+    title: "NOT IMPLEMENTED YET.",
+    text: "¯\\_(ツ)_/¯",
+    imageUrl: "img/its_happening.gif",
+    imageSize: "312x213",
+    allowOutsideClick: "true"
+  });
+}
 
 
 /**
@@ -663,6 +690,7 @@ function load_droppable_targets() {
       var duplicate = false;
       var dup_index = 0;
       var insert_beg = false;
+      var star_spot = "row7_col7";      // Star in the middle of the board.
 
       // For debugging purposes.
       console.log("draggableID: " + draggableID );
@@ -682,9 +710,10 @@ function load_droppable_targets() {
       }
 
       if (gameboard_length == 0) {
-        console.log("Can place this tile anywhere on the board.");
-        // We don't need to worry about this case, the user may place the
-        // tile anywhere on the table.
+        console.log("Must start at the star.");
+
+        /* The only valid place is the star, row7_col7 */
+
       }
 
       if (gameboard_length == 1 || (gameboard_length == 2 && duplicate == true) ) {
