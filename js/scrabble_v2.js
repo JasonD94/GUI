@@ -205,7 +205,7 @@ function submit_word() {
 
   // The user needs to play a tile first...
   if (word == "____") {
-    // User isn't so smart. Tell them to try again.
+    // The user isn't so smart. Tell them to try again.
     $("#le_submit").html("<br><div class='highlight_centered_error'> \
     Sorry, but you need to play a tile before I can check the word for you!</div>");
     console.log("Please play some tiles first.");
@@ -255,7 +255,6 @@ function submit_word() {
 function save_word() {
   // Currently this function does nothing but make a popup using Sweetalerts.
   // JUST A PLACE HOLDER / TROLL.
-  sweetAlert("NOT IMPLEMENTED", "¯\\_(ツ)_/¯", "error");
   swal({
     title: "NOT IMPLEMENTED YET.",
     text: "¯\\_(ツ)_/¯",
@@ -478,6 +477,39 @@ function find_tile_pos(given_id) {
 }
 
 
+// Generate a random tile for the load_scrabble_pieces() function and for
+// swaping for a new tile.
+function get_random_tile() {
+  // Need take into account that there are 100 tiles total, not just 26 options.
+  // Going to create an array of all the possible letters then - 100 to start.
+  var all_letters = [];
+  var total_letters = 0;
+
+  for (var i = 0; i < 26; i++) {
+    var current_letter = pieces[i].letter;    // Get current letter, "A" to start
+    var remaining = pieces[i].remaining;      // Remaining letters, "9" for A at the start.
+    total_letters += remaining;               // Keep track of ALL the letters for the random call.
+
+    for (var x = 0; x < remaining; x++) {
+      all_letters.push(current_letter);       // Add "remaining" number of the current letter to the array.
+    }
+  }
+
+  // Now all_letters should have 100 letters at the start (less while playing the game)
+  // Pick a random number and return that letter.
+  var random_num = getRandomInt(0, total_letters - 1);   // Off by one error if we don't subtract. 0 to 100 is bad. Want 0 to 99.
+  var letter = all_letters[random_num];       // Save the letter.
+
+  // Find the letter to decrement.
+  for (var i = 0; i < 26; i++) {
+    if (pieces[i].letter == letter) {
+      pieces[i].remaining--;            // Decrement letter remaining for this letter.
+      return letter;                         // Return the letter's index.
+    }
+  }
+}
+
+
 /**
  *    This function loads up the scrabble pieces onto the rack.
  *    It also makes each of them draggable and sets various properties, including
@@ -489,31 +521,20 @@ function find_tile_pos(given_id) {
 function load_scrabble_pieces() {
   // I'm so used to C++ that I like defining variables at the top of a function. *shrugs*
   var base_url = "img/scrabble/Scrabble_Tile_";   // base URL of the image
-  var random_num = 1;
-  var piece = "<img class='pieces' id='piece" + i + "' src='" + base_url + random_num + ".jpg" + "'></img>";
+  var random_letter = "";                         // Random letter for the tile
+  var piece = "";
   var piece_ID = "";
   var what_piece = "";
 
   // Load up 7 pieces
   for(var i = 0; i < 7; i++) {
-    // Get a random number so we can generate a random tile. There's 27 tiles,
-    // so we want a range of 0 to 26. Also make sure not to over use any tiles,
-    // so generate multiple random numbers if necessary.
-    var loop = true;
-    while(loop == true){
-      random_num = getRandomInt(0, 26);
-
-      // Need to make sure we remove words from the pieces data structure.
-      if(pieces[random_num].remaining != 0) {
-        loop = false;
-        pieces[random_num].remaining--;
-      }
-    }
+    // This gets a random letter (letter's index in the array).
+    random_letter = get_random_tile();
 
     // Make the img HTML and img ID so we can easily append the tiles.
-    piece = "<img class='pieces' id='piece" + i + "' src='" + base_url + pieces[random_num].letter + ".jpg" + "'></img>";
+    piece = "<img class='pieces' id='piece" + i + "' src='" + base_url + random_letter + ".jpg" + "'></img>";
     piece_ID = "#piece" + i;
-    game_tiles[i].letter = pieces[random_num].letter;
+    game_tiles[i].letter = random_letter;
 
     // Reposition the tile on top of the rack, nicely in a row with the other tiles.
 
@@ -573,7 +594,7 @@ function load_scrabble_pieces() {
  *      load_scrabble_pieces()    -> loads up new tiles.
  *      find_word()               -> resets what the word looked like.
  */
-function reset_tiles() {
+function reset_game_board() {
   console.log("Resetting the game board!");
 
   // First clear the game board array.
@@ -603,25 +624,50 @@ function reset_tiles() {
   // Reset the "submit_word" div, just in case the user tried to submit the word.
   $("#le_submit").html("");
 
+  $("#le_submit").html("<br><div class='highlight_centered_error'> \
+  BOARD AND TILES RESET.</div>");
+
   // Now we're done! Woot!
   return;
 }
 
 
 /*
- *    This function will reset the entire game board.
+ *    This function will force all the tiles in the game_tiles array back into the rack.
  */
-function reset_game_board() {
-  // Currently this function does nothing but make a popup using Sweetalerts.
-  // JUST A PLACE HOLDER / TROLL.
-  sweetAlert("NOT IMPLEMENTED", "¯\\_(ツ)_/¯", "error");
-  swal({
-    title: "NOT IMPLEMENTED YET.",
-    text: "¯\\_(ツ)_/¯",
-    imageUrl: "img/its_happening.gif",
-    imageSize: "312x213",
-    allowOutsideClick: "true"
-  });
+function reset_tiles() {
+  // Let the user know what's going on.
+  $("#le_submit").html("<br><div class='highlight_centered_error'> \
+  MOVING ALL TILES BACK TO THE RACK.</div>");
+
+  // Load up the 7 pieces and move them back to the game rack.
+  for(var i = 0; i < 7; i++) {
+    var piece_ID = "#piece" + i;
+
+    // Reposition the tile on top of the rack, nicely in a row with the other tiles.
+
+    // We first get the rack's location on the screen. Idea from a Stackoverflow post,
+    // URL: https://stackoverflow.com/questions/885144/how-to-get-current-position-of-an-image-in-jquery
+    var pos = $("#the_rack").position();
+
+    // Now figure out where to reposition the board piece.
+
+    var img_left = pos.left + 30 + (50 * i);      // This controls left to right placement.
+    var img_top = pos.top + 30;                   // This controls top to bottom placement.
+
+    // Move the piece relative to where the rack is located on the screen.
+    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "absolute");
+
+    $('#rack').append($(piece_ID));
+  }
+
+  // Now delete everything in the game board array. Do this by just emptying the array.
+  game_board = [];
+
+  // Update the word that is displayed.
+  find_word();
+
+  // Done! Woot. That wasn't so hard, was it?
 }
 
 
@@ -631,6 +677,54 @@ function reset_game_board() {
  *    the game board.
  */
 function load_droppable_targets() {
+
+  // Make a droppable area for getting a replacement tile.
+  // Need to remove the current tile, and add a new one in its location
+  // Also make sure to grab a random tile too.
+  $("#get_new_tile").droppable( {
+    accept: ".ui-draggable",
+    appendTo: "body",
+    drop: function(event, ui) {
+      var draggableID = ui.draggable.attr("id");
+      var droppableID = $(this).attr("id");
+
+      // First - standard "NOT IMPLEMENTED"
+      $("#le_submit").html("<br><div class='highlight_centered_error'> \
+      Sorry, this feature isn't implemented yet. It will be soon!</div>");
+
+
+      // swal({
+      //   title: "NOT IMPLEMENTED YET.",
+      //   text: "¯\\_(ツ)_/¯",
+      //   imageUrl: "img/its_happening.gif",
+      //   imageSize: "312x213",
+      //   allowOutsideClick: "true"
+      // });
+
+      // Second, just make it stick to the droppable area for testing.
+
+      // This trick comes from Stackoverflow.
+      // URL: https://stackoverflow.com/questions/849030/how-do-i-get-the-coordinate-position-after-using-jquery-drag-and-drop
+
+      // NEW WAY - WORKS WAAAAAAY BETTER THAN MAKING THE TILE FLY ACROSS THE SCREEN!
+      var currentPos = ui.helper.position();
+      var posX = parseInt(currentPos.left);
+      var posY = parseInt(currentPos.top);
+
+      // Move the draggable image so it doesn't fly around randomly like to the bottom of the screen or whatever.
+      ui.draggable.css("left", posX);
+      ui.draggable.css("top", posY);
+      ui.draggable.css("position", "absolute");
+
+      // Move the tile over to the rack. Prevents weird bugs where the table changes sizes and thinks there's two tiles in one spot.
+      $('#rack').append($(ui.draggable));
+
+      // Third, figure out a way to generate a new tile (use the get_new_tile() function)
+      // and remove the old tile. Maybe even add it back into the pieces array? So it's a
+      // straight swap.
+    },
+
+  });
 
   // Make the rack droppable for placing tiles back if you don't want them.
   $("#the_rack").droppable( {
@@ -668,7 +762,7 @@ function load_droppable_targets() {
           var posY = parseInt(currentPos.top);
 
           // Move the draggable image so it doesn't fly around randomly like to the bottom of the screen or whatever.
-          ui.draggable.css("left", posX);        // The +60 just makes the draggable object not fly to the left for some reason.
+          ui.draggable.css("left", posX);
           ui.draggable.css("top", posY);
           ui.draggable.css("position", "absolute");
 
@@ -948,6 +1042,7 @@ function load_droppable_targets() {
     zIndex: -1
   });
 }
+
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)

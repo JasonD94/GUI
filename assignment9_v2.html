@@ -74,7 +74,7 @@
       <div class="center_text_images">
 
         <h1 class="name">
-          <span class="highlight_fun">SCRABBLE v2.3</span>
+          <span class="highlight_fun">SCRABBLE v2.4</span>
         </h1>
 
         <br>
@@ -124,7 +124,7 @@
         <div class="col-sm-7 col-md-14 col-lg-14">
           <br>
             <div id="get_new_tile">
-              <p>Swap a tile for a new one! (not implemented)</p>
+              <p>Swap a tile for a new one!</p>
               <p>(drop the tile here)</p>
             </div>
           <br><br>
@@ -990,9 +990,6 @@
         https://stackoverflow.com/questions/8988855/include-another-html-file-in-a-html-file
     */
     $( document ).ready(function() {
-        $("#NavBarHeader").load("html/navbar.html");
-        $("#TheFooter").load("html/footer.html");
-
         load_pieces_array();        // Load up the defaul pieces array.
         load_scrabble_pieces();     // Load up the 7 random Scrabble pieces.
         load_droppable_targets();   // Load up the targets for the Scrabble pieces.
