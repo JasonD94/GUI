@@ -692,15 +692,6 @@ function load_droppable_targets() {
       $("#le_submit").html("<br><div class='highlight_centered_error'> \
       Sorry, this feature isn't implemented yet. It will be soon!</div>");
 
-
-      // swal({
-      //   title: "NOT IMPLEMENTED YET.",
-      //   text: "¯\\_(ツ)_/¯",
-      //   imageUrl: "img/its_happening.gif",
-      //   imageSize: "312x213",
-      //   allowOutsideClick: "true"
-      // });
-
       // Second, just make it stick to the droppable area for testing.
 
       // This trick comes from Stackoverflow.
@@ -720,8 +711,9 @@ function load_droppable_targets() {
       $('#rack').append($(ui.draggable));
 
       // Third, figure out a way to generate a new tile (use the get_new_tile() function)
-      // and remove the old tile. Maybe even add it back into the pieces array? So it's a
-      // straight swap.
+      // and remove the old tile. Maybe even add it back into the pieces array? So it's a straight swap.
+
+
     },
 
   });
@@ -810,6 +802,8 @@ function load_droppable_targets() {
         console.log("Must start at the star.");
 
         /* The only valid place is the star, row7_col7 */
+        $("#le_submit").html("<br><div class='highlight_centered_error'> \
+        Please start at the star in the middle of the game board.</div>");
 
       }
 
@@ -884,6 +878,10 @@ function load_droppable_targets() {
         else {
           console.log("NOT ALLOWED. >:(");
 
+          // Tell the user what the error was.
+          $("#le_submit").html("<br><div class='highlight_centered_error'> \
+          Sorry, diagonals are not allowed once at least one tile has been placed.</div>");
+
           // Force the draggable to revert. Idea from:
           // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
           ui.draggable.draggable('option', 'revert', true);
@@ -938,6 +936,10 @@ function load_droppable_targets() {
             // Not allowed.
             console.log("NOT Allowed. L/R. Game board length = " + gameboard_length);
 
+            // Tell the user what the error was.
+            $("#le_submit").html("<br><div class='highlight_centered_error'> \
+            Sorry, only left and right placements are allowed.</div>");
+
             // Force the draggable to revert. Idea from:
             // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
             ui.draggable.draggable('option', 'revert', true);
@@ -971,6 +973,10 @@ function load_droppable_targets() {
           else {
             // Not allowed.
             console.log("NOT Allowed. T/B. Game board length = " + gameboard_length);
+
+            // Tell the user what the error was.
+            $("#le_submit").html("<br><div class='highlight_centered_error'> \
+            For some reason that wasn't a valid move. (investigate why ¯\\_(ツ)_/¯)</div>");
 
             // Force the draggable to revert. Idea from:
             // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
