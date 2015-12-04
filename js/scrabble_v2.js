@@ -661,11 +661,14 @@ function load_droppable_targets() {
 
           // This trick comes from Stackoverflow.
           // URL: https://stackoverflow.com/questions/849030/how-do-i-get-the-coordinate-position-after-using-jquery-drag-and-drop
-          var posX = ui.offset.left - $(this).offset().left;
-          var posY = ui.offset.top - $(this).offset().top;
+
+          // NEW WAY - WORKS WAAAAAAY BETTER THAN MAKING THE TILE FLY ACROSS THE SCREEN!
+          var currentPos = ui.helper.position();
+          var posX = parseInt(currentPos.left);
+          var posY = parseInt(currentPos.top);
 
           // Move the draggable image so it doesn't fly around randomly like to the bottom of the screen or whatever.
-          ui.draggable.css("left", posX + 175);        // The +60 just makes the draggable object not fly to the left for some reason.
+          ui.draggable.css("left", posX);        // The +60 just makes the draggable object not fly to the left for some reason.
           ui.draggable.css("top", posY);
           ui.draggable.css("position", "absolute");
 
