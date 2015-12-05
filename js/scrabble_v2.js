@@ -439,7 +439,8 @@ function should_double_triple_letter(given_id) {
 function find_table_position(droppableID) {
 
   // Figure out the row / col
-  var test = String(droppableID).split('_');    // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
+  // URL: https://stackoverflow.com/questions/96428/how-do-i-split-a-string-breaking-at-a-particular-character
+  var test = String(droppableID).split('_');
   var row = String(test[0]).split('row');
   row = row[1];
   var col = String(test[1]).split('col');
@@ -739,7 +740,6 @@ function load_droppable_targets() {
 
       // Get new letter. Also create a new image source that will be applied later.
       var new_letter = get_random_tile();
-      //var new_img_src = "img/scrabble/Scrabble_Tile_" + new_letter + ".jpg";
 
       // Put the old letter back.
       var old_letter = find_letter(draggableID);
@@ -747,7 +747,6 @@ function load_droppable_targets() {
       // Debugging
       console.log("draggableID = " + draggableID);
       console.log("Old letter = " + old_letter + " New letter = " + new_letter);
-      //console.log("New letter img src = " + new_img_src);
 
       // Go through the pieces array to find the letter we want to put back.
       // Basically put it back in the "bag" of letters
@@ -1043,7 +1042,6 @@ function load_droppable_targets() {
 
             Assuming (7,7) & (8,7) are already placed, then two valid places are
             (6,7) & (9,7)
-
         */
         if (left_right == true) {
           // First col - 1 and last col + 1 are valid, with same row.
