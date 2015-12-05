@@ -691,12 +691,14 @@ function load_scrabble_pieces() {
       revert: "invalid",            // This is key. Only the rack and game board are considered valid!
                                     // HA, try dropping the game pieces where ever you want!
       start: function(ev, ui) {
+        // Disabling this to allow swapping of tiles.
+
         // Stackoverflow post: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
-        $('.ui-droppable').each(function(i, el) {
-          if (!$(el).find('.ui-draggable').length) {
-            $(el).droppable('enable');
-          }
-        });
+        // $('.ui-droppable').each(function(i, el) {
+        //   if (!$(el).find('.ui-draggable').length) {
+        //     $(el).droppable('enable');
+        //   }
+        //  });
 
         // Save original position.
         startPos = ui.helper.position();
@@ -841,21 +843,74 @@ function load_droppable_targets() {
     drop: function(event, ui) {
       // To figure out which draggable / droppable ID was activated, I used this sweet code from stackoverflow:
       // https://stackoverflow.com/questions/5562853/jquery-ui-get-id-of-droppable-element-when-dropped-an-item
-      var draggableID = ui.draggable.attr("id");
-      var droppableID = $(this).attr("id");
-      var duplicate = false;
-      var dup_index = 0;
-      var insert_beg = false;
+      var draggableID = ui.draggable.attr("id");    // The current Scrabble tile ID
+      var droppableID = $(this).attr("id");         // The current spot on the game board ID
+      var duplicate = false;            // This originally meant "we've seen this tile already". I will need to use this to support swapping of tiles.
+      var dup_index = 0;                // I think this was to be where in the game board array the duplicate is.
+      //left_right                      // Determines if the word is read left to right, or top to bottom. (THIS IS GLOBAL, IT NEEDS TO BE FOR THE FIND_WORD FUNCTION!)
+      var insert_beg = false;           // Determines if we should tiles at the beginning or the end.
       var star_spot = "row7_col7";      // Star in the middle of the board.
+      var gameboard_length = 0;         // The length of the game board array (global array).
+
+      // Get board array length. This will be useful for our checks next.
+      gameboard_length = game_board.length;
 
       // For debugging purposes.
       console.log("draggableID: " + draggableID );
       console.log("droppableID: " + droppableID );
 
-      // Get board array length. This will be useful for our checks next.
-      var gameboard_length = game_board.length;
+      //*****************************************
+      //* See if this spot already has a tile.
+      //*****************************************
+      // I use something similar to this Stackoverflow post but the selector is
+      // different because of the newer version of jQuery UI (I think anyway, its an old post)
+      // https://stackoverflow.com/questions/8751866/check-if-droppable-already-contains-another-draggable-element-jquery-ui
+      if( $(this).find(".ui-draggable").length == 1 ) {
+        // If so, just swap the two tiles. Make sure to update the game board array!
+        console.log("Swapping the two tiles!");
 
-      // See if this is a duplicate
+        // Get the originally dropped tile, so we can change it's positions in a second.
+        var original_tile = $("#" + droppableID).find("img")[0].id;
+        console.log("Original tile is = " + original_tile);
+
+        // startPos has the original position of the current droppable.
+        var posX = startPos.left;
+        var posY = startPos.top;
+
+        // Set the position of the old tile.
+        $("#" + original_tile).css("left", posX);
+        $("#" + original_tile).css("top", posY);
+        $("#" + original_tile).css("position", "absolute");
+
+        // Move the tile over to the rack. Prevents weird bugs where the table changes sizes and thinks there's two tiles in one spot.
+        $('#rack').append($("#" + original_tile));
+
+        // Now put the new tile in the spot where the older tile was.
+        // (ui.draggable refers to the current tile that we want to place on the board.)
+        ui.draggable.css("top", $(this).css("top"));
+        ui.draggable.css("left", $(this).css("left"));
+        ui.draggable.css("position", "relative");
+
+        // Append the new tile to the game board
+        $(this).append($(ui.draggable));
+
+        // Now update the game board array with the new letter.
+        for(var i = 0; i < gameboard_length; i++) {
+          if(game_board[i].tile == original_tile) {
+            game_board[i].tile = draggableID;
+          }
+        }
+
+        // Update the word
+        find_word();
+
+        // We're done so quit.
+        return;
+      }
+
+      //*****************************************
+      //* See if this tile is already on the game board.
+      //*****************************************
       for (var i = 0; i < gameboard_length; i++) {
         if (game_board[i].tile == draggableID) {
           // We've got a duplicate.
@@ -865,21 +920,35 @@ function load_droppable_targets() {
         }
       }
 
+      //*****************************************
+      //* Game board is empty case.
+      //* If so, the user must start at the star.
+      //*****************************************
       if (gameboard_length == 0) {
         console.log("Must start at the star.");
 
-        /* The only valid place is the star, row7_col7 */
-        $("#messages").html("<br><div class='highlight_centered_error'> \
-        Please start at the star in the middle of the game board.</div>");
+        if (droppableID != star_spot) {
+          /* The only valid place is the star, row7_col7 */
+          $("#messages").html("<br><div class='highlight_centered_error'> \
+          Please start at the star in the middle of the game board.</div>");
 
+          // Force the draggable to revert. Idea from:
+          // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+          ui.draggable.draggable('option', 'revert', true);
+          return;
+        }
+        else {
+          // Remove that old error message.
+          $("#messages").html("");
+        }
       }
 
+      //*****************************************
+      //* Game board length 1 case, OR moving the 2nd tile around the first tile.
+      //*****************************************
       if (gameboard_length == 1 || (gameboard_length == 2 && duplicate == true) ) {
         console.log("Diagonals are not allowed.");
-
-        // Disable diagonal placement.
-        // TO DO: ALGORITHM FOR DIAGONALS.
-        /*
+        /*  Disable diagonal placement.
             Example:
 
             X*X
@@ -921,6 +990,7 @@ function load_droppable_targets() {
 
         // See if we have one of the allowed positions.
         var test = cur_pos.toString();
+
         if (test == allowed_arrays[0].toString() || test == allowed_arrays[1].toString() ) {
           // Yeah! And it's top to bottom!
           console.log("Allowed. T/B");
@@ -1096,8 +1166,9 @@ function load_droppable_targets() {
 
       // This makes it so only the given tile may be dropped on the current spot.
       // See this Stackoverflow post for more info: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
-      //$(this).droppable('option', 'accept', ui.draggable);
-      $(this).droppable('disable');
+
+      // THIS IS DISABLED FOR NOW TO ALLOW SWAPPING OF TILES CURRENTLY IN PLAY.
+      //$(this).droppable('disable');
 
       // This from Stackoverflow, it snaps to where it was dropped.
       // URL: https://stackoverflow.com/questions/30122234/how-to-make-an-accept-condition-for-droppable-td-to-accept-only-the-class-within
