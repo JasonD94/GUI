@@ -74,7 +74,7 @@
       <div class="center_text_images">
 
         <h1 class="name">
-          <span class="highlight_fun">SCRABBLE v2.4</span>
+          <span class="highlight_fun">SCRABBLE v2.5</span>
         </h1>
 
         <br>
@@ -109,7 +109,7 @@
           <!--  Add some vertical spacing between the word/score and the two submit buttons
                 on medium / large devices. -->
           <div class="space_top"></div>
-          <button onclick="submit_word();">Submit Word</button>
+          <button onclick="submit_word()">Submit Word</button>
 
           <!--  Add some horizontal spacing between the three buttons. -->
           <div class="divider"></div>
@@ -117,12 +117,12 @@
 
           <!--  Add some horizontal spacing between the three buttons. -->
           <div class="divider"></div>
-          <button onclick="reset_game_board();">Reset Board</button>
+          <button onclick="confirm_reset();">Reset Board</button>
         </div>
 
         <!-- Error / Success messages appear in this div. -->
         <div class="col-sm-6 col-md-14 col-lg-14">
-          <div id="le_submit"></div>
+          <div id="messages"></div>
         </div>
 
         <!-- Letters Remaining Table -->

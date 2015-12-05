@@ -73,7 +73,11 @@ var game_tiles = [
   {"id": "piece4", "letter": "E"},
   {"id": "piece5", "letter": "F"},
   {"id": "piece6", "letter": "G"}
-]
+];
+
+// Used for getting the original position of a draggable object.
+// As seen here: https://stackoverflow.com/questions/12350259/original-position-of-a-draggable-in-jquery-ui
+var startPos;
 
 // URL for this source code: http://ejohn.org/blog/dictionary-lookups-in-javascript/
 // See the "Submit word" function for more info.
@@ -100,7 +104,7 @@ $.get( "files/dictionary.txt", function( txt ) {
 var game_board = [
   // Example of what WOULD be in this array. An obj with "id" of the dropable spot and the tile that was dropped.
   //{"id": "drop0",  "tile": "pieceX"},
-]
+];
 
 
 // Go through the Table with the Scrabble board and fill in special spaces.
@@ -206,7 +210,7 @@ function submit_word() {
   // The user needs to play a tile first...
   if (word == "____") {
     // The user isn't so smart. Tell them to try again.
-    $("#le_submit").html("<br><div class='highlight_centered_error'> \
+    $("#messages").html("<br><div class='highlight_centered_error'> \
     Sorry, but you need to play a tile before I can check the word for you!</div>");
     console.log("Please play some tiles first.");
     return -1;
@@ -228,21 +232,51 @@ function submit_word() {
   // Let's see if our word is in the dictionary.
   if ( dict[ word ] ) {
     // If it is, AWESOME! The user is so smart.
-    $("#le_submit").html("<br><div class='highlight_centered_success'> \
+    $("#messages").html("<br><div class='highlight_centered_success'> \
     Nice job! \"" + word + "\" is considered a word by the game's dictionary!<br><br> \
-    <button class='smaller_button' onclick='save_word();'>Save Word & Play Again.</button><br><br></div>");
+    <button class='smaller_button' onclick='confirm_save_word();'>Save Word & Play Again.</button><br><br></div>");
     console.log("Hey! That's a legit word! NICE JOB!");
     return 1;
   }
   else {
     // User isn't so smart. Tell them to try again.
-    $("#le_submit").html("<br><div class='highlight_centered_error'> \
+    $("#messages").html("<br><div class='highlight_centered_error'> \
     Sorry. \"" + word + "\" is not a word in the English dictionary. \
     I suggest trying a different word. Or try resetting your tiles and trying again.</div>");
     console.log("Sorry, that doesn't seem to be a word.");
     return -1;
   }
 
+}
+
+
+// Confirms if the user wants to actually save the word or not.
+function confirm_save_word() {
+  swal({
+    title: "Are you sure?",
+    text: "This will save the current word to the game board.\n\
+    You will not be able to modify the word afterwards.\n \
+    Are you sure you want to keep this word and play another one?",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Yes.",
+    closeOnConfirm: true
+    },
+    // This is from the example page at: https://t4t5.github.io/sweetalert/
+    // Basically I can quit if the user hits cancel, or continue if they hit Yes.
+    function(isConfirm) {
+      if (isConfirm) {
+        save_word();
+        return false;
+      }
+      else {
+        // Let the user know what's going on.
+        $("#messages").html("<br><div class='highlight_centered_error'> \
+        SUBMIT WORD CANCELED.</div>");
+        return false;
+      }
+  });
 }
 
 
@@ -253,15 +287,9 @@ function submit_word() {
  *
  */
 function save_word() {
-  // Currently this function does nothing but make a popup using Sweetalerts.
-  // JUST A PLACE HOLDER / TROLL.
-  swal({
-    title: "NOT IMPLEMENTED YET.",
-    text: "¯\\_(ツ)_/¯",
-    imageUrl: "img/its_happening.gif",
-    imageSize: "312x213",
-    allowOutsideClick: "true"
-  });
+  // Let the user know what's going on.
+  $("#messages").html("<br><div class='highlight_centered_success'> \
+  SAVING WORD.</div>");
 }
 
 
@@ -451,34 +479,9 @@ function find_letter(given_id) {
 }
 
 
-// Give this function a droppable ID and it returns which position in the array it is.
-function find_board_pos(given_id) {
-  for(var i = 0; i < 15; i++){
-    if(game_board[i].id == given_id) {
-      return i;
-    }
-  }
-
-  // Errors return -1.
-  return -1;
-}
-
-
-// Given a tile, figure out which drop_ID it belongs to.
-function find_tile_pos(given_id) {
-  for(var i = 0; i < 15; i++){
-    if(game_board[i].tile == given_id) {
-      return game_board[i].id;
-    }
-  }
-
-  // Errors return -1.
-  return -1;
-}
-
-
 // Generate a random tile for the load_scrabble_pieces() function and for
 // swaping for a new tile.
+// Returns the new letter that was generated.
 function get_random_tile() {
   // Need take into account that there are 100 tiles total, not just 26 options.
   // Going to create an array of all the possible letters then - 100 to start.
@@ -503,10 +506,129 @@ function get_random_tile() {
   // Find the letter to decrement.
   for (var i = 0; i < 26; i++) {
     if (pieces[i].letter == letter) {
-      pieces[i].remaining--;            // Decrement letter remaining for this letter.
-      return letter;                         // Return the letter's index.
+      pieces[i].remaining--;                  // Decrement letter remaining for this letter.
+      return letter;                          // Return the letter's index.
     }
   }
+}
+
+
+// Simple alert function that calls the reset_game_board function if the user hits
+// the confirm button on the Sweet alert popup.
+function confirm_reset() {
+  // Since the reset function is very destructive, we should confirm with the user if
+  // they are SURE they want to clear the entire game board.
+  swal({
+    title: "Are you sure?",
+    text: "This will clear the ENTIRE game board, reset your tiles and destroy \
+    any words that were placed.\n Are you really sure you want to do this?",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Yes.",
+    closeOnConfirm: true
+    },
+    // This is from the example page at: https://t4t5.github.io/sweetalert/
+    // Basically I can quit if the user hits cancel, or continue if they hit Yes.
+    function(isConfirm) {
+      if (isConfirm) {
+        reset_game_board();
+        return false;
+      }
+      else {
+        // Let the user know what's going on.
+        $("#messages").html("<br><div class='highlight_centered_success'> \
+        RESET BOARD CANCELED.</div>");
+        return false;
+      }
+  });
+}
+
+
+/**
+ *      This function resets the game board.
+ *      It does so by reusing several functions:
+ *      load_pieces_array()       -> resets the pieces array
+ *      reset_tiles()             -> removes all the tiles on the screen.
+ *      load_scrabble_pieces()    -> loads up new tiles.
+ *      find_word()               -> resets what the word looked like.
+ */
+function reset_game_board() {
+
+
+  console.log("Resetting the game board!");
+
+  // First clear the game board array.
+  game_board = [];    // Easy way of doing this.
+  // URL for more ways of doing this: https://stackoverflow.com/questions/1232040/how-do-i-empty-an-array-in-javascript
+
+  // Now reset the pieces array.
+  load_pieces_array();
+
+  // Remove all the scrabble tiles on the board / in the rack.
+  for(var i = 0; i < 7; i++) {
+    var tileID = '#' + game_tiles[i].id;
+    $(tileID).draggable("destroy");    // Destroys the draggable element.
+    $(tileID).remove();                // Removes the tile from the page.
+    // URL for more info: https://stackoverflow.com/questions/11452677/jqueryui-properly-removing-a-draggable-element
+  }
+
+  // Load up some new Scrabble pieces!
+  load_scrabble_pieces();
+
+  // Resets the HTML "Word: " and "Score: " display.
+  find_word();    // Technically this returns -1 and just wipes the display clean.
+
+  // Update the "Letters Remaining" table.
+  update_remaining_table();
+
+  // Reset the "submit_word" div, just in case the user tried to submit the word.
+  $("#messages").html("");
+
+  $("#messages").html("<br><div class='highlight_centered_success'> \
+  BOARD AND TILES RESET.<br>CHECK THE RACK FOR NEW TILES.</div>");
+
+  // Now we're done! Woot!
+  return;
+}
+
+
+/*
+ *    This function will force all the tiles in the game_tiles array back into the rack.
+ */
+function reset_tiles() {
+  // Let the user know what's going on.
+  $("#messages").html("<br><div class='highlight_centered_success'> \
+  MOVING ALL TILES BACK TO THE RACK.</div>");
+
+  // Load up the 7 pieces and move them back to the game rack.
+  for(var i = 0; i < 7; i++) {
+    var piece_ID = "#piece" + i;
+
+    // Reposition the tile on top of the rack, nicely in a row with the other tiles.
+
+    // We first get the rack's location on the screen. Idea from a Stackoverflow post,
+    // URL: https://stackoverflow.com/questions/885144/how-to-get-current-position-of-an-image-in-jquery
+    var pos = $("#the_rack").position();
+
+    // Now figure out where to reposition the board piece.
+
+    var img_left = pos.left + 30 + (50 * i);      // This controls left to right placement.
+    var img_top = pos.top + 30;                   // This controls top to bottom placement.
+
+    // Move the piece relative to where the rack is located on the screen.
+    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "absolute");
+
+    $('#rack').append($(piece_ID));
+  }
+
+  // Now delete everything in the game board array. Do this by just emptying the array.
+  game_board = [];
+
+  // Update the word that is displayed.
+  find_word();
+
+  // Done! Woot. That wasn't so hard, was it?
 }
 
 
@@ -575,6 +697,9 @@ function load_scrabble_pieces() {
             $(el).droppable('enable');
           }
         });
+
+        // Save original position.
+        startPos = ui.helper.position();
       },
       stop: function() {
         // If an invalid event is found, this will return the draggable object to its
@@ -583,91 +708,6 @@ function load_scrabble_pieces() {
       }
     });
   }
-}
-
-
-/**
- *      This function resets the game board.
- *      It does so by reusing several functions:
- *      load_pieces_array()       -> resets the pieces array
- *      reset_tiles()             -> removes all the tiles on the screen.
- *      load_scrabble_pieces()    -> loads up new tiles.
- *      find_word()               -> resets what the word looked like.
- */
-function reset_game_board() {
-  console.log("Resetting the game board!");
-
-  // First clear the game board array.
-  game_board = [];    // Easy way of doing this.
-  // URL for more ways of doing this: https://stackoverflow.com/questions/1232040/how-do-i-empty-an-array-in-javascript
-
-  // Now reset the pieces array.
-  load_pieces_array();
-
-  // Remove all the scrabble tiles on the board / in the rack.
-  for(var i = 0; i < 7; i++) {
-    var tileID = '#' + game_tiles[i].id;
-    $(tileID).draggable("destroy");    // Destroys the draggable element.
-    $(tileID).remove();                // Removes the tile from the page.
-    // URL for more info: https://stackoverflow.com/questions/11452677/jqueryui-properly-removing-a-draggable-element
-  }
-
-  // Load up some new Scrabble pieces!
-  load_scrabble_pieces();
-
-  // Resets the HTML "Word: " and "Score: " display.
-  find_word();    // Technically this returns -1 and just wipes the display clean.
-
-  // Update the "Letters Remaining" table.
-  update_remaining_table();
-
-  // Reset the "submit_word" div, just in case the user tried to submit the word.
-  $("#le_submit").html("");
-
-  $("#le_submit").html("<br><div class='highlight_centered_error'> \
-  BOARD AND TILES RESET.</div>");
-
-  // Now we're done! Woot!
-  return;
-}
-
-
-/*
- *    This function will force all the tiles in the game_tiles array back into the rack.
- */
-function reset_tiles() {
-  // Let the user know what's going on.
-  $("#le_submit").html("<br><div class='highlight_centered_error'> \
-  MOVING ALL TILES BACK TO THE RACK.</div>");
-
-  // Load up the 7 pieces and move them back to the game rack.
-  for(var i = 0; i < 7; i++) {
-    var piece_ID = "#piece" + i;
-
-    // Reposition the tile on top of the rack, nicely in a row with the other tiles.
-
-    // We first get the rack's location on the screen. Idea from a Stackoverflow post,
-    // URL: https://stackoverflow.com/questions/885144/how-to-get-current-position-of-an-image-in-jquery
-    var pos = $("#the_rack").position();
-
-    // Now figure out where to reposition the board piece.
-
-    var img_left = pos.left + 30 + (50 * i);      // This controls left to right placement.
-    var img_top = pos.top + 30;                   // This controls top to bottom placement.
-
-    // Move the piece relative to where the rack is located on the screen.
-    $(piece_ID).css("left", img_left).css("top", img_top).css("position", "absolute");
-
-    $('#rack').append($(piece_ID));
-  }
-
-  // Now delete everything in the game board array. Do this by just emptying the array.
-  game_board = [];
-
-  // Update the word that is displayed.
-  find_word();
-
-  // Done! Woot. That wasn't so hard, was it?
 }
 
 
@@ -688,33 +728,62 @@ function load_droppable_targets() {
       var draggableID = ui.draggable.attr("id");
       var droppableID = $(this).attr("id");
 
-      // First - standard "NOT IMPLEMENTED"
-      $("#le_submit").html("<br><div class='highlight_centered_error'> \
-      Sorry, this feature isn't implemented yet. It will be soon!</div>");
+      // Let the user know what's going on.
+      $("#messages").html("<br><div class='highlight_centered_success'> \
+      Swapping old tile for a new one.<br> Check the rack / board for your new tile!</div>");
 
-      // Second, just make it stick to the droppable area for testing.
+      // Generate a new tile (use get_random_tile() ) and remove the old tile.
+      // Also add it back into the pieces array so it's a straight swap.
 
-      // This trick comes from Stackoverflow.
-      // URL: https://stackoverflow.com/questions/849030/how-do-i-get-the-coordinate-position-after-using-jquery-drag-and-drop
+      // Get new letter. Also create a new image source that will be applied later.
+      var new_letter = get_random_tile();
+      //var new_img_src = "img/scrabble/Scrabble_Tile_" + new_letter + ".jpg";
 
-      // NEW WAY - WORKS WAAAAAAY BETTER THAN MAKING THE TILE FLY ACROSS THE SCREEN!
-      var currentPos = ui.helper.position();
-      var posX = parseInt(currentPos.left);
-      var posY = parseInt(currentPos.top);
+      // Put the old letter back.
+      var old_letter = find_letter(draggableID);
+
+      // Debugging
+      console.log("draggableID = " + draggableID);
+      console.log("Old letter = " + old_letter + " New letter = " + new_letter);
+      //console.log("New letter img src = " + new_img_src);
+
+      // Go through the pieces array to find the letter we want to put back.
+      // Basically put it back in the "bag" of letters
+      for(var i = 0; i < 26; i++) {
+        // If we found the letter we are trying to swap
+        if(pieces[i].letter == old_letter) {
+          pieces[i].remaining++;  // Then increment by one so it's back in the bag.
+        }
+      }
+
+      // Now we can change the letter of the tile to the new letter.
+      for(var i = 0; i < 7; i++) {
+        if(game_tiles[i].id == draggableID) {       // Find the tile in the game tile array.
+          game_tiles[i].letter = new_letter;        // Assign the new letter to the tile.
+        }
+      }
+
+      // Update the tile piece with the new image.
+      // The idea came from this post on Stackoverflow:
+      // https://stackoverflow.com/questions/554273/changing-the-image-source-using-jquery
+      // I had to modify this to work on different IDs, as simply "draggableID" did nothing.
+      $("#" + draggableID).attr("src", "img/scrabble/Scrabble_Tile_" + new_letter + ".jpg");
+
+      // Place the tile back where it came from, either the rack or the game board.
+      var posX = startPos.left;
+      var posY = startPos.top;
 
       // Move the draggable image so it doesn't fly around randomly like to the bottom of the screen or whatever.
       ui.draggable.css("left", posX);
       ui.draggable.css("top", posY);
       ui.draggable.css("position", "absolute");
 
-      // Move the tile over to the rack. Prevents weird bugs where the table changes sizes and thinks there's two tiles in one spot.
-      $('#rack').append($(ui.draggable));
+      // Update the letter's remaining table
+      update_remaining_table();
 
-      // Third, figure out a way to generate a new tile (use the get_new_tile() function)
-      // and remove the old tile. Maybe even add it back into the pieces array? So it's a straight swap.
-
-
-    },
+      // Update the word as well, in case the user changed the word.
+      find_word();
+    }
 
   });
 
@@ -747,8 +816,6 @@ function load_droppable_targets() {
 
           // This trick comes from Stackoverflow.
           // URL: https://stackoverflow.com/questions/849030/how-do-i-get-the-coordinate-position-after-using-jquery-drag-and-drop
-
-          // NEW WAY - WORKS WAAAAAAY BETTER THAN MAKING THE TILE FLY ACROSS THE SCREEN!
           var currentPos = ui.helper.position();
           var posX = parseInt(currentPos.left);
           var posY = parseInt(currentPos.top);
@@ -802,7 +869,7 @@ function load_droppable_targets() {
         console.log("Must start at the star.");
 
         /* The only valid place is the star, row7_col7 */
-        $("#le_submit").html("<br><div class='highlight_centered_error'> \
+        $("#messages").html("<br><div class='highlight_centered_error'> \
         Please start at the star in the middle of the game board.</div>");
 
       }
@@ -879,7 +946,7 @@ function load_droppable_targets() {
           console.log("NOT ALLOWED. >:(");
 
           // Tell the user what the error was.
-          $("#le_submit").html("<br><div class='highlight_centered_error'> \
+          $("#messages").html("<br><div class='highlight_centered_error'> \
           Sorry, diagonals are not allowed once at least one tile has been placed.</div>");
 
           // Force the draggable to revert. Idea from:
@@ -937,7 +1004,7 @@ function load_droppable_targets() {
             console.log("NOT Allowed. L/R. Game board length = " + gameboard_length);
 
             // Tell the user what the error was.
-            $("#le_submit").html("<br><div class='highlight_centered_error'> \
+            $("#messages").html("<br><div class='highlight_centered_error'> \
             Sorry, only left and right placements are allowed.</div>");
 
             // Force the draggable to revert. Idea from:
@@ -975,7 +1042,7 @@ function load_droppable_targets() {
             console.log("NOT Allowed. T/B. Game board length = " + gameboard_length);
 
             // Tell the user what the error was.
-            $("#le_submit").html("<br><div class='highlight_centered_error'> \
+            $("#messages").html("<br><div class='highlight_centered_error'> \
             For some reason that wasn't a valid move. (investigate why ¯\\_(ツ)_/¯)</div>");
 
             // Force the draggable to revert. Idea from:
