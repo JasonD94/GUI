@@ -105,7 +105,7 @@
                 possibly think about adding more rows for Scrabble. (non-trivial)
 
         -->
-        <div class="col-sm-7 col-md-14 col-lg-14">
+        <div class="col-sm-8 col-md-14 col-lg-14">
           <!--  Add some vertical spacing between the word/score and the two submit buttons
                 on medium / large devices. -->
           <div class="space_top"></div>
@@ -120,14 +120,9 @@
           <button onclick="reset_game_board();">Reset Board</button>
         </div>
 
-        <!-- Get a new tile spot. -->
-        <div class="col-sm-7 col-md-14 col-lg-14">
-          <br>
-            <div id="get_new_tile">
-              <p>Swap a tile for a new one!</p>
-              <p>(drop the tile here)</p>
-            </div>
-          <br><br>
+        <!-- Error / Success messages appear in this div. -->
+        <div class="col-sm-6 col-md-14 col-lg-14">
+          <div id="le_submit"></div>
         </div>
 
         <!-- Letters Remaining Table -->
@@ -145,6 +140,7 @@
 
                 This should also be resetable whenever the game is reset.
           -->
+          <div class="divider"></div>
           <table id="letters_remain">
             <tr>
               <td class="larger_td" colspan="9">LETTERS REMAINING</td>
@@ -184,12 +180,6 @@
             </tr>
           </table>
         </div>
-
-        <!-- Error / Success messages appear in this div. -->
-        <div class="col-sm-7 col-md-14 col-lg-14">
-          <div id="le_submit"></div>
-        </div>
-
       </div>
     </div>
 
@@ -937,6 +927,14 @@
         </table>
       </div>
       <br>
+
+      <div class="col-sm-5 col-md-7 col-lg-7">
+        <!-- Get new tile spot. Moved this right next to the rack for easy swapping of tiles. -->
+        <div id="get_new_tile">
+          <p>Swap a tile for a new one!</p>
+          <p>(drop the tile here)</p>
+        </div>
+      </div>
 
       <!--
         Scrabble rack from:
