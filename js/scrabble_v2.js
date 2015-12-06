@@ -363,7 +363,7 @@ function save_word() {
       }
 
       // Used in the next part, to create a new tile.
-      var base_URL = "../img/scrabble/Scrabble_Tile_";
+      var base_URL = "img/scrabble/Scrabble_Tile_";
 
       // Create a new draggable object with the new letter and ID of the old one.
       var new_piece = "<img class='pieces' id='piece" + index + "' src='" + base_URL + new_letter + ".jpg" + "'></img>";
@@ -803,7 +803,7 @@ function reset_tiles() {
  */
 function load_scrabble_pieces() {
   // I'm so used to C++ that I like defining variables at the top of a function. *shrugs*
-  var base_url = "../img/scrabble/Scrabble_Tile_";    // base URL of the image
+  var base_url = "img/scrabble/Scrabble_Tile_";    // base URL of the image
   var random_letter = "";                             // Random letter for the tile
   var piece = "";
   var piece_ID = "";
