@@ -98,7 +98,7 @@ $.get( "files/dictionary.txt", function( txt ) {
     }
 });
 
-// JavaScript object to keep track of the game board.
+// JavaScript array to keep track of the CURRENT game board. (the current word that is being created)
 // NOTE: "pieceX" means NO tile present on that drop zone.
 // Also note this is EMPTY until tiles are placed onto the game board.
 var game_board = [
@@ -106,6 +106,26 @@ var game_board = [
   //{"id": "drop0",  "tile": "pieceX"},
 ];
 
+// JavaScript array to keep track of past words
+var complete_words = [
+  /*
+      Example of what this array with look like:
+      [
+        // Each word will be an array of objects
+        //               "H"                             "E"                              etc
+        [{ {"id": "row7_col7",  "letter": "H"}, {"id": "row7_col8",  "letter": "E"}, ...}],
+
+        // This could be the second word that is saved
+        // It would also have the id of dropped tile, plus which letter it is.
+        [ {H}, {E} , {L}, {L}, {O}   ]
+
+        It could be longer as the game goes on. It could be as long as the board supports even.
+        Each dropID would be used to generate valid positions for starting a new word.
+        Words must be formed at RIGHT angles.
+        Also, the array should be used to get the letters of saved letters.
+      ]
+  */
+];
 
 // Go through the Table with the Scrabble board and fill in special spaces.
 // This Stackoverflow post was handy:
@@ -281,15 +301,98 @@ function confirm_save_word() {
 
 
 /**
- *    This function will (when implemented) save the currently played word / score
+ *    This function will save the currently played word / score
  *    and provide the user with new tiles to play with. This will let them play
  *    as many words as they would like and keep their score as well.
  *
  */
 function save_word() {
+  var game_board_length = game_board.length;      // Get gameboard array length
+  var word;                                       // array for the current word
+  var index = 0;
+
   // Let the user know what's going on.
   $("#messages").html("<br><div class='highlight_centered_success'> \
   SAVING WORD.</div>");
+
+  // Move the game board array into the compete_words array.
+  // First make an array and save everything in the game array into it.
+  word = [];
+
+  // Save everything in the game area into this new array.
+  for(var i = 0; i < game_board_length; i++) {
+    // temp obj, we need to save each array with the id of the droppable space
+    // and with the letter that droppable space holds. this will make it easier
+    // when we go to figure out what 2nd / 3rd / etc word the user is creating.
+    var obj = {};
+    obj["id"] = game_board[i].id;
+    obj["letter"] = find_letter(game_board[i].tile);
+    var tile_ID = game_board[i].tile;
+
+    word.push(obj);   // Push obj back.
+
+    // Mark the space as disabled so that the user cannot swap the tile in the future.
+    // See this Stackoverflow post for more info: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
+    $("#" + obj["id"]).droppable('disable');
+
+    // Make the draggable disabled too so that the user can't drag the tile back to the rack.
+    $("#" + tile_ID).draggable('disable');
+
+    // Also change the id of the tile so it doesn't get recalled either.
+    // use the game board length and current letter to make each disabled tile have a unique id.
+    $("#" + tile_ID).attr("id", "disabled" + (game_board_length + i - 1));  // start at 0, that's why its -1.
+
+    // Generate a new letter to be used.
+    var new_letter = get_random_tile();
+
+    // Change the game tiles array to reflect the new letter.
+    for(var x = 0; x < 7; x++) {
+      if(game_tiles[x].id == tile_ID) {
+        console.log("The index for " + tile_ID + " is " + x);
+        index = x;  // index for the new piece.
+        game_tiles[x].letter = new_letter;
+      }
+    }
+
+    // Used in the next part, to create a new tile.
+    var base_URL = "../img/scrabble/Scrabble_Tile_";
+
+    // Create a new draggable object with the new letter and ID of the old one.
+    var new_piece = "<img class='pieces' id='piece" + index + "' src='" + base_URL + new_letter + ".jpg" + "'></img>";
+
+    // Append to the rack.
+    $("#rack").append(new_piece);
+
+    // Make the piece draggable.
+    $("#piece" + index).draggable({
+      appendTo: scrabble_board,
+      revert: "invalid",            // This is key. Only the rack and game board are considered valid!
+      start: function(ev, ui) {
+        // Save original position. (used for swapping tiles)
+        startPos = ui.helper.position();
+      },
+      stop: function() {
+        // If an invalid event is found, this will return the draggable object to its
+        // default "invalid" option. From this Stackoverflow post (also used in the droppable part.)
+        $(this).draggable('option','revert','invalid');
+      }
+    });
+  }
+
+  // Now that we've saved the game board array, let's empty it.
+  game_board = [];
+
+  // Reset all the Scrabble tiles
+  reset_tiles();
+
+  // And update the word / score as well.
+  find_word();
+
+  // Update remaining letters table.
+  update_remaining_table();
+
+  // Should be done now!
+  return;
 }
 
 
@@ -690,18 +793,8 @@ function load_scrabble_pieces() {
     $(piece_ID).draggable({
       appendTo: scrabble_board,
       revert: "invalid",            // This is key. Only the rack and game board are considered valid!
-                                    // HA, try dropping the game pieces where ever you want!
       start: function(ev, ui) {
-        // Disabling this to allow swapping of tiles.
-
-        // Stackoverflow post: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
-        // $('.ui-droppable').each(function(i, el) {
-        //   if (!$(el).find('.ui-draggable').length) {
-        //     $(el).droppable('enable');
-        //   }
-        //  });
-
-        // Save original position.
+        // Save original position. (used for swapping tiles)
         startPos = ui.helper.position();
       },
       stop: function() {
