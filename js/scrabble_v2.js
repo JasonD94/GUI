@@ -130,13 +130,6 @@ var complete_words = [
 // Save the score of all the words saved.
 var word_score = 0;
 
-// Save the HTML of the game board, so we can reset it when the "reset board" button gets pressed.
-var the_game_board_HTML = "";
-
-function save_board_HTML() {
-  the_game_board_HTML = $("#scrabble_board").html();
-}
-
 // Go through the Table with the Scrabble board and fill in special spaces.
 // This Stackoverflow post was handy:
 // URL: https://stackoverflow.com/questions/3065342/how-do-i-iterate-through-table-rows-and-cells-in-javascript
@@ -350,7 +343,7 @@ function save_word() {
 
     // Also change the id of the tile so it doesn't get recalled either.
     // use the game board length and current letter to make each disabled tile have a unique id.
-    $("#" + tile_ID).attr("id", "disabled" + (game_board_length + i - 1));  // start at 0, that's why its -1.
+    $("#" + tile_ID).attr("id", "disabled" + (i + complete_words.length) );  // start at 0, add length to make unique
 
     // Generate a new letter to be used.
     var new_letter = get_random_tile();
@@ -674,9 +667,7 @@ function confirm_reset() {
  */
 function reset_game_board() {
   console.log("Resetting the game board!");
-
-  // Reset the game board by loading up the original HTML of it.
-  $("#scrabble_board").html(the_game_board_HTML);
+  var word_count = complete_words.length;
 
   // First clear the game board array.
   game_board = [];    // Easy way of doing this.
@@ -685,13 +676,33 @@ function reset_game_board() {
   // Now reset the pieces array.
   load_pieces_array();
 
-  // Remove all the scrabble tiles on the board / in the rack.
+  // Set the score back to zero.
+  word_score = 0;
+
+  // Remove all the scrabble tiles in the rack.
   for(var i = 0; i < 7; i++) {
     var tileID = '#' + game_tiles[i].id;
     $(tileID).draggable("destroy");    // Destroys the draggable element.
     $(tileID).remove();                // Removes the tile from the page.
     // URL for more info: https://stackoverflow.com/questions/11452677/jqueryui-properly-removing-a-draggable-element
   }
+
+  // Remove all the scrabble tiles on the game board.
+  for(var i = 0; i < word_count; i++) {
+    // Get the individual spaces to remove.
+    for(var x = 0; x < complete_words[i].length; x++) {
+      var space = complete_words[i][x].id;
+
+      // Make the space droppable again.
+      $("#" + space).droppable("enable");
+
+      // Remove the tile attached to the space.
+      $("#disabled" + (i + x)).remove();    // The i + x will access all of them, since i starts at 0.
+    }
+  }
+
+  // Clear the complete word array.
+  complete_words = [];
 
   // Load up some new Scrabble pieces!
   load_scrabble_pieces();
@@ -702,9 +713,7 @@ function reset_game_board() {
   // Update the "Letters Remaining" table.
   update_remaining_table();
 
-  // Reset the "submit_word" div, just in case the user tried to submit the word.
-  $("#messages").html("");
-
+  // Let the user know what's going on.
   $("#messages").html("<br><div class='highlight_centered_success'> \
   BOARD AND TILES RESET.<br>CHECK THE RACK FOR NEW TILES.</div>");
 
@@ -749,6 +758,7 @@ function reset_tiles() {
   find_word();
 
   // Done! Woot. That wasn't so hard, was it?
+  return;
 }
 
 
