@@ -855,9 +855,12 @@ function load_scrabble_pieces() {
  */
 function load_droppable_targets() {
 
-  // Make a droppable area for getting a replacement tile.
-  // Need to remove the current tile, and add a new one in its location
-  // Also make sure to grab a random tile too.
+  /**
+   *    Logic for getting a new tile. User must drop the tile on the red "swap a tile" div.
+   *    This function will then generate a new letter, set the source on the tile to the new
+   *    letter and finally place the tile back to the original position before it was dropped.
+   *
+   */
   $("#get_new_tile").droppable( {
     accept: ".ui-draggable",
     appendTo: "body",
@@ -869,8 +872,8 @@ function load_droppable_targets() {
       $("#messages").html("<br><div class='highlight_centered_success'> \
       Swapping old tile for a new one.<br> Check the rack / board for your new tile!</div>");
 
-      // Generate a new tile (use get_random_tile() ) and remove the old tile.
-      // Also add it back into the pieces array so it's a straight swap.
+      // Generate a new tile (using get_random_tile() ) and remove the old tile.
+      // Also add it back into the pieces array so it's a straight swap. (no loss of ties)
 
       // Get new letter. Also create a new image source that will be applied later.
       var new_letter = get_random_tile();
@@ -922,7 +925,14 @@ function load_droppable_targets() {
 
   });
 
-  // Make the rack droppable for placing tiles back if you don't want them.
+
+  /**
+   *      Rack logic. Positions the rack on page load. Recalling the tiles is handled by the reset_tiles function.
+   *      Positioning is done using the ui.helper.position method which the jQuery UI provides.
+   *
+   *
+   *
+   */
   $("#the_rack").droppable( {
     accept: ".ui-draggable",
     appendTo: "body",
@@ -970,6 +980,14 @@ function load_droppable_targets() {
     }
   });
 
+
+  /**
+   *    Scrabble game board logic. Allows swapping of tiles that are not saved,
+   *    determines valid game moves for both one word and multiple words. One word
+   *    logic works very well - multiple word logic is bound to have bugs due to
+   *    the complexity of having many words on the board at once.
+   *
+   */
   $("#scrabble_board td").droppable({
     accept: ".ui-draggable",
     appendTo: "body",
@@ -984,16 +1002,21 @@ function load_droppable_targets() {
       var insert_beg = false;           // Determines if we should tiles at the beginning or the end.
       var star_spot = "row7_col7";      // Star in the middle of the board.
       var gameboard_length = 0;         // The length of the game board array (global array).
+      var number_of_words = 0;          // Number of played words.
+      var valid = 0;                    // Used for determining valid right angles.
 
       // Get board array length. This will be useful for our checks next.
       gameboard_length = game_board.length;
+
+      // Also determine how many words are currently played.
+      number_of_words = complete_words.length;
 
       // For debugging purposes.
       console.log("draggableID: " + draggableID );
       console.log("droppableID: " + droppableID );
 
       //*****************************************
-      //* See if this spot already has a tile.
+      //* Swap a tile logic.
       //*****************************************
       // I use something similar to this Stackoverflow post but the selector is
       // different because of the newer version of jQuery UI (I think anyway, its an old post)
@@ -1041,217 +1064,401 @@ function load_droppable_targets() {
         return;
       }
 
-      //*****************************************
-      //* See if this tile is already on the game board.
-      //*****************************************
-      for (var i = 0; i < gameboard_length; i++) {
-        if (game_board[i].tile == draggableID) {
-          // We've got a duplicate.
-          console.log("Found a duplicate! ");
-          duplicate = true;
-          dup_index = i;      // Save the index for later.
+      //*************************************************************************
+      //* Logic for one word here
+      //*************************************************************************
+      if(number_of_words == 0) {
+        //*****************************************
+        //* See if this tile is already on the game board.
+        //*****************************************
+        for (var i = 0; i < gameboard_length; i++) {
+          if (game_board[i].tile == draggableID) {
+            // We've got a duplicate.
+            console.log("Found a duplicate! ");
+            duplicate = true;
+            dup_index = i;      // Save the index for later.
+          }
+        }
+
+        //*****************************************
+        //* Game board is empty case.
+        //* If so, the user must start at the star.
+        //*****************************************
+        if (gameboard_length == 0) {
+          console.log("Must start at the star.");
+
+          if (droppableID != star_spot) {
+            /* The only valid place is the star, row7_col7 */
+            $("#messages").html("<br><div class='highlight_centered_error'> \
+            Please start at the star in the middle of the game board.</div>");
+
+            // Force the draggable to revert. Idea from:
+            // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+            ui.draggable.draggable('option', 'revert', true);
+            return;
+          }
+          else {
+            // Remove that old error message.
+            $("#messages").html("");
+          }
+        }
+
+        //*****************************************
+        //* Game board length 1 case, OR moving the 2nd tile around the first tile.
+        //*****************************************
+        if (gameboard_length == 1 || (gameboard_length == 2 && duplicate == true) ) {
+          console.log("Diagonals are not allowed.");
+          /*  Disable diagonal placement.
+              Example:
+
+              X*X
+              *+*
+              X*X
+
+              X = not allowed
+              * = allowed
+              + = current location
+          */
+
+          // If we get here, we should determine what the index is of our current
+          // tile. Then we can use some math to determine what moves are allowed.
+          var past_pos = find_table_position(game_board[0].id);
+          var cur_pos = find_table_position(droppableID);
+
+          // Debugging
+          console.log("Past pos = " + past_pos + " Proposed position: " + cur_pos);
+
+          /*  If this was 7,7 then the allowed positions would be:
+
+              (6,7) & (8,7) => allowed, left to right read.
+              (7,6) & (7,8) => allowed, top to bottom read.
+
+              this could be written as past_pos needing to be equal to:
+              (cur_pos[0] - 1, cur_pos[1]) & (cur_pos[0] + 1, cur_pos[1])   -> l/r
+              or
+              (cur_pos[0], cur_pos[1] - 1) & (cur_pos[0], cur_pos[1] + 1)   -> t/b
+          */
+          allowed_arrays = [
+            [ parseInt(past_pos[0]) - 1, past_pos[1] ],     // these two are l / r
+            [ parseInt(past_pos[0]) + 1, past_pos[1] ],
+            [ past_pos[0], parseInt(past_pos[1]) - 1],     // these two are t / b
+            [ past_pos[0], parseInt(past_pos[1]) + 1]
+          ];
+
+          // Debugging
+          console.log("allowed positions are: " + allowed_arrays[0] + ' & ' + allowed_arrays[1] + ' & ' + allowed_arrays[2] + ' & ' + allowed_arrays[3]);
+
+          // See if we have one of the allowed positions.
+          var test = cur_pos.toString();
+
+          if (test == allowed_arrays[0].toString() || test == allowed_arrays[1].toString() ) {
+            // Yeah! And it's top to bottom!
+            console.log("Allowed. T/B");
+            left_right = false;
+
+            // Need to insert at the front if we're inserting at the top.
+            if (test == allowed_arrays[0].toString()) {
+              console.log("Inserting at the beginning of the game board array.");
+              insert_beg = true;
+            }
+          }
+          else if (test == allowed_arrays[2].toString() || test == allowed_arrays[3].toString() ) {
+            // Yep! And it's left to right too!
+            console.log("Allowed. L/R");
+            left_right = true;
+
+            // Need to insert at the front if we're inserting from the left.
+            if (test == allowed_arrays[2].toString()) {
+              insert_beg = true;
+            }
+          }
+          else {
+            console.log("NOT ALLOWED. >:(");
+
+            // Tell the user what the error was.
+            $("#messages").html("<br><div class='highlight_centered_error'> \
+            Sorry, diagonals are not allowed once at least one tile has been placed.</div>");
+
+            // Force the draggable to revert. Idea from:
+            // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+            ui.draggable.draggable('option', 'revert', true);
+            return;
+          }
+
+        }
+
+        if (gameboard_length >= 2) {
+          // Now there should only be up and down placement.
+          console.log("Only up and down should be allowed.");
+
+          /*
+              X+X
+              X*X
+              X*X
+              X+X
+
+              * = the first / second tiles
+              + = valid space
+              X = NOT VALID SPACE
+
+              Assuming (7,7) & (8,7) are already placed, then two valid places are
+              (6,7) & (9,7)
+          */
+          if (left_right == true) {
+            // First col - 1 and last col + 1 are valid, with same row.
+            var valid_left = find_table_position(game_board[0].id);
+            var valid_right = find_table_position(game_board[gameboard_length - 1].id);
+            var cur_pos = find_table_position(droppableID);
+
+            // Add or subtract for the valid position.
+            valid_left[1] = parseInt(valid_left[1]) - 1;
+            valid_right[1] = parseInt(valid_right[1]) + 1;
+
+            // Debugging
+            console.log("Valid left pos = " + valid_left + " Valid right position: " + valid_right + " Proposed position: " + cur_pos);
+
+            var test = cur_pos.toString();
+
+            // See if this is a valid move!
+            if ( test == valid_left.toString() || test == valid_right.toString() ) {
+              if( test == valid_left.toString() ) {
+                insert_beg = true;
+              }
+
+              // Yes! It is allowed!
+              console.log("Allowed. L/R. Game board length = " + gameboard_length);
+            }
+            else {
+              // Not allowed.
+              console.log("NOT Allowed. L/R. Game board length = " + gameboard_length);
+
+              // Tell the user what the error was.
+              $("#messages").html("<br><div class='highlight_centered_error'> \
+              Sorry, only left and right placements are allowed.</div>");
+
+              // Force the draggable to revert. Idea from:
+              // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+              ui.draggable.draggable('option', 'revert', true);
+              return;
+            }
+          }
+          else {
+            // First row - 1 and last row + 1 are valid, with same col.
+            var valid_top = find_table_position(game_board[0].id);
+            var valid_bottom = find_table_position(game_board[gameboard_length - 1].id);
+            var cur_pos = find_table_position(droppableID);
+
+            // Add or subtract for the valid position.
+            valid_top[0] = parseInt(valid_top[0]) - 1;
+            valid_bottom[0] = parseInt(valid_bottom[0]) + 1;
+
+            // Debugging
+            console.log("Valid top pos = " + valid_top + " Valid bottom position: " + valid_bottom + " Proposed position: " + cur_pos);
+
+            var test = cur_pos.toString();
+
+            // See if this is a valid move!
+            if ( test == valid_top.toString() || test == valid_bottom.toString() ) {
+              if (test == valid_top.toString()) {
+                insert_beg = true;
+              }
+
+              // Yes! It is allowed!
+              console.log("Allowed. T/B. Game board length = " + gameboard_length);
+            }
+            else {
+              // Not allowed.
+              console.log("NOT Allowed. T/B. Game board length = " + gameboard_length);
+
+              // Tell the user what the error was.
+              $("#messages").html("<br><div class='highlight_centered_error'> \
+              That wasn't a valid move.</div>");
+
+              // Force the draggable to revert. Idea from:
+              // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+              ui.draggable.draggable('option', 'revert', true);
+              return;
+            }
+          }
         }
       }
+      //*************************************************************************
+      //* Logic for more than one word here
+      //*************************************************************************
+      else {
+        // Need to first determine all the possible valid moves.
+        // This will be an array of IDs that are right angles around
+        // the game board tiles (both saved and unsaved words)
+        var possible_moves = [];
 
-      //*****************************************
-      //* Game board is empty case.
-      //* If so, the user must start at the star.
-      //*****************************************
-      if (gameboard_length == 0) {
-        console.log("Must start at the star.");
+        // We will first determine valid spaces to move to around saved words.
 
-        if (droppableID != star_spot) {
-          /* The only valid place is the star, row7_col7 */
-          $("#messages").html("<br><div class='highlight_centered_error'> \
-          Please start at the star in the middle of the game board.</div>");
+        // First, go through all the words
+        for(var i = 0; i < number_of_words; i++) {
+          // Get number of tiles in the current word.
+          var num_tiles = complete_words[i].length;
 
-          // Force the draggable to revert. Idea from:
-          // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
-          ui.draggable.draggable('option', 'revert', true);
-          return;
+          // Debugging
+          console.log("Number of tiles for this word: " + num_tiles);
+
+          // Now go through the current word and grab all right angle spaces around each letter.
+          // Make sure to ignore DISABLED spaces.
+          for(var x = 0; x < num_tiles; x++) {
+            var cur_letterID = complete_words[i][x].id;
+            var coordinates = find_table_position(cur_letterID);    // Get the row / col values.
+
+            // Logic works like this:
+            /*
+                X*X
+                *+*
+                X*X
+
+                + = current position to look at
+                * = valid spots, l/r = row(-1),col & row(+1),col + t/b = row,col(-1) & row,col(+1)
+                X = not valid spot
+            */
+            // Allow both left/right & top/bottom placement.
+            if(gameboard_length < 1) {
+              valid = [
+                "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
+                "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1],     // right of space
+                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
+                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
+              ];
+            }
+            // Only allow left to right spaces.
+            else if(gameboard_length > 1 && left_right == true) {
+              valid = [
+                "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
+                "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // right of space
+              ];
+            }
+            // Only allow top to bottom spaces.
+            else if(gameboard_length > 1 && left_right == false) {
+              valid = [
+                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
+                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
+              ];
+            }
+
+            // Debugging
+            console.log("Valid array = " + valid);
+
+            // Make sure each space is not disabled, and not in the possible moves array already.
+            if(gameboard_length == 0) {
+              for(y = 0; y < 4; y++) {
+                possible_moves.push(String(valid[y]));
+              }
+            }
+            else {
+              for(y = 0; y < 2; y++) {
+                possible_moves.push(String(valid[y]));
+              }
+            }
+          }
         }
-        else {
-          // Remove that old error message.
+
+        // Debugging
+        console.log("Possible moves = " + possible_moves);
+
+        // Now let's look at spaces around the game board.
+        for(var i = 0; i < gameboard_length; i++) {
+          var cur_letterID = game_board[i].id;
+          var coordinates = find_table_position(cur_letterID);    // Get the row / col values.
+
+          // Logic works like this:
+          /*
+              X*X
+              *+*
+              X*X
+
+              + = current position to look at
+              * = valid spots, l/r = row(-1),col & row(+1),col + t/b = row,col(-1) & row,col(+1)
+              X = not valid spot
+          */
+          // Allow both left/right & top/bottom placement.
+          if(gameboard_length < 1) {
+            valid = [
+              "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
+              "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1],     // right of space
+              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
+              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
+            ];
+          }
+          // Only allow left to right spaces.
+          else if(gameboard_length > 1 && left_right == true) {
+            valid = [
+              "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
+              "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // right of space
+            ];
+          }
+          // Only allow top to bottom spaces.
+          else if(gameboard_length > 1 && left_right == false) {
+            valid = [
+              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
+              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
+            ];
+          }
+
+          // Make sure each space is not disabled, and not in the possible moves array already.
+          // URL for the droppable disabled: https://api.jqueryui.com/droppable/#option-disabled
+          // URL for the $.inArray function: https://stackoverflow.com/questions/6116474/how-to-find-if-an-array-contains-a-specific-string-in-javascript-jquery
+          if(gameboard_length == 0) {
+            for(y = 0; y < 4; y++) {
+              possible_moves.push(String(valid[y]));
+            }
+          }
+          else {
+            for(y = 0; y < 2; y++) {
+              possible_moves.push(String(valid[y]));
+            }
+          }
+        }
+
+        // Debugging
+        console.log("Possible moves = " + possible_moves);
+
+        // Now see if the given spot the user tried to drop in is in the valid list.
+        // Got the idea for this from Stackoverflow. This little JS code will return -1 if the array does
+        // not contain the current droppable target, or the index if it does. We just need to check for -1.
+        // https://stackoverflow.com/questions/12623272/how-to-check-if-a-string-array-contains-one-string-in-javascript
+        var is_valid = possible_moves.indexOf(droppableID);
+
+        // It is a valid move if is_valid isn't -1.
+        if(is_valid != -1) {
+          console.log("VALID MOVE.");
           $("#messages").html("");
-        }
-      }
 
-      //*****************************************
-      //* Game board length 1 case, OR moving the 2nd tile around the first tile.
-      //*****************************************
-      if (gameboard_length == 1 || (gameboard_length == 2 && duplicate == true) ) {
-        console.log("Diagonals are not allowed.");
-        /*  Disable diagonal placement.
-            Example:
+          // Make as either left to right, or top to bottom for this new word.
+          if(gameboard_length == 0) {
+            var cur_row;
+            var next_row;
 
-            X*X
-            *+*
-            X*X
+            var tmp_pos = find_table_position(droppableID);
+            next_row = tmp_pos[0];
 
-            X = not allowed
-            * = allowed
-            + = current location
-        */
+            tmp_pos = find_table_position(possible_moves[is_valid]);
+            cur_row = tmp_pos[0];
 
-        // If we get here, we should determine what the index is of our current
-        // tile. Then we can use some math to determine what moves are allowed.
-        var past_pos = find_table_position(game_board[0].id);
-        var cur_pos = find_table_position(droppableID);
+            console.log("cur row = " + cur_row + " next row = " + next_row);
 
-        // Debugging
-        console.log("Past pos = " + past_pos + " Proposed position: " + cur_pos);
-
-        /*  If this was 7,7 then the allowed positions would be:
-
-            (6,7) & (8,7) => allowed, left to right read.
-            (7,6) & (7,8) => allowed, top to bottom read.
-
-            this could be written as past_pos needing to be equal to:
-            (cur_pos[0] - 1, cur_pos[1]) & (cur_pos[0] + 1, cur_pos[1])   -> l/r
-            or
-            (cur_pos[0], cur_pos[1] - 1) & (cur_pos[0], cur_pos[1] + 1)   -> t/b
-        */
-        allowed_arrays = [
-          [ parseInt(past_pos[0]) - 1, past_pos[1] ],     // these two are l / r
-          [ parseInt(past_pos[0]) + 1, past_pos[1] ],
-          [ past_pos[0], parseInt(past_pos[1]) - 1],     // these two are t / b
-          [ past_pos[0], parseInt(past_pos[1]) + 1]
-        ];
-
-        // Debugging
-        console.log("allowed positions are: " + allowed_arrays[0] + ' & ' + allowed_arrays[1] + ' & ' + allowed_arrays[2] + ' & ' + allowed_arrays[3]);
-
-        // See if we have one of the allowed positions.
-        var test = cur_pos.toString();
-
-        if (test == allowed_arrays[0].toString() || test == allowed_arrays[1].toString() ) {
-          // Yeah! And it's top to bottom!
-          console.log("Allowed. T/B");
-          left_right = false;
-
-          // Need to insert at the front if we're inserting at the top.
-          if (test == allowed_arrays[0].toString()) {
-            console.log("Inserting at the beginning of the game board array.");
-            insert_beg = true;
-          }
-        }
-        else if (test == allowed_arrays[2].toString() || test == allowed_arrays[3].toString() ) {
-          // Yep! And it's left to right too!
-          console.log("Allowed. L/R");
-          left_right = true;
-
-          // Need to insert at the front if we're inserting from the left.
-          if (test == allowed_arrays[2].toString()) {
-            insert_beg = true;
+            if(cur_row == next_row) {
+              left_right = true;        // Yep the rows are the same, so it's left to right.
+            }
+            else {
+              left_right = false;       // Nope, rows are different, it's top to bottom.
+            }
           }
         }
         else {
-          console.log("NOT ALLOWED. >:(");
-
-          // Tell the user what the error was.
+          console.log("NOT A VALID MOVE.");
           $("#messages").html("<br><div class='highlight_centered_error'> \
-          Sorry, diagonals are not allowed once at least one tile has been placed.</div>");
+          That wasn't a valid move. Tiles must be placed at right angles.</div>");
 
           // Force the draggable to revert. Idea from:
           // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
           ui.draggable.draggable('option', 'revert', true);
           return;
-        }
-
-      }
-
-      if (gameboard_length >= 2) {
-        // Now there should only be up and down placement.
-        console.log("Only up and down should be allowed.");
-
-        /*
-            X+X
-            X*X
-            X*X
-            X+X
-
-            * = the first / second tiles
-            + = valid space
-            X = NOT VALID SPACE
-
-            Assuming (7,7) & (8,7) are already placed, then two valid places are
-            (6,7) & (9,7)
-        */
-        if (left_right == true) {
-          // First col - 1 and last col + 1 are valid, with same row.
-          var valid_left = find_table_position(game_board[0].id);
-          var valid_right = find_table_position(game_board[gameboard_length - 1].id);
-          var cur_pos = find_table_position(droppableID);
-
-          // Add or subtract for the valid position.
-          valid_left[1] = parseInt(valid_left[1]) - 1;
-          valid_right[1] = parseInt(valid_right[1]) + 1;
-
-          // Debugging
-          console.log("Valid left pos = " + valid_left + " Valid right position: " + valid_right + " Proposed position: " + cur_pos);
-
-          var test = cur_pos.toString();
-
-          // See if this is a valid move!
-          if ( test == valid_left.toString() || test == valid_right.toString() ) {
-            if( test == valid_left.toString() ) {
-              insert_beg = true;
-            }
-
-            // Yes! It is allowed!
-            console.log("Allowed. L/R. Game board length = " + gameboard_length);
-          }
-          else {
-            // Not allowed.
-            console.log("NOT Allowed. L/R. Game board length = " + gameboard_length);
-
-            // Tell the user what the error was.
-            $("#messages").html("<br><div class='highlight_centered_error'> \
-            Sorry, only left and right placements are allowed.</div>");
-
-            // Force the draggable to revert. Idea from:
-            // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
-            ui.draggable.draggable('option', 'revert', true);
-            return;
-          }
-        }
-        else {
-          // First row - 1 and last row + 1 are valid, with same col.
-          var valid_top = find_table_position(game_board[0].id);
-          var valid_bottom = find_table_position(game_board[gameboard_length - 1].id);
-          var cur_pos = find_table_position(droppableID);
-
-          // Add or subtract for the valid position.
-          valid_top[0] = parseInt(valid_top[0]) - 1;
-          valid_bottom[0] = parseInt(valid_bottom[0]) + 1;
-
-          // Debugging
-          console.log("Valid top pos = " + valid_top + " Valid bottom position: " + valid_bottom + " Proposed position: " + cur_pos);
-
-          var test = cur_pos.toString();
-
-          // See if this is a valid move!
-          if ( test == valid_top.toString() || test == valid_bottom.toString() ) {
-            if (test == valid_top.toString()) {
-              insert_beg = true;
-            }
-
-            // Yes! It is allowed!
-            console.log("Allowed. T/B. Game board length = " + gameboard_length);
-          }
-          else {
-            // Not allowed.
-            console.log("NOT Allowed. T/B. Game board length = " + gameboard_length);
-
-            // Tell the user what the error was.
-            $("#messages").html("<br><div class='highlight_centered_error'> \
-            For some reason that wasn't a valid move. (investigate why ¯\\_(ツ)_/¯)</div>");
-
-            // Force the draggable to revert. Idea from:
-            // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
-            ui.draggable.draggable('option', 'revert', true);
-            return;
-          }
         }
       }
 
