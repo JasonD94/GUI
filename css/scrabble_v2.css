@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 24, 2015.
-    Last Updated: Nov 24, 1:30PM.
+    Last Updated: Dec 6, 1AM.
 
     This CSS file is for the 9th assignment, "Scrabble".
     Mainly because my Index got way too large.
@@ -254,6 +254,7 @@ td.larger_td {
 /* Success version of the error message. */
 .highlight_centered_success {
   background-color: black;
+  border: 1px solid green;
   color: green;
   font-family: "Ubuntu";
   font-size: 150%;
@@ -264,6 +265,7 @@ td.larger_td {
 /* Error version of the above message. */
 .highlight_centered_error {
   background-color: black;
+  border: 1px solid red;
   color: red;
   font-family: "Ubuntu";
   font-size: 150%;

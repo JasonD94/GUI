@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 24, 2015.
-    Last Updated: Nov 24, 1:30PM.
+    Last Updated: Dec 6, 1AM.
 
     This JavaScript file is for the 9th assignment, "Scrabble".
 */
@@ -130,6 +130,8 @@ var complete_words = [
 // Save the score of all the words saved.
 var word_score = 0;
 
+// First letter for 2nd and on words played.
+var first_letter = "";
 
 // Go through the Table with the Scrabble board and fill in special spaces.
 // This Stackoverflow post was handy:
@@ -340,46 +342,52 @@ function save_word() {
     $("#" + obj["id"]).droppable('disable');
 
     // Make the draggable disabled too so that the user can't drag the tile back to the rack.
-    $("#" + tile_ID).draggable('disable');
+    try {
+      $("#" + tile_ID).draggable('disable');
 
-    // Also change the id of the tile so it doesn't get recalled either.
-    // use the game board length and current letter to make each disabled tile have a unique id.
-    $("#" + tile_ID).attr("id", "disabled" + (i + complete_words.length) );  // start at 0, add length to make unique
+      // Also change the id of the tile so it doesn't get recalled either.
+      // use the game board length and current letter to make each disabled tile have a unique id.
+      $("#" + tile_ID).attr("id", "disabled" + (i + complete_words.length) );  // start at 0, add length to make unique
 
-    // Generate a new letter to be used.
-    var new_letter = get_random_tile();
+      // Generate a new letter to be used.
+      var new_letter = get_random_tile();
 
-    // Change the game tiles array to reflect the new letter.
-    for(var x = 0; x < 7; x++) {
-      if(game_tiles[x].id == tile_ID) {
-        index = x;  // index for the new piece.
-        game_tiles[x].letter = new_letter;
+      // Change the game tiles array to reflect the new letter.
+      for(var x = 0; x < 7; x++) {
+        if(game_tiles[x].id == tile_ID) {
+          index = x;  // index for the new piece.
+          game_tiles[x].letter = new_letter;
+        }
       }
+
+      // Used in the next part, to create a new tile.
+      var base_URL = "../img/scrabble/Scrabble_Tile_";
+
+      // Create a new draggable object with the new letter and ID of the old one.
+      var new_piece = "<img class='pieces' id='piece" + index + "' src='" + base_URL + new_letter + ".jpg" + "'></img>";
+
+      // Append to the rack.
+      $("#rack").append(new_piece);
+
+      // Make the piece draggable.
+      $("#piece" + index).draggable({
+        appendTo: scrabble_board,
+        revert: "invalid",            // This is key. Only the rack and game board are considered valid!
+        start: function(ev, ui) {
+          // Save original position. (used for swapping tiles)
+          startPos = ui.helper.position();
+        },
+        stop: function() {
+          // If an invalid event is found, this will return the draggable object to its
+          // default "invalid" option. From this Stackoverflow post (also used in the droppable part.)
+          $(this).draggable('option','revert','invalid');
+        }
+      });
     }
-
-    // Used in the next part, to create a new tile.
-    var base_URL = "../img/scrabble/Scrabble_Tile_";
-
-    // Create a new draggable object with the new letter and ID of the old one.
-    var new_piece = "<img class='pieces' id='piece" + index + "' src='" + base_URL + new_letter + ".jpg" + "'></img>";
-
-    // Append to the rack.
-    $("#rack").append(new_piece);
-
-    // Make the piece draggable.
-    $("#piece" + index).draggable({
-      appendTo: scrabble_board,
-      revert: "invalid",            // This is key. Only the rack and game board are considered valid!
-      start: function(ev, ui) {
-        // Save original position. (used for swapping tiles)
-        startPos = ui.helper.position();
-      },
-      stop: function() {
-        // If an invalid event is found, this will return the draggable object to its
-        // default "invalid" option. From this Stackoverflow post (also used in the droppable part.)
-        $(this).draggable('option','revert','invalid');
-      }
-    });
+    catch(e) {
+      // the above code might fail on multiple words.
+      // if so just ignore it.
+    }
   }
 
   // Save the current word score. This will become the total score now.
@@ -584,6 +592,15 @@ function find_letter(given_id) {
     if(game_tiles[i].id == given_id) {
       // Just return its letter!
       return game_tiles[i].letter;
+    }
+  }
+
+  // Or try looking in the completed word array
+  for(var i = 0; i < complete_words.length; i++) {
+    for(var x = 0; x < complete_words[i].length; x++) {
+      if(given_id == complete_words[i][x].id) {
+        return complete_words[i][x].letter;
+      }
     }
   }
 
@@ -943,6 +960,9 @@ function load_droppable_targets() {
       // Get board array length. This will be useful for our checks next.
       var gameboard_length = game_board.length;
 
+      // Need to check for complete words, if there's any then change some logic.
+      var number_of_words = complete_words.length;
+
       // See if this element is in the array and at the beginning or end.
       for(var i = 0; i < gameboard_length; i++) {
         if (game_board[i].tile == draggableID) {
@@ -972,6 +992,13 @@ function load_droppable_targets() {
 
           // Move the tile over to the rack. Prevents weird bugs where the table changes sizes and thinks there's two tiles in one spot.
           $('#rack').append($(ui.draggable));
+
+          // If there's any completed words, and we just hit 1 tile left, then
+          // remove that tile, it's one of the disabled tiles.
+          if(number_of_words > 0) {
+            game_board.splice(0, 1);  // Remove disabled tile.
+            find_word();              // Update word & score.
+          }
 
           // Quit now.
           return;
@@ -1004,6 +1031,7 @@ function load_droppable_targets() {
       var gameboard_length = 0;         // The length of the game board array (global array).
       var number_of_words = 0;          // Number of played words.
       var valid = 0;                    // Used for determining valid right angles.
+      var prev_spaceID = "";            // Used for determining left/right vs up/down and also inserting at the beginning / end. And even saved letters.
 
       // Get board array length. This will be useful for our checks next.
       gameboard_length = game_board.length;
@@ -1322,24 +1350,24 @@ function load_droppable_targets() {
             // Allow both left/right & top/bottom placement.
             if(gameboard_length < 1) {
               valid = [
-                "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
-                "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1],     // right of space
-                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
-                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
+                "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // top of space
+                "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1],      // bottom of space
+                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // left of space
+                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // right of space
               ];
             }
             // Only allow left to right spaces.
             else if(gameboard_length >= 1 && left_right == true) {
               valid = [
-                "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
-                "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // right of space
+                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // left of space
+                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // right of space
               ];
             }
             // Only allow top to bottom spaces.
             else if(gameboard_length >= 1 && left_right == false) {
               valid = [
-                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
-                "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
+                "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // top of space
+                "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // bottom of space
               ];
             }
 
@@ -1349,11 +1377,21 @@ function load_droppable_targets() {
             // Make sure each space is not disabled, and not in the possible moves array already.
             if(gameboard_length == 0) {
               for(y = 0; y < 4; y++) {
+                // See if we find our space.
+                if(String(valid[y]) == String(droppableID)) {
+                  // We did! Save this ID then.
+                  prev_spaceID = cur_letterID;
+                }
                 possible_moves.push(String(valid[y]));
               }
             }
             else {
               for(y = 0; y < 2; y++) {
+                // See if we find our space.
+                if(String(valid[y]) == String(droppableID)) {
+                  // We did! Save this ID then.
+                  prev_spaceID = cur_letterID;
+                }
                 possible_moves.push(String(valid[y]));
               }
             }
@@ -1381,24 +1419,24 @@ function load_droppable_targets() {
           // Allow both left/right & top/bottom placement.
           if(gameboard_length < 1) {
             valid = [
-              "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
-              "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1],     // right of space
-              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
-              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
+              "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // top of space
+              "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1],      // bottom of space
+              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // left of space
+              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // right of space
             ];
           }
           // Only allow left to right spaces.
           else if(gameboard_length >= 1 && left_right == true) {
             valid = [
-              "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
-              "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // right of space
+              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // left of space
+              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // right of space
             ];
           }
           // Only allow top to bottom spaces.
           else if(gameboard_length >= 1 && left_right == false) {
             valid = [
-              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
-              "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
+              "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // top of space
+              "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // bottom of space
             ];
           }
 
@@ -1407,11 +1445,22 @@ function load_droppable_targets() {
           // URL for the $.inArray function: https://stackoverflow.com/questions/6116474/how-to-find-if-an-array-contains-a-specific-string-in-javascript-jquery
           if(gameboard_length == 0) {
             for(y = 0; y < 4; y++) {
+              // See if we find our space.
+              if(String(valid[y]) == droppableID) {
+                // We did! Save this ID then.
+                prev_spaceID = cur_letterID;
+              }
               possible_moves.push(String(valid[y]));
             }
           }
           else {
             for(y = 0; y < 2; y++) {
+              // See if we find our space.
+              if(String(valid[y]) == droppableID) {
+                // We did! Save this ID then.
+                prev_spaceID = cur_letterID;
+              }
+
               possible_moves.push(String(valid[y]));
             }
           }
@@ -1431,52 +1480,70 @@ function load_droppable_targets() {
           console.log("VALID MOVE.");
           $("#messages").html("");
 
-          var cur_row;
-          var next_row;
-          var cur_col;
-          var next_col;
+          var past_row, past_col;
+          var new_row, new_col;
 
           var tmp_pos = find_table_position(droppableID);
-          next_row = tmp_pos[0];
-          next_col = tmp_pos[1];
+          new_row = parseInt(tmp_pos[0]);
+          new_col = parseInt(tmp_pos[1]);
 
-          console.log("is valid ID = " + possible_moves[is_valid]);
+          console.log("past ID = " + prev_spaceID);
 
-          tmp_pos = find_table_position(possible_moves[is_valid]);
-          cur_row = tmp_pos[0];
-          cur_col = tmp_pos[1];
+          tmp_pos = find_table_position(prev_spaceID);
+          past_row = parseInt(tmp_pos[0]);
+          past_col = parseInt(tmp_pos[1]);
 
-          console.log("cur row = " + cur_row + " next row = " + next_row);
-          console.log("cur col = " + cur_col + " next col = " + next_col);
+          console.log("new = " + new_row + ", " + new_col);
+          console.log("past = " + past_row + ", " + past_col);
 
           // Determine if we are going left to right or top to bottom.
           if(gameboard_length == 0) {
-            if(cur_row == next_row) {
+            if(past_row == new_row) {
               left_right = true;        // Yep the rows are the same, so it's left to right.
+
+              console.log("This is left to right.");
             }
             else {
               left_right = false;       // Nope, rows are different, it's top to bottom.
+
+              console.log("This is top to bottom.");
             }
           }
 
           // Determine if we should insert at the beginning or the end.
           if(left_right == true) {
-            // For left to right, see if next_col < cur_col
-            if(next_col < cur_col) {  // True case
+            // For left to right, see if new_col > past_col
+            if(new_col <= past_col) {  // True case
               insert_beg = true;
+
+              console.log("Insert at the beginning L/R");
             }
-            else {                    // False case
+            else if (new_col < past_col) {                    // False case
               insert_beg = false;
+
+              console.log("Insert at the end. L/R");
             }
           }
-          else {
-            // For top to bottom, see if next_row > cur_row
-            if(next_row > cur_row) {
+          else if (left_right == false) {
+            // For top to bottom, see if new_row < past_row
+            if(new_row <= past_row) {
               insert_beg = true;
+
+              console.log("Insert at the beginning T/B");
             }
-            else {
+            else if (new_row > past_row) {
               insert_beg = false;
+
+              console.log("Insert at the end. T/B");
             }
+          }
+
+          // Determine if the prev space should be added to the game board array.
+          if(gameboard_length == 0) {
+            var tmp_obj = {};
+            tmp_obj['id'] = prev_spaceID;          // This style works as an object.
+            tmp_obj['tile'] = prev_spaceID;
+            game_board.push(tmp_obj);
           }
         }
         else {
@@ -1530,13 +1597,6 @@ function load_droppable_targets() {
 
       // Recalculate this.
       gameboard_length = game_board.length;
-
-
-      // This makes it so only the given tile may be dropped on the current spot.
-      // See this Stackoverflow post for more info: https://stackoverflow.com/questions/3948447/jquery-ui-droppable-only-accept-one-draggable
-
-      // THIS IS DISABLED FOR NOW TO ALLOW SWAPPING OF TILES CURRENTLY IN PLAY.
-      //$(this).droppable('disable');
 
       // This from Stackoverflow, it snaps to where it was dropped.
       // URL: https://stackoverflow.com/questions/30122234/how-to-make-an-accept-condition-for-droppable-td-to-accept-only-the-class-within
