@@ -276,6 +276,8 @@ function submit_word() {
 
 /**
  *    This function confirms that the user wants to save the currently played word.
+ *    This function uses a cool alert replacement called Sweet Alert.
+ *    URL: https://t4t5.github.io/sweetalert/
  */
 function confirm_save_word() {
   swal({
@@ -649,8 +651,9 @@ function get_random_tile() {
 
 
 /**
- *      This function confirms that the user wants to reset the entire game board.
- *
+ *    This function confirms that the user wants to reset the entire game board.
+ *    This function uses a cool alert replacement called Sweet Alert.
+ *    URL: https://t4t5.github.io/sweetalert/
  */
 function confirm_reset() {
   // Since the reset function is very destructive, we should confirm with the user if
@@ -1607,9 +1610,6 @@ function load_droppable_targets() {
 
       // Update the word as it stands now.
       find_word();
-    },
-    out: function(event, ui) {
-      // Not even sure if we need this but let's see first.
     },
     zIndex: -1
   });
