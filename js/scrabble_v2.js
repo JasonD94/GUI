@@ -31,7 +31,7 @@ var left_right = false;   /* Boolean for reading left to right or top to bottom 
 
 var number_of_words = 0;  /* For detecting multiple words played. */
 
-// Made this a function for an easy way to reset the pieces array/objects.
+// This function is an easy way to reset the pieces array / objects.
 function load_pieces_array() {
   pieces = [
     {"letter":"A", "value":  1,  "amount":  9,  "remaining":  9},
@@ -129,6 +129,7 @@ var complete_words = [
 
 // Save the score of all the words saved.
 var word_score = 0;
+
 
 // Go through the Table with the Scrabble board and fill in special spaces.
 // This Stackoverflow post was handy:
@@ -258,7 +259,6 @@ function submit_word() {
     $("#messages").html("<br><div class='highlight_centered_success'> \
     Nice job! \"" + word + "\" is considered a word by the game's dictionary!<br><br> \
     <button class='smaller_button' onclick='confirm_save_word();'>Save Word & Play Again.</button><br><br></div>");
-    console.log("Hey! That's a legit word! NICE JOB!");
     return 1;
   }
   else {
@@ -266,14 +266,15 @@ function submit_word() {
     $("#messages").html("<br><div class='highlight_centered_error'> \
     Sorry. \"" + word + "\" is not a word in the English dictionary. \
     I suggest trying a different word. Or try resetting your tiles and trying again.</div>");
-    console.log("Sorry, that doesn't seem to be a word.");
     return -1;
   }
 
 }
 
 
-// Confirms if the user wants to actually save the word or not.
+/**
+ *    This function confirms that the user wants to save the currently played word.
+ */
 function confirm_save_word() {
   swal({
     title: "Are you sure?",
@@ -351,7 +352,6 @@ function save_word() {
     // Change the game tiles array to reflect the new letter.
     for(var x = 0; x < 7; x++) {
       if(game_tiles[x].id == tile_ID) {
-        console.log("The index for " + tile_ID + " is " + x);
         index = x;  // index for the new piece.
         game_tiles[x].letter = new_letter;
       }
@@ -406,10 +406,9 @@ function save_word() {
 
 
 /**
- *    When called, this function determine what the current word is, and prints it
- *    out to the HTML doc as well as the console for logging purposes.
- *
+ *    When called, this function determine what the current word is.
  *    It also determines what the score is for the word that it finds.
+ *    Both the word and score are printed to HTML.
  *
  */
 function find_word(read_left) {
@@ -446,8 +445,14 @@ function find_word(read_left) {
 }
 
 
-// Determine whether to double or triple the word score or not.
-// Returns 1 or 2 for YES and 0 for NO.
+/**
+ *    This function determines whether to double or triple the word score.
+ *    Returns:
+ *    0 = neither
+ *    1 = double
+ *    2 = triple
+ *
+ */
 function should_double_triple_word() {
   // Get board array length. This will be useful for our checks next.
   var gameboard_length = game_board.length;
@@ -457,17 +462,12 @@ function should_double_triple_word() {
   for (var i = 0; i < gameboard_length; i++) {
     var space_ID = "#" + game_board[i].id
 
-    // Debugging
-    // console.log("space_ID = " + space_ID);
-
     if ( $(space_ID).hasClass('double_word') == true ) {
       // Sweet! Double the word's value!
-      console.log("Doubling word value.");
       return 1;
     }
     else if ( $(space_ID).hasClass('triple_word') == true ) {
       // SWEET! IT'S A TRIPLE!
-      console.log("Tripling word value");
       return 2;
     }
   }
@@ -513,9 +513,14 @@ function find_score(given_id) {
 }
 
 
-// Given a tile ID, figures out which dropID this is and whether to double the
-// letter score or not.
-// Returns 2 or 3 for YES or 1 for NO.
+/**
+ *    Given a tile ID, figures out which dropID this is and whether to double the
+ *    letter score or not.
+ *    Returns:
+ *    0 = neither
+ *    1 = double
+ *    2 = triple
+ */
 function should_double_triple_letter(given_id) {
   var space;
 
@@ -525,17 +530,16 @@ function should_double_triple_letter(given_id) {
     }
   }
 
-  // Debugging
-  //console.log("Space is: " + space);
+  /*
+      Using "hasClass" to detect if this is a double / triple space.
+  */
 
   if ( $(space).hasClass("double_letter") == true ) {
     // Sweet! Double the letter's value!
-    console.log("Doubling letter's value.");
     return 1;
   }
   else if ( $(space).hasClass("triple_letter") == true ) {
     // SWEET! IT'S A TRIPLE!
-    console.log("Tripling letter's value.");
     return 2;
   }
 
@@ -544,8 +548,8 @@ function should_double_triple_letter(given_id) {
 }
 
 
-/*
-      Get's row / col index for given droppableID
+/**
+ *    This function gets the row / col index for given droppableID
  */
 function find_table_position(droppableID) {
 
@@ -557,12 +561,9 @@ function find_table_position(droppableID) {
   var col = String(test[1]).split('col');
   col = col[1];
 
-  var arry = [];
+  var arry = [];      // Save the row / col in an array, so that we can return both at once.
   arry.push(row);
   arry.push(col);
-
-  // Debugging
-  console.log(arry);
 
   // Return the row / col in an array.
   return arry;
@@ -591,9 +592,11 @@ function find_letter(given_id) {
 }
 
 
-// Generate a random tile for the load_scrabble_pieces() function and for
-// swaping for a new tile.
-// Returns the new letter that was generated.
+/**
+ *    This function generates a random tile for the load_scrabble_pieces() function and for
+ *    swapping for a new tile.
+ *    It returns the new letter that was generated.
+ */
 function get_random_tile() {
   // Need take into account that there are 100 tiles total, not just 26 options.
   // Going to create an array of all the possible letters then - 100 to start.
@@ -622,11 +625,16 @@ function get_random_tile() {
       return letter;                          // Return the letter's index.
     }
   }
+
+  // Error if we get here.
+  return -1;
 }
 
 
-// Simple alert function that calls the reset_game_board function if the user hits
-// the confirm button on the Sweet alert popup.
+/**
+ *      This function confirms that the user wants to reset the entire game board.
+ *
+ */
 function confirm_reset() {
   // Since the reset function is very destructive, we should confirm with the user if
   // they are SURE they want to clear the entire game board.
@@ -664,9 +672,12 @@ function confirm_reset() {
  *      reset_tiles()             -> removes all the tiles on the screen.
  *      load_scrabble_pieces()    -> loads up new tiles.
  *      find_word()               -> resets what the word looked like.
+ *
+ *      It also removes all draggable tiles on the game board, and enables all droppable spaces.
+ *      And it clears the game_board array and complete_words array.
+ *
  */
 function reset_game_board() {
-  console.log("Resetting the game board!");
   var word_count = complete_words.length;
 
   // First clear the game board array.
@@ -837,6 +848,10 @@ function load_scrabble_pieces() {
  *    This function will load up targets for the images to be dropped onto.
  *    I figure they will be transparent images that are overlayed on top of
  *    the game board.
+ *
+ *    Note: this is the main logic behind the game. Other functions help this one out,
+ *    but all rules for where a tile can be dropped come from this function.
+ *
  */
 function load_droppable_targets() {
 
