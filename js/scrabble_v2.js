@@ -1307,6 +1307,8 @@ function load_droppable_targets() {
             var cur_letterID = complete_words[i][x].id;
             var coordinates = find_table_position(cur_letterID);    // Get the row / col values.
 
+            console.log("cur_letterID = " + cur_letterID + " coordinates = " + coordinates);
+
             // Logic works like this:
             /*
                 X*X
@@ -1327,14 +1329,14 @@ function load_droppable_targets() {
               ];
             }
             // Only allow left to right spaces.
-            else if(gameboard_length > 1 && left_right == true) {
+            else if(gameboard_length >= 1 && left_right == true) {
               valid = [
                 "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
                 "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // right of space
               ];
             }
             // Only allow top to bottom spaces.
-            else if(gameboard_length > 1 && left_right == false) {
+            else if(gameboard_length >= 1 && left_right == false) {
               valid = [
                 "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
                 "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
@@ -1386,14 +1388,14 @@ function load_droppable_targets() {
             ];
           }
           // Only allow left to right spaces.
-          else if(gameboard_length > 1 && left_right == true) {
+          else if(gameboard_length >= 1 && left_right == true) {
             valid = [
               "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // left of space
               "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // right of space
             ];
           }
           // Only allow top to bottom spaces.
-          else if(gameboard_length > 1 && left_right == false) {
+          else if(gameboard_length >= 1 && left_right == false) {
             valid = [
               "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // bottom of space
               "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // top of space
@@ -1429,24 +1431,51 @@ function load_droppable_targets() {
           console.log("VALID MOVE.");
           $("#messages").html("");
 
-          // Make as either left to right, or top to bottom for this new word.
+          var cur_row;
+          var next_row;
+          var cur_col;
+          var next_col;
+
+          var tmp_pos = find_table_position(droppableID);
+          next_row = tmp_pos[0];
+          next_col = tmp_pos[1];
+
+          console.log("is valid ID = " + possible_moves[is_valid]);
+
+          tmp_pos = find_table_position(possible_moves[is_valid]);
+          cur_row = tmp_pos[0];
+          cur_col = tmp_pos[1];
+
+          console.log("cur row = " + cur_row + " next row = " + next_row);
+          console.log("cur col = " + cur_col + " next col = " + next_col);
+
+          // Determine if we are going left to right or top to bottom.
           if(gameboard_length == 0) {
-            var cur_row;
-            var next_row;
-
-            var tmp_pos = find_table_position(droppableID);
-            next_row = tmp_pos[0];
-
-            tmp_pos = find_table_position(possible_moves[is_valid]);
-            cur_row = tmp_pos[0];
-
-            console.log("cur row = " + cur_row + " next row = " + next_row);
-
             if(cur_row == next_row) {
               left_right = true;        // Yep the rows are the same, so it's left to right.
             }
             else {
               left_right = false;       // Nope, rows are different, it's top to bottom.
+            }
+          }
+
+          // Determine if we should insert at the beginning or the end.
+          if(left_right == true) {
+            // For left to right, see if next_col < cur_col
+            if(next_col < cur_col) {  // True case
+              insert_beg = true;
+            }
+            else {                    // False case
+              insert_beg = false;
+            }
+          }
+          else {
+            // For top to bottom, see if next_row > cur_row
+            if(next_row > cur_row) {
+              insert_beg = true;
+            }
+            else {
+              insert_beg = false;
             }
           }
         }
