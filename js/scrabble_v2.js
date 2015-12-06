@@ -12,7 +12,7 @@
 */
 
 /**
- *    Global variables for ease of use. Lazy lazy lazy but whatever.
+ *    Global variables for ease of use. Lazy but whatever. It works and that's all that matters.
  */
 
 
@@ -126,6 +126,16 @@ var complete_words = [
       ]
   */
 ];
+
+// Save the score of all the words saved.
+var word_score = 0;
+
+// Save the HTML of the game board, so we can reset it when the "reset board" button gets pressed.
+var the_game_board_HTML = "";
+
+function save_board_HTML() {
+  the_game_board_HTML = $("#scrabble_board").html();
+}
 
 // Go through the Table with the Scrabble board and fill in special spaces.
 // This Stackoverflow post was handy:
@@ -379,6 +389,12 @@ function save_word() {
     });
   }
 
+  // Save the current word score. This will become the total score now.
+  word_score = parseInt($("#score").html());  // Save it as an int.
+
+  // Save the given word in the complete_words array
+  complete_words.push(word);
+
   // Now that we've saved the game board array, let's empty it.
   game_board = [];
 
@@ -404,15 +420,14 @@ function save_word() {
  *
  */
 function find_word(read_left) {
-  var word = "";
-  var score = 0;
-  var board_length = game_board.length;
+  var word = "";                              // The current word.
+  var score = word_score;                     // This DEFAULTS TO ZERO, but afterwards defaults to whatever the total score is!
+  var board_length = game_board.length;       // Current game board
+  var word_count = complete_words.length;     // All saved words
 
-  if (board_length == 0) {
-    // The word is now blank.
-    $("#word").html("____");
-    $("#score").html(score);
-  }
+  // The word is now blank.
+  $("#word").html("____");
+  $("#score").html(score);
 
   // Go through the game board and generate a possible word.
   for(var i = 0; i < board_length; i++) {
@@ -658,9 +673,10 @@ function confirm_reset() {
  *      find_word()               -> resets what the word looked like.
  */
 function reset_game_board() {
-
-
   console.log("Resetting the game board!");
+
+  // Reset the game board by loading up the original HTML of it.
+  $("#scrabble_board").html(the_game_board_HTML);
 
   // First clear the game board array.
   game_board = [];    // Easy way of doing this.
