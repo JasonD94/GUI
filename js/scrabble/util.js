@@ -138,7 +138,7 @@ function update_remaining_table() {
     // array. So we should stop at 27, since we are going 0 to 26.
     // Make sure to return false for this to work (THANK YOU STACKOVERFLOW)
     // URL for that amazing tip: https://stackoverflow.com/questions/1784780/how-to-break-out-of-jquery-each-loop
-    if (x > 26) {
+    if (x > 25) {   // hack to make Blank show "2".
       // Quit before bad things happen.
       return true;
     }
@@ -152,7 +152,7 @@ function update_remaining_table() {
 
       // DO NOT go over the limit of the array! Currently there is 27 elements in the
       // array. So we should stop at 27, since we are going 0 to 26.
-      if (x > 26) {
+      if (x > 25) {
         // Quit before bad things happen.
         return false;
       }
