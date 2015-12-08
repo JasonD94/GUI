@@ -111,6 +111,12 @@ ul {
   text-decoration: underline;
 }
 
+/*  From this SO post, although I modified it:
+    https://stackoverflow.com/questions/1571648/html-tab-space-instead-of-multiple-non-breaking-spaces-nbsp */
+.basic_tab {
+  padding-left: 1em;
+}
+
 /* Get new tile space CSS */
 #get_new_tile {
   background-color: red;
