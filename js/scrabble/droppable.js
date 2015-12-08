@@ -191,6 +191,9 @@ function load_droppable_targets() {
       var valid = 0;                    // Used for determining valid right angles.
       var prev_spaceID = "";            // Used for determining left/right vs up/down and also inserting at the beginning / end. And even saved letters.
 
+      // Remove old error messages.
+      $("#messages").html("");
+
       // Get board array length. This will be useful for our checks next.
       gameboard_length = game_board.length;
 
@@ -200,6 +203,34 @@ function load_droppable_targets() {
       // For debugging purposes.
       console.log("draggableID: " + draggableID );
       console.log("droppableID: " + droppableID );
+
+      //*****************************************
+      //* See if this tile is already on the game board.
+      //*****************************************
+      for (var i = 0; i < gameboard_length; i++) {
+        if (game_board[i].tile == draggableID) {
+          // We've got a duplicate.
+          console.log("Found a duplicate! ");
+          duplicate = true;
+          dup_index = i;      // Save the index for later.
+        }
+      }
+
+      // If it's a duplicate, don't allow it to be moved. The user will need to
+      // bring the tile back to the rack; other wise the game board word could become
+      // messed up. This will prevent many of the multiple word errors.
+      if (duplicate == true) {
+          $("#messages").html("<br><div class='highlight_centered_error'> \
+          Sorry, tiles that are already placed on the board cannot be moved. \
+          You will need to return the tile to the rack to move it. \
+          You are also allowed to swap two tiles by dropping a new tile on top of a \
+          currently played tile.</div>");
+
+          // Force the draggable to revert. Idea from:
+          // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
+          ui.draggable.draggable('option', 'revert', true);
+          return;
+      }
 
       //*****************************************
       //* Swap a tile logic.
@@ -254,18 +285,6 @@ function load_droppable_targets() {
       //* Logic for one word here
       //*************************************************************************
       if(number_of_words == 0) {
-        //*****************************************
-        //* See if this tile is already on the game board.
-        //*****************************************
-        for (var i = 0; i < gameboard_length; i++) {
-          if (game_board[i].tile == draggableID) {
-            // We've got a duplicate.
-            console.log("Found a duplicate! ");
-            duplicate = true;
-            dup_index = i;      // Save the index for later.
-          }
-        }
-
         //*****************************************
         //* Game board is empty case.
         //* If so, the user must start at the star.
@@ -390,6 +409,7 @@ function load_droppable_targets() {
               Assuming (7,7) & (8,7) are already placed, then two valid places are
               (6,7) & (9,7)
           */
+          // Left and right case
           if (left_right == true) {
             // First col - 1 and last col + 1 are valid, with same row.
             var valid_left = find_table_position(game_board[0].id);
@@ -420,7 +440,7 @@ function load_droppable_targets() {
 
               // Tell the user what the error was.
               $("#messages").html("<br><div class='highlight_centered_error'> \
-              Sorry, only left and right placements are allowed.</div>");
+              Sorry, only left and right placements are allowed when 2 or more tiles are played.</div>");
 
               // Force the draggable to revert. Idea from:
               // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
@@ -428,6 +448,7 @@ function load_droppable_targets() {
               return;
             }
           }
+          // Top and bottom case.
           else {
             // First row - 1 and last row + 1 are valid, with same col.
             var valid_top = find_table_position(game_board[0].id);
@@ -458,7 +479,7 @@ function load_droppable_targets() {
 
               // Tell the user what the error was.
               $("#messages").html("<br><div class='highlight_centered_error'> \
-              That wasn't a valid move.</div>");
+              Sorry, only up and down positions are allowed when 2 or more tiles are played.</div>");
 
               // Force the draggable to revert. Idea from:
               // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
@@ -479,7 +500,9 @@ function load_droppable_targets() {
 
         // We will first determine valid spaces to move to around saved words.
 
-        // First, go through all the words
+        //************************************************************
+        //* Scan COMPLETED WORDS array for possible valid placement
+        //************************************************************
         for(var i = 0; i < number_of_words; i++) {
           // Get number of tiles in the current word.
           var num_tiles = complete_words[i].length;
@@ -520,6 +543,19 @@ function load_droppable_targets() {
                 "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) - 1),   // left of space
                 "row" + (coordinates[0]) + "_col" + (parseInt(coordinates[1]) + 1)    // right of space
               ];
+
+              // Make sure we stay in the same row.
+              var test_spaceID = game_board[0];
+              var test_coord = find_table_position(test_spaceID);
+
+              // Row is [0], so if these are the same, we're good.
+              if (test_coord[0] == valid[0]) {
+                // valid
+              }
+              // Not valid otherwise.
+              else {
+                valid = [];   // make it null so it won't match.
+              }
             }
             // Only allow top to bottom spaces.
             else if(gameboard_length >= 1 && left_right == false) {
@@ -527,6 +563,19 @@ function load_droppable_targets() {
                 "row" + (parseInt(coordinates[0]) - 1) + "_col" + coordinates[1],     // top of space
                 "row" + (parseInt(coordinates[0]) + 1) + "_col" + coordinates[1]      // bottom of space
               ];
+
+              // Make sure to stay in the same column.
+              var test_spaceID = game_board[0];
+              var test_coord = find_table_position(test_spaceID);
+
+              // Col is [1], so if these are the same, we're good.
+              if (test_coord[1] == valid[1]) {
+                // valid
+              }
+              // Not valid otherwise.
+              else {
+                valid = [];   // make it null so it won't match.
+              }
             }
 
             // Debugging
@@ -559,7 +608,9 @@ function load_droppable_targets() {
         // Debugging
         console.log("Possible moves = " + possible_moves);
 
-        // Now let's look at spaces around the game board.
+        //************************************************************
+        //* Scan the currently placed word for possible moves.
+        //************************************************************
         for(var i = 0; i < gameboard_length; i++) {
           var cur_letterID = game_board[i].id;
           var coordinates = find_table_position(cur_letterID);    // Get the row / col values.
@@ -707,7 +758,23 @@ function load_droppable_targets() {
         else {
           console.log("NOT A VALID MOVE.");
           $("#messages").html("<br><div class='highlight_centered_error'> \
-          That wasn't a valid move. Tiles must be placed at right angles.</div>");
+          Sorry, that wasn't a valid move. Tiles must be placed at right angles, as diagonals are not allowed.</div>");
+
+          // Alert users to restrictions on row / columns.
+          // If the game board length is 0, then any placement around tiles is fine. So the above message is completely valid.
+          // However, when the game board greater than 0, the user must stay in the same column or row.
+          if(gameboard_length > 0) {
+            // Check for left / right to provide the most accurate error message.
+            if(left_right == true) {
+              $("#messages").html("<br><div class='highlight_centered_error'> \
+              Sorry, that wasn't a valid move. Tiles must be placed on the same row (left / right) after one tile has been placed on a row.</div>");
+            }
+            // Must be top / down, so provide that error message.
+            else {
+              $("#messages").html("<br><div class='highlight_centered_error'> \
+              Sorry, that wasn't a valid move. Tiles must be placed on the same column (top / down) after one tile has been placed on a column.</div>");
+            }
+          }
 
           // Force the draggable to revert. Idea from:
           // https://stackoverflow.com/questions/6071409/draggable-revert-if-outside-this-div-and-inside-of-other-draggables-using-both
@@ -725,20 +792,6 @@ function load_droppable_targets() {
       var obj = {};
       obj['id'] = droppableID;          // This style works as an object.
       obj['tile'] = draggableID;
-
-      // If it's a duplicate, just move it.
-      if (duplicate == true) {
-        if (insert_beg == false) {
-          // remove then add it back at the end.
-          game_board.splice(dup_index, 1);
-          game_board.push(obj);
-        }
-        else{
-          // remove then add it back at the beginning.
-          game_board.splice(dup_index, 1);
-          game_board.unshift(obj);
-        }
-      }
 
       // Don't add duplicates to the array again!
       if (duplicate == false) {
