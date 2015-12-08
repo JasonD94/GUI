@@ -41,6 +41,9 @@ function find_word(read_left) {
     score += find_score(game_board[i].tile);
   }
 
+  //   TODO:  FIX DOUBLE / TRIPLE WORD LOGIC FOR MULTIPLE WORDS.
+  //          CURRENTLY IT DOUBLES / TRIPLES THE ENTIRE SCORE WHICH IS BAD.
+
   // Factor in the doubling of certain tiles. Since the should_double() function returns 0 or 1,
   // this is easy to account for. If it's 0, 0 is added to the score. If it's 1, the score is doubled.
   score += (score * should_double_triple_word());
