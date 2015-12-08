@@ -85,15 +85,30 @@ html {
   text-align: center;
 }
 
-/**************************************************************************************************************
-    For the Scrabble board
-    Figured this out on Stackoverflow:
-    https://stackoverflow.com/questions/5969114/how-do-i-make-an-image-smaller-with-css
+/*  For the rules page.
+    URL: https://stackoverflow.com/questions/1461015/ul-dont-stay-within-their-containing-divs
 */
+ul {
+  list-style-position: inside;
+  text-align: left;
+  padding-left: 25px;
+  padding-right: 25px;
+}
 
-/* The ID for the Table itself. */
-#scrabble_board {
+.left_align_highlight {
+  background-color: black;
+  color: white;
+  font-family: "Ubuntu";
+  font-size: 100%;
+  font-weight: 900;
+  padding-left: 25px;
+  padding-right: 25px;
+  text-align: left;
+}
 
+.under_line {
+  color: red;
+  text-decoration: underline;
 }
 
 /* Get new tile space CSS */
