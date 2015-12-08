@@ -982,7 +982,30 @@
   <!-- Sweet Alerts! Awesome! -->
   <script src="js/scrabble/sweetalert.min.js" type="text/javascript"></script>
 
-  <!-- JS file to handle the scrabble game. -->
+  <!-- JS Global Variables -->
+  <script src="js/scrabble/variables.js" type="text/javascript"></script>
+
+  <!-- Functions that the three buttons run are found here. "Submit", "Recall", "Reset" buttons. -->
+  <script src="js/scrabble/buttons.js" type="text/javascript"></script>
+
+  <!--  JS Utility functions for this Scrabble board game. Has the random function, find position functions,
+        and a few other misc. functions that are used throughout the reset of the JS files. -->
+  <script src="js/scrabble/util.js" type="text/javascript"></script>
+
+  <!--  Score functions that determine the score of the current word / total score if multiple
+        words are played. -->
+  <script src="js/scrabble/score.js" type="text/javascript"></script>
+
+  <!--  Function that runs the jQuery UI draggable code. -->
+  <script src="js/scrabble/draggable.js" type="text/javascript"></script>
+
+  <!--  Function that runs the jQuery UI droppable code.
+        NOTE: this is the heart of the Scrabble logic.
+        TODO: make so much of this code reusable by making functions
+              for the parts that are CONSTANTLY repeated. -->
+  <script src="js/scrabble/droppable.js" type="text/javascript"></script>
+
+  <!-- JS file to load the Scrabble game stuff on first page load after the DOM is loaded. -->
   <script src="js/scrabble/scrabble_v2.js" type="text/javascript"></script>
 
 </body>
