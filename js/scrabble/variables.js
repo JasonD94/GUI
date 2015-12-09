@@ -98,9 +98,9 @@ var complete_words = [
   */
 ];
 
-// Save the score of all the words saved.
+// Save the score of all the words saved. Only updates when a word is saved, which allows
+// the scoring function (find_word()) to work properly.
 var word_score = 0;
 
 // First letter for 2nd and on words played.
 var first_letter = "";
-

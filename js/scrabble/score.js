@@ -27,29 +27,34 @@
  */
 function find_word(read_left) {
   var word = "";                              // The current word.
-  var score = word_score;                     // This DEFAULTS TO ZERO, but afterwards defaults to whatever the total score is!
+  var current_score = 0;                      // Current Score always starts at 0.
+  var saved_score = word_score;               // Saved score from previous words.
   var board_length = game_board.length;       // Current game board
   var word_count = complete_words.length;     // All saved words
 
   // The word is now blank.
   $("#word").html("____");
-  $("#score").html(score);
+  $("#score").html(saved_score);    // Technically this starts at 0, then adds up to whatever the saved score is.
 
   // Go through the game board and generate a possible word.
   for(var i = 0; i < board_length; i++) {
     word += find_letter(game_board[i].tile);
-    score += find_score(game_board[i].tile);
+    current_score += find_score(game_board[i].tile);
   }
-
-  //   TODO:  FIX DOUBLE / TRIPLE WORD LOGIC FOR MULTIPLE WORDS.
-  //          CURRENTLY IT DOUBLES / TRIPLES THE ENTIRE SCORE WHICH IS BAD.
 
   // Factor in the doubling of certain tiles. Since the should_double() function returns 0 or 1,
   // this is easy to account for. If it's 0, 0 is added to the score. If it's 1, the score is doubled.
-  score += (score * should_double_triple_word());
+  current_score += (current_score * should_double_triple_word());
+
+  // Add the current word's score (current_score) to the total score (saved_score)
+  // This little trick prevents the bug where playing multiple words and placing a tile
+  // on a "double word" or "triple word" square will double or triple the TOTAL SCORE.
+  // Obviously this can lead to 9000+ scores with just 6 or 7 words. Very bad.
+  // By keeping track of current score and saved score, we can print this easily.
+  saved_score += current_score;
 
   // Put the score of the dropped tile into the HTML doc.
-  $("#score").html(score);
+  $("#score").html(saved_score);
 
   // If the word is not empty, show it on the screen!
   if(word != "") {
