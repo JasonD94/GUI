@@ -95,6 +95,14 @@ ul {
   padding-right: 25px;
 }
 
+/* Same as above for ordered lists. */
+ol {
+  list-style-position: inside;
+  text-align: left;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
 .left_align_highlight {
   background-color: black;
   color: white;
@@ -114,7 +122,9 @@ ul {
 /*  From this SO post, although I modified it:
     https://stackoverflow.com/questions/1571648/html-tab-space-instead-of-multiple-non-breaking-spaces-nbsp */
 .basic_tab {
+  padding-top: 1em;
   padding-left: 1em;
+  padding-bottom: 1em;
 }
 
 /* Get new tile space CSS */

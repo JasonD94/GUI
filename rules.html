@@ -83,14 +83,34 @@
         <br>
 
         <div class="highlight_centered_smaller">
-          <!-- Rules for Scrabble V2.7.1 -->
-          <p class="under_line">Rules for this implementation of Scrabble</p>
+          <!-- Summary of the Assignment / TO LONG, DIDN'T READ. -->
+          <p class="under_line">Summary - TL;DR</p>
           <p class="left_align_highlight">I have implemented a full Scrabble board game using HTML, CSS and JavaScript.
           The game fully supports playing one word, and I have also added support for saving words
-          and continuing to play more of them. There are very few bugs for playing one word – I am
-          able to restrict placement of tiles and where tiles can go. For playing multiple words it
-          becomes very complex to restrict placement so there are a few bugs that crop up that I will
-          try to fix in the next few days before the December 9th due date.</p>
+          and continuing to play more of them.</p>
+          <p class="left_align_highlight">There are very few bugs for playing one word – I am
+          able to restrict placement of tiles and where tiles can go. For playing multiple words, I have added
+          some logic to the "droppable.js" file to detect valid positions to add tiles to. Because of the complexity
+          of this logic, it is very possible that bugs will occur when playing multiple words. I highly recommend hitting
+          the "Recall tiles" button should any weird bugs occur, such as letters appearing in the wrong order, or being unable
+          to add onto a word.</p>
+        </div>
+
+        <div class="highlight_centered_smaller">
+          <!-- Rules for Scrabble V2.7.1 -->
+          <p class="under_line">Rules for this implementation of Scrabble</p>
+          <ol>
+            <li>Place your first letter at the SuperMario "Star" at the middle of the page.</li>
+            <li>Add letters in the four allowed directions - up, down, left or right.</li>
+            <li>Continue adding in either the Left/Right direction or Up/Down direction.</li>
+            <li>Hit the "Submit Word" to check and see if a word is valid. Valid words may be saved,
+            invalid words will need to become valid before you may save them.</li>
+            <li>If a word is considered valid, you may press the "Save Word & Play Again" button
+            that appears below the three main buttons ("Submit Word", "Recall Tiles", and "Reset Board")</li>
+            <li>Continue spelling words and saving valid words (See Rules 2 - 5). You may do so until you've used up all your letters,
+            at which point you'll need to reset the game board to keep playing words.</li>
+          </ol>
+
         </div>
 
           <br>
@@ -101,6 +121,9 @@
           <ul>
             <li>Playing a single word, along with scoring for basic / double / triple tiles.</li>
             <li>Playing multiple words, and scoring continues to add with each played word.</li>
+            <li>I have also made it so adding onto a saved word will count those played tiles as part of your word. So if a user plays "Hope" and then
+            adds an "s" to the end of "hope" the displayed word becomes "hopes" and the score updates accordingly. See the bug selection for
+            any issues with this feature.</li>
             <li>“Letters Remaining” table updates as tiles are used and allows the user to see how many of a certain letter is remaining.</li>
             <li>“Swap a tile” space is a droppable target that, when a tile a is dropped on it,
             replaces that tile with a random letter and moves back to the previous location (rack / game board)</li>
@@ -109,9 +132,10 @@
             <li>Three buttons control submitting a word (saving a word to the game board so that you can play multiple words in one game),
             recalling tiles (this moves all tiles of the CURRENT word back to the rack. It does not mess with played tiles, which are part
             of saved words), and resetting the game board (which completely resets the board so that a new game of Scrabble can be played instead).</li>
-            <li>Warning and Success messages appear when needed, such as "Start at the start" and "Place tiles at right angles".</li>
+            <li>Warning and Success messages appear when needed, such as <span class="highlight_centered_success">Start at the star</span> and <br>
+            <span class="highlight_centered_error">Place tiles at right angles</span></li>
             <li>As a result, for creating one word, start at the middle star, and create a word in a straight line, either up and down or left and right.</li>
-            <li>For creating multiple words, add onto the middle of a word. See example screen shots below.</li>
+            <li>For creating multiple words, add onto the middle of a word, or to the end of a word like adding an "S" to a created word. See example screen shots below.</li>
           </ul>
         </div>
 
@@ -121,15 +145,12 @@
           <!-- BUGS, BUGS, BUGS ¯\_(ツ)_/¯ -->
           <p class="under_line">Current bugs:</p>
           <ul>
-            <li>Blank tiles are not implemented (if I have time I may implement them)</li>
+            <li>Blank tiles are not implemented.</li>
             <li>Multiple words can cause the displayed word to show up incorrectly, especially when swapping tiles and changing the tiles around.</li>
             <p class="basic_tab">If bugs occur with the current word, I recommend hitting the “recall tiles” button to reset the CURRENT word while maintaining the game board as is.</p>
-            <li>Adding on to already created words isn’t fully implemented.</li>
-            <p class="basic_tab">I basically take just the first letter and add it to the current word.
-            This allows playing multiple words off of the middle of already created words, but if you try to add an “S” to the end of a word it won’t show the entire word.
-            If I have time before the deadline I may be able to fully implement this.</p>
-            <li>Scoring for special spaces on multiple words causes the entire word to double / triple on "double word" and "triple word" spaces.</li>
-            <p class="basic_tab">I may be able to fix this.</p>
+            <li>Adding on to an already created word could create bugs. However, works most of the time.</li>
+            <p class="basic_tab">See above comment about bugs. When a bug occurs, which is possible considering the size of my code at the current point in time,
+            it is best to just hit the "RECALL TILES" button to reset the CURRENT WORD. You may also hit reset board if that does not fix the issue.</p>
           </ul>
         </div>
 
@@ -160,8 +181,7 @@
           <ul>
             <li><a href="img/examples/single_word.png">Playing a single word</a></li>
             <li><a href="img/examples/two_words.png">Playing two words</a></li>
-            <li><a href="img/examples/so_many_words.png">Playing a ton of words</a><br>
-            (the score got messed up, doubling seems to double the entire score with multiple words...)</li>
+            <li><a href="img/examples/so_many_words.png">Playing a ton of words</a></li>
             <li><a href="img/examples/failure.png">Example error message</a></li>
             <li><a href="img/examples/success.png">Example success message</a></li>
             <li><a href="img/examples/custom_alert.png">Custom alert</a> using
@@ -195,7 +215,7 @@
   <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
   <!-- Custom Bootstrap with 14 grid! JavaScript file for it. -->
-  <script type='text/javascript' src="js/bootstrap.min.js"></script>
+  <script type='text/javascript' src="js/scrabble/bootstrap.min.js"></script>
 
 </body>
 </html>

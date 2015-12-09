@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 24, 2015.
-    Last Updated: Dec 8, 9PM.
+    Last Updated: Dec 9, 4PM.
 
     This JavaScript file is for the 9th assignment, "Scrabble".
 
@@ -895,6 +895,9 @@ function load_droppable_targets() {
             }
           }
         }
+        //*******************************************
+        //* If we get here, it wasn't a valid move. *
+        //*******************************************
         else {
           console.log("NOT A VALID MOVE.");
           $("#messages").html("<br><div class='highlight_centered_error'> \
