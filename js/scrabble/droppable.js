@@ -151,12 +151,24 @@ function load_droppable_targets() {
           // Move the tile over to the rack. Prevents weird bugs where the table changes sizes and thinks there's two tiles in one spot.
           $('#rack').append($(ui.draggable));
 
-          // If there's any completed words, and we just hit 1 tile left, then
-          // remove that tile, it's one of the disabled tiles.
+
+
+          // If there's any completed words, and we just removed the last currently played word,
+          // we need to remove any disabled tiles from the word array.
           if(number_of_words > 0) {
-            game_board.splice(0, 1);  // Remove disabled tile.
-            find_word();              // Update word & score.
+
+            // See if its time to remove these letters.
+            if(gameboard_length - 1 <= used_letters) {        // Yep, the length is at or below the user_letters
+
+              // Debugging
+              console.log("Time to remove those disabled tiles!");
+
+              // Remove disabled tiles.
+              game_board.splice(0, gameboard_length);
+            }
           }
+
+          find_word();              // Update word & score.
 
           // Quit now.
           return;
@@ -749,10 +761,72 @@ function load_droppable_targets() {
 
           // Determine if the prev space should be added to the game board array.
           if(gameboard_length == 0) {
-            var tmp_obj = {};
-            tmp_obj['id'] = prev_spaceID;          // This style works as an object.
-            tmp_obj['tile'] = prev_spaceID;
-            game_board.push(tmp_obj);
+            // Go up or down to grab the entire previous word.
+            // Current space is: droppableID
+            if(left_right == true) {  // All the way to the left.
+
+              console.log("Current space is: " + droppableID);
+
+              // Need to go left and see if we find any disabled spaces.
+              // We know this row is: new_row
+              console.log("This row is: " + new_row);
+
+              // Var to determine when to stop checking words.
+              var test_word = true;
+
+              // Go all the way to the left.
+              for(var i = new_col - 1; i > 0; i--) {
+                var row_pos = new_row;          // Row position stays constant.
+                var col_pos = i;                // Col must change.
+
+                // Debug
+                //console.log("Col is: " + col_pos + "Row is: " + row_pos);
+
+                // See if this a valid disabled space.
+                var test_cord = "row" + row_pos + "_col" + col_pos;
+
+                // Debug
+                console.log("Test_cord is: " + test_cord);
+
+                // If this is a valid disabled space, sweet! Add it to the array!
+                if(find_letter(test_cord) != -1 && test_word == true) {
+                  // Create an object to add.
+                  var tmp_obj = {};
+                  tmp_obj['id'] = test_cord;          // This style works as an object.
+                  tmp_obj['tile'] = test_cord;
+
+                  // Do we insert at the beginning or the end?
+                  if(insert_beg != true) {    // No! Beginning!
+                    console.log("Insert at the beginning!");
+                    game_board.unshift(tmp_obj);               }
+                  else {                      // Yes, the end!
+                    console.log("Insert at the end!");
+                    game_board.push(tmp_obj);
+                  }
+
+                  // Keep track of used letters.
+                  used_letters++;
+                }
+                else {
+                  // Time to break. This prevents reading the entire row and adding silly letters.
+                  test_word = false;
+                }
+              }
+            }
+            else {                    // All the way up.
+
+              console.log("Current space is: " + droppableID);
+
+              // Need to go up and see if we find any disabled spaces.
+              // We know this col is: new_col
+              console.log("This col is: " + new_col);
+            }
+
+
+            // var tmp_obj = {};
+            // tmp_obj['id'] = prev_spaceID;          // This style works as an object.
+            // tmp_obj['tile'] = prev_spaceID;
+            // game_board.push(tmp_obj);
           }
         }
         else {

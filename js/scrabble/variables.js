@@ -107,3 +107,8 @@ var word_score = 0;
 
 // First letter for 2nd and on words played.
 var first_letter = "";
+
+// Keep track of the letters of used words. This is handy for tracking adding an "S" to
+// a currently created word "hope" - if we had an S, then we have 5 letters. If we remove an
+// S, we have 4 letters that need to be removed.
+var used_letters = 0;
