@@ -326,6 +326,7 @@ function load_droppable_targets() {
         //*****************************************
         if (gameboard_length == 1 || (gameboard_length == 2 && duplicate == true) ) {
           console.log("Diagonals are not allowed.");
+
           /*  Disable diagonal placement.
               Example:
 
@@ -387,6 +388,7 @@ function load_droppable_targets() {
 
             // Need to insert at the front if we're inserting from the left.
             if (test == allowed_arrays[2].toString()) {
+              console.log("Inserting at the beginning of the game board array.");
               insert_beg = true;
             }
           }
@@ -419,8 +421,8 @@ function load_droppable_targets() {
               + = valid space
               X = NOT VALID SPACE
 
-              Assuming (7,7) & (8,7) are already placed, then two valid places are
-              (6,7) & (9,7)
+              Assuming (7,7) & (8,7) are already placed,
+              then two valid places are (6,7) & (9,7)
           */
           // Left and right case
           if (left_right == true) {
@@ -776,7 +778,7 @@ function load_droppable_targets() {
               var test_word = true;
 
               // Go all the way to the left or right.
-              var col_index = parseInt(new_col);                  // Index for the column.
+              var col_index = parseInt(new_col);          // Index for the column.
 
               if(insert_beg != true) {
                 col_index = new_col - 1;                  // Start going to the left.
@@ -937,6 +939,8 @@ function load_droppable_targets() {
       obj['tile'] = draggableID;
 
       // Don't add duplicates to the array again!
+      // TO DO: IS THIS EVEN USED AGAIN?
+      // NOTE TO OTHER PEOPLE, I'M ALMOST CERTAIN I DON'T USE THIS.
       if (duplicate == false) {
         if (insert_beg == false) {
           // Push back to the game board array.
@@ -965,4 +969,3 @@ function load_droppable_targets() {
     zIndex: -1
   });
 }
-

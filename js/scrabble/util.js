@@ -235,4 +235,3 @@ function fill_in_table() {
     row++;
   });
 }
-

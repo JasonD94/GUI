@@ -6,16 +6,11 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 24, 2015.
-    Last Updated: Dec 8, 9PM.
+    Last Updated: Dec 9, 5PM.
 
     This JavaScript file is for the 9th assignment, "Scrabble".
 
     This file contains all of the scoring logic for the Scrabble board game.
-
-    TODO:
-        - Fix multiple words special spaces scoring
-            (when 2+ words are played, double/triple word spaces shouldn't
-             double the ENTIRE score, just the CURRENT WORD.)
 */
 
 

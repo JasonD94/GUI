@@ -373,4 +373,3 @@ function reset_game_board() {
   // Now we're done! Woot!
   return;
 }
-
