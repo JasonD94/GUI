@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 24, 2015.
-    Last Updated: Dec 8, 1PM.
+    Last Updated: Dec 8, 9PM.
 
     This JavaScript file is for the 9th assignment, "Scrabble".
 
@@ -24,11 +24,12 @@
  */
 function load_scrabble_pieces() {
   // I'm so used to C++ that I like defining variables at the top of a function. *shrugs*
-  var base_url = "img/scrabble/Scrabble_Tile_";    // base URL of the image
+  var base_url = "img/scrabble/Scrabble_Tile_";       // base URL of the image
   var random_letter = "";                             // Random letter for the tile
-  var piece = "";
-  var piece_ID = "";
-  var what_piece = "";
+  var piece = "";                                     // HTML for the current tile (image tag)
+  var piece_ID = "";                                  // ID for the current tile. In the form "piece#" where # is between 0 and 6.
+  var pos;                                            // Position of the rack.
+  var img_left, img_top;                              // Used to set the tile's position, based on the position of the rack (pos)
 
   // Load up 7 pieces
   for(var i = 0; i < 7; i++) {
@@ -44,12 +45,11 @@ function load_scrabble_pieces() {
 
     // We first get the rack's location on the screen. Idea from a Stackoverflow post,
     // URL: https://stackoverflow.com/questions/885144/how-to-get-current-position-of-an-image-in-jquery
-    var pos = $("#the_rack").position();
+    pos = $("#the_rack").position();
 
     // Now figure out where to reposition the board piece.
-
-    var img_left = pos.left + 30 + (50 * i);      // This controls left to right placement.
-    var img_top = pos.top + 30;                   // This controls top to bottom placement.
+    img_left = pos.left + 30 + (50 * i);      // This controls left to right placement.
+    img_top = pos.top + 30;                   // This controls top to bottom placement.
 
     /* Load onto the page and make draggable.
        The height / width get set using these tricks:
@@ -73,7 +73,7 @@ function load_scrabble_pieces() {
       revert: "invalid",            // This is key. Only the rack and game board are considered valid!
       start: function(ev, ui) {
         // Save original position. (used for swapping tiles)
-        startPos = ui.helper.position();
+        startPos = ui.helper.position();  // startPos is a global variable found in variables.js
       },
       stop: function() {
         // If an invalid event is found, this will return the draggable object to its

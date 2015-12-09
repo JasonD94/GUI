@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 24, 2015.
-    Last Updated: Dec 8, 1PM.
+    Last Updated: Dec 8, 9PM.
 
     This JavaScript file is for the 9th assignment, "Scrabble".
 

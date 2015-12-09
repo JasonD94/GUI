@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 24, 2015.
-    Last Updated: Dec 8, 1PM.
+    Last Updated: Dec 8, 9PM.
 
     This JavaScript file is for the 9th assignment, "Scrabble".
 
@@ -58,9 +58,12 @@ var startPos;
 var dict = {};
 
 // Do a jQuery Ajax request for the text dictionary
+// Note, used this page to make the dictionary all lowercase:
+// URL: http://linuxcommando.blogspot.com/2008/05/how-to-convert-text-files-to-all-upper.html
 $.get( "files/dictionary.txt", function( txt ) {
     // Get an array of all the words
     var words = txt.split( "\n" );
+
 
     // And add them as properties to the dictionary lookup
     // This will allow for fast lookups later
