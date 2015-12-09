@@ -833,7 +833,7 @@ function load_droppable_targets() {
 
       }
 
-      // This from Stackoverflow, it snaps to where it was dropped.
+      // This from Stackoverflow, it makes the tiles snap to where it was dropped.
       // URL: https://stackoverflow.com/questions/30122234/how-to-make-an-accept-condition-for-droppable-td-to-accept-only-the-class-within
       $(this).append($(ui.draggable));
       ui.draggable.css("top", $(this).css("top"));
