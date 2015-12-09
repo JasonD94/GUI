@@ -151,8 +151,6 @@ function load_droppable_targets() {
           // Move the tile over to the rack. Prevents weird bugs where the table changes sizes and thinks there's two tiles in one spot.
           $('#rack').append($(ui.draggable));
 
-
-
           // If there's any completed words, and we just removed the last currently played word,
           // we need to remove any disabled tiles from the word array.
           if(number_of_words > 0) {
@@ -165,6 +163,9 @@ function load_droppable_targets() {
 
               // Remove disabled tiles.
               game_board.splice(0, gameboard_length);
+
+              // Reset the used_letters counter.
+              used_letters = 0;
             }
           }
 
@@ -774,13 +775,24 @@ function load_droppable_targets() {
               // Var to determine when to stop checking words.
               var test_word = true;
 
-              // Go all the way to the left.
-              for(var i = new_col - 1; i > 0; i--) {
-                var row_pos = new_row;          // Row position stays constant.
-                var col_pos = i;                // Col must change.
+              // Go all the way to the left or right.
+              var col_index = parseInt(new_col);                  // Index for the column.
+
+              if(insert_beg != true) {
+                col_index = new_col - 1;                  // Start going to the left.
+              }
+              else {
+                col_index = new_col + 1;                  // Start going to the right.
+              }
+
+              // While there's a letter to add, keep adding.
+              // Once test_word is false, we stop adding letters to the array.
+              while(test_word == true) {
+                var row_pos = new_row;                  // Row position stays constant.
+                var col_pos = col_index;                // Column must change.
 
                 // Debug
-                //console.log("Col is: " + col_pos + "Row is: " + row_pos);
+                console.log("Col is: " + col_pos + "Row is: " + row_pos);
 
                 // See if this a valid disabled space.
                 var test_cord = "row" + row_pos + "_col" + col_pos;
@@ -798,10 +810,13 @@ function load_droppable_targets() {
                   // Do we insert at the beginning or the end?
                   if(insert_beg != true) {    // No! Beginning!
                     console.log("Insert at the beginning!");
-                    game_board.unshift(tmp_obj);               }
+                    game_board.unshift(tmp_obj);
+                    col_index--;
+                  }
                   else {                      // Yes, the end!
                     console.log("Insert at the end!");
                     game_board.push(tmp_obj);
+                    col_index++;
                   }
 
                   // Keep track of used letters.
@@ -815,18 +830,69 @@ function load_droppable_targets() {
             }
             else {                    // All the way up.
 
+              // Debugging
               console.log("Current space is: " + droppableID);
 
               // Need to go up and see if we find any disabled spaces.
               // We know this col is: new_col
               console.log("This col is: " + new_col);
+
+              // Var to determine when to stop checking words.
+              var test_word = true;
+
+              // Go all the way to the left or right.
+              var row_index = parseInt(new_row);          // Index for the row.
+
+              if(insert_beg != true) {
+                row_index = new_row - 1;                  // Start going up.
+              }
+              else {
+                row_index = new_row + 1;                  // Start going down.
+              }
+
+              // While there's a letter to add, keep adding.
+              // Once test_word is false, we stop adding letters to the array.
+              while(test_word == true) {
+                var row_pos = row_index;                  // Row must change.
+                var col_pos = new_col;                    // Column position stays constant.
+
+                // Debug
+                console.log("Col is: " + col_pos + "Row is: " + row_pos);
+
+                // See if this a valid disabled space.
+                var test_cord = "row" + row_pos + "_col" + col_pos;
+
+                // Debug
+                console.log("Test_cord is: " + test_cord);
+
+                // If this is a valid disabled space, sweet! Add it to the array!
+                if(find_letter(test_cord) != -1 && test_word == true) {
+                  // Create an object to add.
+                  var tmp_obj = {};
+                  tmp_obj['id'] = test_cord;          // This style works as an object.
+                  tmp_obj['tile'] = test_cord;
+
+                  // Do we insert at the beginning or the end?
+                  if(insert_beg != true) {    // No! Beginning!
+                    console.log("Insert at the beginning!");
+                    game_board.unshift(tmp_obj);
+                    row_index--;
+                  }
+                  else {                      // Yes, the end!
+                    console.log("Insert at the end!");
+                    game_board.push(tmp_obj);
+                    row_index++;
+                  }
+
+                  // Keep track of used letters.
+                  used_letters++;
+                }
+                else {
+                  // Time to break. This prevents reading the entire row and adding silly letters.
+                  test_word = false;
+                }
+              }
             }
-
-
-            // var tmp_obj = {};
-            // tmp_obj['id'] = prev_spaceID;          // This style works as an object.
-            // tmp_obj['tile'] = prev_spaceID;
-            // game_board.push(tmp_obj);
           }
         }
         else {

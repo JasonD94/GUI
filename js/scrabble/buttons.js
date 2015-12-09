@@ -258,6 +258,9 @@ function reset_tiles() {
   // Now delete everything in the game board array. Do this by just emptying the array.
   game_board = [];
 
+  // Reset the used letters counter.
+  used_letters = 0;
+
   // Update the word that is displayed.
   find_word();
 
@@ -325,6 +328,9 @@ function reset_game_board() {
 
   // Set the score back to zero.
   word_score = 0;
+
+  // Reset the used letters counter.
+  used_letters = 0;
 
   // Remove all the scrabble tiles in the rack.
   for(var i = 0; i < 7; i++) {
