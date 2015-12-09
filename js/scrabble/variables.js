@@ -6,7 +6,7 @@
     MIT Licensed - see http://opensource.org/licenses/MIT for details.
     Anyone may freely use this code. Just don't sue me if it breaks stuff.
     Created: Nov 24, 2015.
-    Last Updated: Dec 8, 9PM.
+    Last Updated: Dec 9, 6PM.
 
     This JavaScript file is for the 9th assignment, "Scrabble".
 
@@ -28,7 +28,37 @@
 */
 var pieces = [];
 
+// JavaScript array to keep track of the CURRENT game board. (the current word that is being created)
+// NOTE: "pieceX" means NO tile present on that drop zone.
+// Also note this is EMPTY until tiles are placed onto the game board.
+var game_board = [
+  // Example of what WOULD be in this array. An obj with "id" of the dropable spot and the tile that was dropped.
+  //{"id": "drop0",  "tile": "pieceX"},
+];
+
+// JavaScript array to keep track of past words
+var complete_words = [
+  /*
+      Example of what this array with look like:
+      [
+        // Each word will be an array of objects
+        //               "H"                             "E"                              etc
+        [{ {"id": "row7_col7",  "letter": "H"}, {"id": "row7_col8",  "letter": "E"}, ...}],
+
+        // This could be the second word that is saved
+        // It would also have the id of dropped tile, plus which letter it is.
+        [ {H}, {E} , {L}, {L}, {O}   ]
+
+        It could be longer as the game goes on. It could be as long as the board supports even.
+        Each dropID would be used to generate valid positions for starting a new word.
+        Words must be formed at RIGHT angles.
+        Also, the array should be used to get the letters of saved letters.
+      ]
+  */
+];
+
 // JavaScript array of objects to determine what letter each piece is.
+// This gets configured by load_scrabble_pieces()
 var game_tiles = [
   {"id": "piece0", "letter": "A"},
   {"id": "piece1", "letter": "B"},
@@ -64,42 +94,12 @@ $.get( "files/dictionary.txt", function( txt ) {
     // Get an array of all the words
     var words = txt.split( "\n" );
 
-
     // And add them as properties to the dictionary lookup
     // This will allow for fast lookups later
     for ( var i = 0; i < words.length; i++ ) {
         dict[ words[i] ] = true;
     }
 });
-
-// JavaScript array to keep track of the CURRENT game board. (the current word that is being created)
-// NOTE: "pieceX" means NO tile present on that drop zone.
-// Also note this is EMPTY until tiles are placed onto the game board.
-var game_board = [
-  // Example of what WOULD be in this array. An obj with "id" of the dropable spot and the tile that was dropped.
-  //{"id": "drop0",  "tile": "pieceX"},
-];
-
-// JavaScript array to keep track of past words
-var complete_words = [
-  /*
-      Example of what this array with look like:
-      [
-        // Each word will be an array of objects
-        //               "H"                             "E"                              etc
-        [{ {"id": "row7_col7",  "letter": "H"}, {"id": "row7_col8",  "letter": "E"}, ...}],
-
-        // This could be the second word that is saved
-        // It would also have the id of dropped tile, plus which letter it is.
-        [ {H}, {E} , {L}, {L}, {O}   ]
-
-        It could be longer as the game goes on. It could be as long as the board supports even.
-        Each dropID would be used to generate valid positions for starting a new word.
-        Words must be formed at RIGHT angles.
-        Also, the array should be used to get the letters of saved letters.
-      ]
-  */
-];
 
 // Save the score of all the words saved. Only updates when a word is saved, which allows
 // the scoring function (find_word()) to work properly.
