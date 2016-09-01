@@ -1,6 +1,0 @@
-{
-  "name": "GUI",
-  "tagline": "GUI I website code",
-  "body": "# GUI\r\n\r\nSource code for GUI website.\r\n\r\nBuilt using HTML5 and Bootstrap.\r\n\r\n[View it at the following address: https://jasond94.github.io/GUI](https://jasond94.github.io/GUI)\r\n\r\nNote: you can also view the page at [http://downing.io/GUI/](http://downing.io/GUI/) since I applied a custom domain to my jasond94.github.io repository / personal website. This apparently applies to other GitHub Pages that I host on GitHub.\r\n",
-  "note": "Don't delete this file! It's used internally to help with page regeneration."
-}
